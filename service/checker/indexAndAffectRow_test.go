@@ -1,0 +1,200 @@
+package advisor
+
+import (
+	"fmt"
+	"reflect"
+	"testing"
+)
+
+func TestIndexMatchCondition(t *testing.T) {
+	keys := &[]KeysInfo{
+		{
+			KeyName:    "PRIMARY",
+			SeqInIndex: 1,
+			ColumnName: "id",
+		},
+		{
+			KeyName:    "idx_record_video",
+			SeqInIndex: 1,
+			ColumnName: "roomid",
+		},
+	}
+	resp := indexMatchConditionOrdinal(keys, []string{"id"})
+	t.Log("resp is ", resp)
+}
+
+func TestOperateDisableIndex(t *testing.T) {
+	type data struct {
+		origin string
+		target bool
+	}
+	datas := []data{
+		{
+			origin: "FirstName='Bush' AND LastName='hello' and age >17 and name like '%hello%' and high between 175 and 180",
+			target: true,
+		},
+		{
+			origin: "FirstName='Bush' AND LastName='hello' and age >17 and name like 'hello%' and high between 175 and 180",
+			target: true,
+		},
+		{
+			origin: "FirstName='Bush' AND LastName='hello' and age >17 and high between 175 and 180 and name like 'hello%' ",
+			target: true,
+		},
+		{
+			origin: "FirstName='Bush' AND LastName='hello' and age >17 and high = 180 ",
+			target: true,
+		},
+		{
+			origin: "FirstName='Bush' AND LastName='hello' and age =17 and high between 175 and 180 ",
+			target: false,
+		},
+		{
+			origin: "",
+			target: false,
+		},
+	}
+
+	for i, v := range datas {
+		tar := operateDisableIndex(v.origin)
+		if tar != v.target {
+			t.Log(fmt.Sprintf("expert: %v, \n got : %v, sql index :%d ", tar, v.target, i))
+			t.FailNow()
+		}
+	}
+}
+
+func TestGetCondition(t *testing.T) {
+	type data struct {
+		origin string
+		target []string
+	}
+	datas := []data{
+		{
+			origin: "FirstName='Bush' AND LastName='hello' and age >17 and name like '%hello%' and high between 175 and 180",
+			target: []string{"firstname", "lastname", "age", "name", "high"},
+		},
+		{
+			origin: "",
+			target: nil,
+		},
+		{
+			origin: "uid = 40792760 AND courseid = 295748327620620 AND `index` >1 and name not in ('hi','hei');",
+			target: []string{"uid", "courseid", "`index`", "name"},
+		},
+	}
+
+	for _, v := range datas {
+		tar := getCondition(v.origin)
+		if !reflect.DeepEqual(tar, v.target) {
+			t.Log(fmt.Sprintf("expert: %v, \n got : %v", tar, v.target))
+			t.FailNow()
+		}
+	}
+}
+
+
+func TestHandleKeyWordForCondition(t *testing.T) {
+	type data struct {
+		origin string
+		target string
+	}
+	datas := []data{
+		{
+			origin: "FirstName='Bush' AND LastName='hello' and age >17 and name like '%hello%' and high between 175 and 180",
+			target: "FirstName='Bush' AND LastName='hello' and age >17 and name like '%hello%' and high between 175 and 180",
+		},
+		{
+			origin: "",
+			target: "",
+		},
+		{
+			origin: "uid = 40792760 AND courseid = 295748327620620 AND `index` >1 and name not in ('hi','hei');",
+			target: "uid = 40792760 AND courseid = 295748327620620 AND `index` >1 and name not in ('hi','hei');",
+		},
+		{
+			origin: "uid = 40792760 AND courseid = 295748327620620 AND index >1 and user not in ('hi','hei');",
+			target: "uid = 40792760 AND courseid = 295748327620620 AND `index` >1 and `user` not in ('hi','hei');",
+		},
+	}
+
+	for _, v := range datas {
+		resp := HandelKeyWorldForCondition(v.origin)
+		if !reflect.DeepEqual(resp, v.target) {
+			t.Log(fmt.Sprintf("expert: %v, \n got : %v", v.target, resp))
+			t.FailNow()
+		}
+	}
+}
+
+func TestDmlSqlToCount(t *testing.T) {
+	type data struct {
+		origin string
+		target string
+		isErr  bool
+		opType opType
+	}
+	datas := []data{
+		{
+			"update test_table set name=zhangsan where age=19 ",
+			"select count(*) from test_table where age=19",
+			false,
+			Update,
+		},
+		{
+			"",
+			"",
+			true,
+			Update,
+		},
+		{
+			"delete from test_table  where age in (select age from test_table where naem=zhangsan) ",
+			"select count(*) from test_table where age in (select age from test_table where naem=zhangsan)",
+			false,
+			Delete,
+		},
+	}
+	for _, v := range datas {
+		target, err := dmlSqlToCount(v.origin)
+		if err != nil {
+			if v.isErr {
+				continue
+			}
+			t.Log("err not expected: ", err.Error())
+			t.FailNow()
+		}
+		if v.target != target {
+			t.Log(fmt.Sprintf("translate err , expect : %s, got : %s", v.target, target))
+			t.FailNow()
+		}
+	}
+}
+
+func TestIsSubKey(t *testing.T) {
+	type Key struct {
+		KeyS   string
+		KeyL   string
+		Result bool
+	}
+
+	keys := []Key{
+		{
+			"a",
+			"ab+cd",
+			false,
+		},
+		{
+			"ab",
+			"ab+cd",
+			true,
+		},
+	}
+	for _, v := range keys {
+		if resp := isSubKey(v.KeyL, v.KeyS); resp != v.Result {
+			t.FailNow()
+		}
+		if resp := isSubKey(v.KeyS, v.KeyL); resp != v.Result {
+			t.FailNow()
+		}
+	}
+}
