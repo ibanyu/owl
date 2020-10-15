@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/pingcap/parser"
-	"github.com/pingcap/parser/ast"
 	_ "github.com/pingcap/tidb/types/parser_driver"
 	"github.com/shawnfeng/sutil/slog"
 
@@ -30,7 +28,7 @@ func IndexMach(info *task.DBInfo, sql string) (bool, error) {
 	}
 
 	sql = strings.TrimSpace(sql)
-	sqlAfterWhere := GetSqlAfterWhere(sql)
+	sqlAfterWhere := task.GetSqlAfterWhere(sql)
 	if operateDisableIndex(sqlAfterWhere) {
 		return false, nil
 	}
@@ -39,7 +37,7 @@ func IndexMach(info *task.DBInfo, sql string) (bool, error) {
 		slog.Warnf("sql check, get index info err: %s", err.Error())
 		return false, err
 	}
-	condition := getCondition(sqlAfterWhere)
+	condition := task.GetCondition(sqlAfterWhere)
 
 	return indexMatchConditionOrdinal(keysInfo, condition) || indexMatchConditionAllValue(keysInfo, condition), nil
 }
@@ -95,48 +93,6 @@ func indexMatchConditionOrdinal(keys *[]KeysInfo, condition []string) bool {
 	return true
 }
 
-// 获取sql的条件，字符串处理
-// 方式： 小写化，and前后有空格，空格分割，再依次进一步判断。
-func getCondition(sqlAfterWhere string) []string {
-	sqlAfterWhere = strings.ToLower(sqlAfterWhere)
-	strs := strings.Split(sqlAfterWhere, "and")
-	var condition []string
-	for _, v := range strs {
-		if condi := getOneCondition(v); condi != "" {
-			condition = append(condition, condi)
-		}
-	}
-	slog.Infof("sql condition is : %v", condition)
-	return condition
-}
-
-//检查=， >，<，>=，<=，like，in
-// != ,not in 已经在上一步过滤掉
-func getOneCondition(str string) string {
-	switch {
-	case strings.Contains(str, "="):
-		return strings.TrimSpace(strings.Split(str, "=")[0])
-	case strings.Contains(str, ">"):
-		return strings.TrimSpace(strings.Split(str, ">")[0])
-	case strings.Contains(str, "<"):
-		return strings.TrimSpace(strings.Split(str, "<")[0])
-	case strings.Contains(str, ">="):
-		return strings.TrimSpace(strings.Split(str, ">=")[0])
-	case strings.Contains(str, "<="):
-		return strings.TrimSpace(strings.Split(str, "<=")[0])
-	case strings.Contains(str, "like"):
-		return strings.TrimSpace(strings.Split(str, "like")[0])
-	case strings.Contains(str, "not in"):
-		return strings.TrimSpace(strings.Split(str, "not in")[0])
-	case strings.Contains(str, "in"):
-		return strings.TrimSpace(strings.Split(str, "in")[0])
-	case strings.Contains(str, "between"):
-		return strings.TrimSpace(strings.Split(str, "between")[0])
-	}
-
-	return ""
-}
-
 type KeysInfo struct {
 	KeyName    string `bdb:"Key_name"`
 	SeqInIndex int    `bdb:"Seq_in_index"` // index,索引 即key，
@@ -145,7 +101,7 @@ type KeysInfo struct {
 
 // 获取索引信息
 func getIndexInfo(info *task.DBInfo, sql string) (*[]KeysInfo, error) {
-	tableName, err := GetTableName(sql)
+	tableName, err := task.GetTableName(sql)
 	if err != nil {
 		return nil, err
 	}
@@ -295,45 +251,12 @@ func dmlSqlToCount(sql string) (string, error) {
 		return "", errors.New("sql translate to count, not contain 'where'")
 	}
 
-	tableName, err := GetTableName(sql)
+	tableName, err := task.GetTableName(sql)
 	if err != nil {
 		return "", err
 	}
-	countSql := fmt.Sprintf("select count(*) from %s where %s", tableName, GetSqlAfterWhere(sql))
+	countSql := fmt.Sprintf("select count(*) from %s where %s", tableName, task.GetSqlAfterWhere(sql))
 	slog.Infof("build count sql : %s", countSql)
 
 	return countSql, nil
-}
-
-//仅dml用
-func GetTableName(sql string) (string, error) {
-	p := parser.New()
-	stmtNodes, _, err := p.Parse(sql, "", "")
-	if err != nil {
-		slog.Errorf("get table name,parse sql failed, sql : %s", sql)
-		return "", err
-	}
-	var left ast.ResultSetNode
-	for _, tiStmt := range stmtNodes {
-		switch node := tiStmt.(type) {
-		case *ast.UpdateStmt:
-			//fmt.Printf("%#v\n", node)
-			left = node.TableRefs.TableRefs.Left
-		case *ast.DeleteStmt:
-			left = node.TableRefs.TableRefs.Left
-		}
-
-		tSource, ok := left.(*ast.TableSource)
-		if !ok {
-			slog.Errorf("get table name, assert failed, sql : %s", sql)
-			return "", errors.New("get table name failed")
-		}
-		tName, ok := tSource.Source.(*ast.TableName)
-		if !ok {
-			slog.Errorf("get table name, assert failed, sql : %s", sql)
-			return "", errors.New("get table name failed")
-		}
-		return tName.Name.L, nil
-	}
-	return "", nil
 }
