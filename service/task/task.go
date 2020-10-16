@@ -8,22 +8,22 @@ import (
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 )
 
 type DbInjectionTask struct {
-	ID              int64    `json:"id" gorm:"column:id"`
-	Name            string   `json:"name" gorm:"column:name"`
-	Status          string   `json:"status" gorm:"column:status"`
-	ExecType        ExecType `json:"exec_type" gorm:"column:exec_type"`
-	Creator         string   `json:"creator" gorm:"column:creator"`
-	Reviewer        string   `json:"reviewer" gorm:"column:reviewer"`
-	Executor        string   `json:"executor" gorm:"column:executor"`
-	ExecInfo        string   `json:"exec_info" gorm:"column:exec_info"`
-	TurnDownContent string   `json:"turn_down_content" gorm:"column:turn_down_content"`
-	Ct              int64    `json:"ct" gorm:"column:ct"`
-	Ut              int64    `json:"ut" gorm:"column:ut"`
-	Et              int64    `json:"et" gorm:"column:et"`
-	Ft              int64    `json:"ft" gorm:"column:ft"`
+	ID            int64  `json:"id" gorm:"column:id"`
+	Name          string `json:"name" gorm:"column:name"`
+	Status        string `json:"status" gorm:"column:status"`
+	Creator       string `json:"creator" gorm:"column:creator"`
+	Reviewer      string `json:"reviewer" gorm:"column:reviewer"`
+	Executor      string `json:"executor" gorm:"column:executor"`
+	ExecInfo      string `json:"exec_info" gorm:"column:exec_info"`
+	RejectContent string `json:"reject_content" gorm:"column:reject_content"`
+	Ct            int64  `json:"ct" gorm:"column:ct"`
+	Ut            int64  `json:"ut" gorm:"column:ut"`
+	Et            int64  `json:"et" gorm:"column:et"`
+	Ft            int64  `json:"ft" gorm:"column:ft"`
 
 	SubTasks  []DbInjectionSubtask  `json:"sub_tasks" gorm:"-"`
 	ExecItems []DbInjectionExecItem `json:"exec_items" gorm:"-"`
@@ -85,13 +85,13 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 		}
 
 		for itemIdx, item := range subTask.ExecItems {
-			pass, suggestion, affectRow := checker.SqlCheck(item.SQLContent, "", "", dbConn)
+			pass, suggestion, affectRow := checker.SqlCheck(item.SQL, "", "", dbConn)
 			if affectRow > 0 {
 				task.SubTasks[idx].ExecItems[itemIdx].AffectRows = 0
 			}
 			if !pass {
 				checkPass = false
-				task.SubTasks[idx].ExecItems[itemIdx].InjectComments = suggestion
+				task.SubTasks[idx].ExecItems[itemIdx].RuleComments = suggestion
 			}
 		}
 	}
@@ -108,13 +108,13 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 func splitSubTaskExecItems(subTask *DbInjectionSubtask) (*DbInjectionSubtask, error) {
 	var items []DbInjectionExecItem
 	for _, execItem := range subTask.ExecItems {
-		sqls, err := splitMultiSql(execItem.SQLContent)
+		sqls, err := sql_util.splitMultiSql(execItem.SQL)
 		if err != nil {
 			return nil, err
 		}
 		for _, v := range sqls {
 			newItem := execItem
-			newItem.SQLContent = v
+			newItem.SQL = v
 			items = append(items, newItem)
 		}
 	}
@@ -149,7 +149,7 @@ func UpdateTask(task *DbInjectionTask) error {
 
 	//对于执行变更，检查权限
 	if task.Action == BeginAt || task.Action == SkipAt || (dbTask.Status == DBAPass && task.Action == Progress) {
-		if !(isReviewer && task.ExecType == DML) && !isDba {
+		if !(isReviewer && allIsDmlTask(task)) && !isDba {
 			return errors.New("auth invalid")
 		}
 	}

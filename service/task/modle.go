@@ -1,42 +1,31 @@
 package task
 
-type DbInjectionRules struct {
-	ID          uint64 `json:"id" gorm:"column:id"`
-	RuleName    string `json:"rule_name" gorm:"column:rule_name"`
-	RuleContent string `json:"rule_content" gorm:"column:rule_content"`
-	Switch      int    `json:"switch" gorm:"column:switch"`
-	Ct          int64  `json:"ct" gorm:"column:ct"`
-	Ut          int64  `json:"ut" gorm:"column:ut"`
-}
-
 type DbInjectionSubtask struct {
 	ID          int64  `json:"id" gorm:"column:id"`
 	TaskID      int64  `json:"task_id" gorm:"column:task_id"`
 	TaskType    string `json:"task_type" gorm:"column:task_type"`
 	DbName      string `json:"db_name" gorm:"column:db_name"`
 	ClusterName string `json:"cluster_name" gorm:"column:cluster_name"`
-	Ct          int64  `json:"ct" gorm:"column:ct"`
-	Ut          int64  `json:"ut" gorm:"column:ut"`
 
 	ExecItems []DbInjectionExecItem `json:"exec_items" gorm:"-"`
 }
 
 type DbInjectionExecItem struct {
-	ID             int64  `json:"id" gorm:"column:id"`
-	TaskID         int64  `json:"task_id" gorm:"column:task_id"`
-	SubTaskID      int64  `json:"sub_task_id" gorm:"column:sub_task_id"`
-	SQLContent     string `json:"sql_content" gorm:"column:sql_content"`
-	Remark         string `json:"remark" gorm:"column:remark"`
-	AffectRows     int    `json:"affect_rows" gorm:"column:affect_rows"`
-	InjectComments string `json:"inject_comments" gorm:"column:inject_comments"`
-	Status         string `json:"status" gorm:"column:status"`
-	Ct             int64  `json:"ct" gorm:"column:ct"`
-	Ut             int64  `json:"ut" gorm:"column:ut"`
-	Et             int64  `json:"et" gorm:"column:et"`
-	ExecInfo       string `json:"exec_info" gorm:"column:exec_info"`
-	BackupInfo     string `json:"backup_info" gorm:"column:exec_info"`
-	BackupStatus   string `json:"backup_status" gorm:"column:backup_status"`
-	BackupID       int64  `json:"backup_id" gorm:"column:backup_id"`
+	ID           int64  `json:"id" gorm:"column:id"`
+	TaskID       int64  `json:"task_id" gorm:"column:task_id"`
+	SubtaskID    int64  `json:"subtask_id" gorm:"column:subtask_id"`
+	SQL          string `json:"sql" gorm:"column:sql"`
+	Remark       string `json:"remark" gorm:"column:remark"`
+	AffectRows   int    `json:"affect_rows" gorm:"column:affect_rows"`
+	RuleComments string `json:"rule_comments" gorm:"column:rule_comments"`
+	Status       string `json:"status" gorm:"column:status"`
+	ExecInfo     string `json:"exec_info" gorm:"column:exec_info"`
+	BackupInfo   string `json:"backup_info" gorm:"column:exec_info"`
+	BackupStatus string `json:"backup_status" gorm:"column:backup_status"`
+	BackupID     int64  `json:"backup_id" gorm:"column:backup_id"`
+
+	Ut int64 `json:"ut" gorm:"column:ut"`
+	Et int64 `json:"et" gorm:"column:et"`
 }
 
 type Status = string
@@ -62,18 +51,18 @@ const (
 type ItemStatus = string
 
 const (
-	ItemFailed       ItemStatus = "failed"
-	ItemBackupFailed            = "backupFailed"
+	ItemFailed        ItemStatus = "failed"
+	ItemBackupFailed             = "backupFailed"
 	ItemBackupSuccess            = "backupSuccess"
-	ItemSuccess                 = "success"
-	ItemSkipped                 = "skipped"
+	ItemSuccess                  = "success"
+	ItemSkipped                  = "skipped"
 )
 
-type ExecType = string
+type Type = string
 
 const (
-	DML ExecType = "DML"
-	DDL          = "DDL"
+	DML Type = "DML"
+	DDL      = "DDL"
 )
 
 type Action = string
