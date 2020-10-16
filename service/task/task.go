@@ -108,7 +108,7 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 func splitSubTaskExecItems(subTask *DbInjectionSubtask) (*DbInjectionSubtask, error) {
 	var items []DbInjectionExecItem
 	for _, execItem := range subTask.ExecItems {
-		sqls, err := sql_util.splitMultiSql(execItem.SQL)
+		sqls, err := sql_util.SplitMultiSql(execItem.SQL)
 		if err != nil {
 			return nil, err
 		}

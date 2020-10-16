@@ -1,4 +1,4 @@
-package task
+package sql_util
 
 import (
 	"database/sql"
@@ -108,7 +108,7 @@ func HandelKeyWorldForCondition(originWhere string) string {
 	targetWhere := originWhere
 	columns := GetCondition(originWhere)
 	for _, v := range columns {
-		if isKeyWord(v) {
+		if IsKeyWord(v) {
 			targetWhere = strings.ReplaceAll(targetWhere, v, fmt.Sprintf("`%s`", v))
 		}
 	}
@@ -255,7 +255,7 @@ func GetSqlAfterWhere(sql string) string {
 	return writer.Condition.String()
 }
 
-func splitMultiSql(sql string) (resp []string, err error) {
+func SplitMultiSql(sql string) (resp []string, err error) {
 	stmtNodes, _, err := getParser().Parse(sql, "utf8mb4", "")
 	if err != nil {
 		slog.Infof("parser sql error : %s", err.Error())
@@ -312,9 +312,9 @@ func replaceSpecifyChar(str string) string {
 	return replaceSpecifyChar(strings.ReplaceAll(str, doubleSpace, space))
 }
 
-const keyJoinChar = "+"
+const KeyJoinChar = "+"
 
-func isSubKey(keyA, keyB string) bool {
+func IsSubKey(keyA, keyB string) bool {
 	var short, long string
 	if len(keyA) < len(keyB) {
 		short, long = keyA, keyB
@@ -322,7 +322,7 @@ func isSubKey(keyA, keyB string) bool {
 		short, long = keyB, keyA
 	}
 
-	subKeys := strings.Split(long, keyJoinChar)
+	subKeys := strings.Split(long, KeyJoinChar)
 	for _, v := range subKeys {
 		if v == short {
 			return true
@@ -385,7 +385,7 @@ var keyWords = map[string]struct{}{
 	"WHEN": {}, "WHERE": {}, "WIDTH": {}, "WITH": {}, "WRITE": {}, "XOR": {}, "YEAR_MONTH": {}, "ZEROFILL": {},
 }
 
-func isKeyWord(name string) bool {
+func IsKeyWord(name string) bool {
 	name = strings.ToUpper(name)
 	if _, ok := keyWords[name]; ok {
 		return true
@@ -395,7 +395,7 @@ func isKeyWord(name string) bool {
 
 const varcharLimit = 1024
 
-func varcharLengthTooLong(nodes []ast.StmtNode) bool {
+func VarcharLengthTooLong(nodes []ast.StmtNode) bool {
 	for _, tiStmt := range nodes {
 		switch node := tiStmt.(type) {
 		case *ast.AlterTableStmt:
@@ -419,7 +419,7 @@ func varcharLengthTooLong(nodes []ast.StmtNode) bool {
 	return false
 }
 
-func singlePrimaryKeyIsInt(nodes []ast.StmtNode) bool {
+func SinglePrimaryKeyIsInt(nodes []ast.StmtNode) bool {
 	for _, tiStmt := range nodes {
 		switch node := tiStmt.(type) {
 		case *ast.CreateTableStmt:
