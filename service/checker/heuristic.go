@@ -1,9 +1,10 @@
-package advisor
+package checker
 
 import (
 	"bytes"
 	"context"
 	"fmt"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"strings"
 
 	"github.com/pingcap/parser/ast"
@@ -273,7 +274,7 @@ func (q *Rule) RuleCreateTableDupIndex(audit *Audit, info *task.DBInfo) (pass bo
 					for k, v1 := range v.Keys {
 						keys[k] = fmt.Sprintf("%v", v1.Column)
 					}
-					key := strings.Join(keys, keyJoinChar)
+					key := strings.Join(keys, sql_util.KeyJoinChar)
 					if idxmap[key] {
 						return false, q.Summary, 0
 					} else {
@@ -285,7 +286,7 @@ func (q *Rule) RuleCreateTableDupIndex(audit *Audit, info *task.DBInfo) (pass bo
 						if k == k1 {
 							continue
 						}
-						if strings.HasPrefix(k, k1) && isSubKey(k, k1) {
+						if strings.HasPrefix(k, k1) && sql_util.IsSubKey(k, k1) {
 							return false, q.Summary, 0
 						}
 					}
@@ -521,7 +522,7 @@ func (q *Rule) RuleCreateTableNotUseKeyWorld(audit *Audit, info *task.DBInfo) (p
 			switch node := tiStmt.(type) {
 			case *ast.CreateTableStmt:
 				for _, v := range node.Cols {
-					if isKeyWord(v.Name.Name.O) {
+					if sql_util.IsKeyWord(v.Name.Name.O) {
 						return false, q.Summary + " key: " + v.Name.Name.O, 0
 					}
 				}
@@ -533,7 +534,7 @@ func (q *Rule) RuleCreateTableNotUseKeyWorld(audit *Audit, info *task.DBInfo) (p
 
 // RuleCreateTableTextColNum Create.017
 func (q *Rule) RuleNotUseIntAsPrimaryKey(audit *Audit, info *task.DBInfo) (pass bool, newSummary string, affectRows int) {
-	if singlePrimaryKeyIsInt(audit.TiStmt) {
+	if sql_util.SinglePrimaryKeyIsInt(audit.TiStmt) {
 		return false, q.Summary, 0
 	}
 	return true, q.Summary, 0
@@ -541,7 +542,7 @@ func (q *Rule) RuleNotUseIntAsPrimaryKey(audit *Audit, info *task.DBInfo) (pass 
 
 // RuleCreateTableTextColNum Create.018
 func (q *Rule) RuleVarcharLengthLimit(audit *Audit, info *task.DBInfo) (pass bool, newSummary string, affectRows int) {
-	if varcharLengthTooLong(audit.TiStmt) {
+	if sql_util.VarcharLengthTooLong(audit.TiStmt) {
 		return false, q.Summary, 0
 	}
 	return true, q.Summary, 0

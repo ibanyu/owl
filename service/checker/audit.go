@@ -1,4 +1,4 @@
-package advisor
+package checker
 
 import (
 	"fmt"
@@ -30,10 +30,14 @@ func (audit *Audit) SqlCheck(sql, charset, collation string, info *task.DBInfo) 
 
 	pass = true
 	for _, v := range Rules {
+		if v.Close {
+			continue
+		}
+
 		pass, suggestion, affectRow = v.CheckFuncPass(&v, audit, info)
 		if  !pass{
 			pass = false
-			suggestion += v.Summary
+			suggestion += "; " + v.Summary
 			if IsBreakRule(v.Name) {
 				break
 			}
