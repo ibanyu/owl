@@ -6,6 +6,8 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
+const ruleClose = 1
+
 type DbInjectionRuleStatus struct {
 	Name  string `json:"name" gorm:"column:name"`
 	Close int    `json:"close" gorm:"column:close"`
@@ -31,7 +33,7 @@ func SetRuleStatus() {
 
 	for _, ruleStatus := range ruleStatuses {
 		for idx, _ := range Rules {
-			if Rules[idx].Name == ruleStatus.Name && ruleStatus.Close == 1 {
+			if Rules[idx].Name == ruleStatus.Name && ruleStatus.Close == ruleClose {
 				Rules[idx].Close = true
 			}
 		}
@@ -53,6 +55,10 @@ func UpdateRuleStatus(name, action string) (err error) {
 	default:
 		return fmt.Errorf("update rule status action not defind, action: %s", action)
 	}
+}
+
+func ListRules() []Rule {
+	return Rules
 }
 
 func updateCacheRuleStatus(name string, close bool) {
