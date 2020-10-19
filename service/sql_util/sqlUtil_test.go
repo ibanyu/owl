@@ -1,4 +1,4 @@
-package task
+package sql_util
 
 import (
 	"fmt"
@@ -244,10 +244,10 @@ func TestIsSubKey(t *testing.T) {
 		},
 	}
 	for _, v := range keys {
-		if resp := isSubKey(v.KeyL, v.KeyS); resp != v.Result {
+		if resp := IsSubKey(v.KeyL, v.KeyS); resp != v.Result {
 			t.FailNow()
 		}
-		if resp := isSubKey(v.KeyS, v.KeyL); resp != v.Result {
+		if resp := IsSubKey(v.KeyS, v.KeyL); resp != v.Result {
 			t.FailNow()
 		}
 	}

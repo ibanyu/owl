@@ -1,4 +1,4 @@
-package advisor
+package checker
 
 import (
 	"strconv"
@@ -8,6 +8,7 @@ import (
 	"github.com/pingcap/parser/mysql"
 	"github.com/shawnfeng/sutil/slog"
 
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
 
@@ -23,7 +24,7 @@ func unsupportedTypeChange(sql string, tiStmt ast.StmtNode, info *task.DBInfo) b
 		return true
 	}
 
-	column, err := GetTableColumn(tableName, info)
+	column, err := sql_util.GetTableColumn(tableName, info.DB)
 	if err != nil {
 		slog.Errorf("get column info from db err: %s", err.Error())
 		return true
@@ -51,8 +52,8 @@ varchar  varchar
 int      long
 bigint   longlong
 */
-func IsBanned(column []Column, old string, newFieldType byte, NewFieldLen int) bool {
-	var oldCol *Column
+func IsBanned(column []sql_util.Column, old string, newFieldType byte, NewFieldLen int) bool {
+	var oldCol *sql_util.Column
 	for _, v := range column {
 		if strings.ToLower(v.Field) == old {
 			oldCol = &v

@@ -121,7 +121,7 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 			}
 		}
 	case ReviewPass:
-		//如果是dml，则不需要dba审核 todo
+		//如果是dml，则不需要dba审核
 		if isReviewer && allIsDmlTask(task){
 			if detail {
 				return &EditAuth{

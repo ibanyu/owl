@@ -1,4 +1,4 @@
-package advisor
+package checker
 
 import (
 	"fmt"

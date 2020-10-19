@@ -1,4 +1,4 @@
-package advisor
+package checker
 
 import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
@@ -12,6 +12,7 @@ type Rule struct {
 	Content  string `json:"Content"`  // 规则解释
 	Case     string `json:"Case"`     // SQL示例
 	Position int    `json:"Position"` // 建议所处SQL字符位置，默认0表示全局建议
+	Close    bool   `json:"close"`    // 是否禁用，
 
 	CheckFuncPass func(*Rule, *Audit, *task.DBInfo) (pass bool, newSummary string, affectRows int) `json:"-"` // 函数名
 }

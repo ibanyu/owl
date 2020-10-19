@@ -11,6 +11,7 @@ import (
 	"github.com/pingcap/parser/ast"
 	"github.com/shawnfeng/sutil/slog"
 
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
 
@@ -68,7 +69,7 @@ func backup(db *sql.DB, taskType, sql string) (execBackup bool, backupId int64, 
 }
 
 func needBackup(sql string) bool {
-	stmtNodes, _, _ := Parser.Parse(sql, "", "")
+	stmtNodes, _, _ := sql_util.Parser.Parse(sql, "", "")
 
 	for _, tiStmt := range stmtNodes {
 		switch tiStmt.(type) {
@@ -88,7 +89,7 @@ func fetchAndStoreBackupInfo(db *sql.DB, selectSql, tableName string) (isEmpty b
 		return
 	}
 
-	column, err := GetTableColumn(tableName, db)
+	column, err := sql_util.GetTableColumn(tableName, db)
 	if err != nil {
 		return
 	}
@@ -108,10 +109,10 @@ func fetchAndStoreBackupInfo(db *sql.DB, selectSql, tableName string) (isEmpty b
 }
 
 func getSqlInfo(sql string) (selectSql string, tableName string, err error) {
-	tableName, err = GetTableName(sql)
+	tableName, err = sql_util.GetTableName(sql)
 
-	where := GetSqlAfterWhere(sql)
-	selectSql = fmt.Sprintf("select * from %s where %s", tableName, HandelKeyWorldForCondition(where))
+	where := sql_util.GetSqlAfterWhere(sql)
+	selectSql = fmt.Sprintf("select * from %s where %s", tableName, sql_util.HandelKeyWorldForCondition(where))
 	slog.Infof("build backup select sql : %s ", selectSql)
 
 	return
@@ -120,7 +121,7 @@ func getSqlInfo(sql string) (selectSql string, tableName string, err error) {
 //map 乱序, 需要按列顺序存
 // 用#分割行,用*分割字段
 // 需要把字段中的 # * 空字符替换掉, 展示以及回滚的时候再替换回来
-func formatData(row *sql.Rows, columns *[]Column) string {
+func formatData(row *sql.Rows, columns *[]sql_util.Column) string {
 	defer row.Close()
 	values, err := scanner.ScanMap(row)
 	if err != nil {

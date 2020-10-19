@@ -1,4 +1,4 @@
-package advisor
+package checker
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	_ "github.com/pingcap/tidb/types/parser_driver"
 	"github.com/shawnfeng/sutil/slog"
 
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
@@ -28,7 +29,7 @@ func IndexMach(info *task.DBInfo, sql string) (bool, error) {
 	}
 
 	sql = strings.TrimSpace(sql)
-	sqlAfterWhere := task.GetSqlAfterWhere(sql)
+	sqlAfterWhere := sql_util.GetSqlAfterWhere(sql)
 	if operateDisableIndex(sqlAfterWhere) {
 		return false, nil
 	}
@@ -37,7 +38,7 @@ func IndexMach(info *task.DBInfo, sql string) (bool, error) {
 		slog.Warnf("sql check, get index info err: %s", err.Error())
 		return false, err
 	}
-	condition := task.GetCondition(sqlAfterWhere)
+	condition := sql_util.GetCondition(sqlAfterWhere)
 
 	return indexMatchConditionOrdinal(keysInfo, condition) || indexMatchConditionAllValue(keysInfo, condition), nil
 }
@@ -101,7 +102,7 @@ type KeysInfo struct {
 
 // 获取索引信息
 func getIndexInfo(info *task.DBInfo, sql string) (*[]KeysInfo, error) {
-	tableName, err := task.GetTableName(sql)
+	tableName, err := sql_util.GetTableName(sql)
 	if err != nil {
 		return nil, err
 	}
@@ -251,11 +252,11 @@ func dmlSqlToCount(sql string) (string, error) {
 		return "", errors.New("sql translate to count, not contain 'where'")
 	}
 
-	tableName, err := task.GetTableName(sql)
+	tableName, err := sql_util.GetTableName(sql)
 	if err != nil {
 		return "", err
 	}
-	countSql := fmt.Sprintf("select count(*) from %s where %s", tableName, task.GetSqlAfterWhere(sql))
+	countSql := fmt.Sprintf("select count(*) from %s where %s", tableName, sql_util.GetSqlAfterWhere(sql))
 	slog.Infof("build count sql : %s", countSql)
 
 	return countSql, nil
