@@ -10,11 +10,11 @@ import (
 	"github.com/pingcap/parser/ast"
 	"github.com/pingcap/parser/mysql"
 	"github.com/pingcap/parser/types"
-	"github.com/shawnfeng/sutil/slog"
 
 	"vitess.io/vitess/go/vt/sqlparser"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/builder"
 	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
@@ -754,7 +754,7 @@ func (q *Rule) RuleAlterTableExist(audit *Audit, info *task.DBInfo) (pass bool, 
 	}
 	ts, err := getTableSysInfo(tbs[0], info)
 	if err != nil || ts == nil {
-		slog.Infof("get table sys info err:%+v, ts:%+v, task.DBInfo:%+v", err, ts, info)
+		logger.Infof("get table sys info err:%+v, ts:%+v, task.DBInfo:%+v", err, ts, info)
 		return false, q.Summary, 0
 	}
 	return true, q.Summary, 0
@@ -793,7 +793,7 @@ func (q *Rule) RuleAlterTableColumnExist(audit *Audit, info *task.DBInfo) (pass 
 	}
 	columns, err := readTableStruct(tbs[0], info)
 	if err != nil {
-		slog.Infof("Select table columns err:%+v", err.Error())
+		logger.Infof("Select table columns err:%+v", err.Error())
 		return false, q.Summary, 0
 	}
 
@@ -806,7 +806,7 @@ func (q *Rule) RuleAlterTableColumnExist(audit *Audit, info *task.DBInfo) (pass 
 			}
 		}
 		if !exist {
-			slog.Infof("get table columns info err, cols:%+v, columns:%+v, task.DBInfo:%+v", cols, columns, info)
+			logger.Infof("get table columns info err, cols:%+v, columns:%+v, task.DBInfo:%+v", cols, columns, info)
 			return false, q.Summary, 0
 		}
 	}
@@ -853,7 +853,7 @@ func (q *Rule) RuleDmlIndexMatch(audit *Audit, info *task.DBInfo) (pass bool, ne
 			return true, q.Summary, affectRows
 		}
 		if !match {
-			slog.Infof("sql check update %s, index not match", RuleDml008)
+			logger.Infof("sql check update %s, index not match", RuleDml008)
 			return false, q.Summary, affectRows
 		}
 	}
@@ -876,7 +876,7 @@ func (q *Rule) RuleDmlNoMoreThan100(audit *Audit, info *task.DBInfo) (pass bool,
 		default:
 			return true, q.Summary, affectRows
 		}
-		slog.Infof("%s sql check dml affect row, affectRow: %d", RuleDml009, affectRow)
+		logger.Infof("%s sql check dml affect row, affectRow: %d", RuleDml009, affectRow)
 
 		if affectRows > 0 {
 			affectRows = affectRow
@@ -928,7 +928,7 @@ func getTableSysInfo(table string, info *task.DBInfo) (*tableSysInfo, error) {
 	sqlContent := fmt.Sprintf("select * from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='%s' and TABLE_NAME='%s';", info.DBName, table)
 	res, err := db.QueryContext(context.TODO(), sqlContent)
 	if err != nil {
-		slog.Infof("get table sys info err:%+v", err.Error())
+		logger.Infof("get table sys info err:%+v", err.Error())
 		return nil, err
 	}
 	defer res.Close()

@@ -15,18 +15,17 @@ func InitLog() {
 		log.Fatal("init zap logger failed: ", err.Error())
 	}
 	zlog = logger.Sugar()
-
 }
 
 func Info(args ...interface{}) {
 	zlog.Info(args...)
 }
 
-func InfoF(template string, args ...interface{}) {
+func Infof(template string, args ...interface{}) {
 	zlog.Infof(template, args...)
 }
 
-func InfoW(msg string, keysAndValues ...interface{}) {
+func Infow(msg string, keysAndValues ...interface{}) {
 	zlog.Infow(msg, keysAndValues...)
 }
 
@@ -34,11 +33,11 @@ func Warn(args ...interface{}) {
 	zlog.Warn(args...)
 }
 
-func WarnF(template string, args ...interface{}) {
+func Warnf(template string, args ...interface{}) {
 	zlog.Warnf(template, args...)
 }
 
-func WarnW(msg string, keysAndValues ...interface{}) {
+func Warnw(msg string, keysAndValues ...interface{}) {
 	zlog.Warnw(msg, keysAndValues...)
 }
 
@@ -46,10 +45,10 @@ func Error(args ...interface{}) {
 	zlog.Error(args...)
 }
 
-func ErrorF(template string, args ...interface{}) {
+func Errorf(template string, args ...interface{}) {
 	zlog.Errorf(template, args...)
 }
 
-func ErrorW(msg string, keysAndValues ...interface{}) {
+func Errorw(msg string, keysAndValues ...interface{}) {
 	zlog.Errorw(msg, keysAndValues...)
 }
