@@ -1,0 +1,16 @@
+# config
+server:
+  port: 8081
+  env: 0 # 0 test, 1 pro
+  log_level: "debug" # debug, info, warning, error
+  log_dir: "./"
+  show_sql: true
+  exec_no_backup: false
+db:
+  address: "127.0.0.1"
+  port: 4000
+  user: "user@banyu"
+  password: "pwd"
+  db_name: "db_injection"
+  max_idle_conn: 2
+  max_open_conn: 30
