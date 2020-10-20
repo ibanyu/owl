@@ -7,7 +7,7 @@ import (
 type BackupImpl struct {
 }
 
-var BackupDAO = &BackupImpl{}
+var BackupDAO BackupImpl
 
 func (*BackupImpl) AddBackup(backup *task.DbInjectionBackup) (int64, error) {
 	err := GetDB().Create(backup).Error
