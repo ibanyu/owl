@@ -6,10 +6,10 @@ import (
 
 	"github.com/pingcap/parser/ast"
 	"github.com/pingcap/parser/mysql"
-	"github.com/shawnfeng/sutil/slog"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
 /**
@@ -20,13 +20,13 @@ ALTER TABLE testalter_tbl CHANGE i j BIGINT;
 func unsupportedTypeChange(sql string, tiStmt ast.StmtNode, info *task.DBInfo) bool {
 	old, new, tableName, newFieldType, newFieldLen, notChange := getInfoByParser(sql, tiStmt)
 	if notChange {
-		slog.Infof("while get Field info by parser err: stmt don't have value ")
+		logger.Infof("while get Field info by parser err: stmt don't have value ")
 		return true
 	}
 
 	column, err := sql_util.GetTableColumn(tableName, info.DB)
 	if err != nil {
-		slog.Errorf("get column info from db err: %s", err.Error())
+		logger.Errorf("get column info from db_info err: %s", err.Error())
 		return true
 	}
 
@@ -61,11 +61,11 @@ func IsBanned(column []sql_util.Column, old string, newFieldType byte, NewFieldL
 		}
 	}
 	if oldCol == nil {
-		slog.Errorf("while check is banned change, get oldCol err,old: %s cols : %v", old, column)
+		logger.Errorf("while check is banned change, get oldCol err,old: %s cols : %v", old, column)
 		return false
 	}
 
-	slog.Infof("ban change check info: old: %s, newFieldType: %v, newFiledLen: %d, oldCol: %v",
+	logger.Infof("ban change check info: old: %s, newFieldType: %v, newFiledLen: %d, oldCol: %v",
 		old, newFieldType, NewFieldLen, oldCol)
 
 	switch {
@@ -90,14 +90,14 @@ func IsBanned(column []sql_util.Column, old string, newFieldType byte, NewFieldL
 }
 
 func getLenFromType(str string) int {
-	if ! strings.Contains(str, "(") || !strings.Contains(str, ")") {
-		slog.Errorf("get field len from type err, type : %s", str)
+	if !strings.Contains(str, "(") || !strings.Contains(str, ")") {
+		logger.Errorf("get field len from type err, type : %s", str)
 		return -1
 	}
 	numStr := str[strings.Index(str, "(")+1 : strings.Index(str, ")")]
 	num, err := strconv.Atoi(numStr)
 	if err != nil {
-		slog.Errorf("get field len from type err: %s", err.Error())
+		logger.Errorf("get field len from type err: %s", err.Error())
 	}
 	return num
 }
@@ -106,7 +106,7 @@ func getInfoByParser(sql string, tiStmt ast.StmtNode) (old, new, tableName strin
 	newFieldType byte, newFieldLen int, notChange bool) {
 	node := tiStmt.(*ast.AlterTableStmt)
 	if len(node.Specs) < 1 || len(node.Specs[0].NewColumns) < 1 {
-		slog.Warnf("while get Field info by parser err: stmt.NewColumns don't have value ")
+		logger.Warnf("while get Field info by parser err: stmt.NewColumns don't have value ")
 		notChange = true
 		return
 	}
@@ -124,7 +124,7 @@ func getInfoByParser(sql string, tiStmt ast.StmtNode) (old, new, tableName strin
 	new = node.Specs[0].NewColumns[0].Name.Name.L
 	newFieldType = node.Specs[0].NewColumns[0].Tp.Tp
 	newFieldLen = node.Specs[0].NewColumns[0].Tp.Flen
-	slog.Infof("get sql info by parser, tableName: %s,old:%s, new: %s, newFieldType: %v, newFieldLen: %d",
+	logger.Infof("get sql info by parser, tableName: %s,old:%s, new: %s, newFieldType: %v, newFieldLen: %d",
 		tableName, old, new, newFieldType, newFieldLen)
 	return
 }

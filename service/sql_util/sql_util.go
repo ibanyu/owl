@@ -12,8 +12,8 @@ import (
 	"github.com/pingcap/parser/ast"
 	"github.com/pingcap/parser/format"
 	_ "github.com/pingcap/tidb/types/parser_driver"
-	"github.com/shawnfeng/sutil/slog"
 
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
 
@@ -45,7 +45,7 @@ func buildDelRollBackSql(column []Column, dataItems [][]string, tableName string
 	sql := fmt.Sprintf("INSERT INTO %s (%s) VALUES %s;",
 		tableName, strings.Join(columnName, ", "), strings.Join(values, ", "))
 
-	slog.Infof("build rollback delete sql : %s ", sql)
+	logger.Infof("build rollback delete sql : %s ", sql)
 	return sql, nil
 }
 
@@ -60,12 +60,12 @@ func GetTableColumn(tableName string, db *sql.DB) (*[]Column, error) {
 	sql := fmt.Sprintf("show columns from %s ", tableName)
 	rows, err := db.Query(sql)
 	if err != nil {
-		slog.Warnf("get table column info err:%v, sql content: %s", err, sql)
+		logger.Warnf("get Table column info err:%v, sql content: %s", err, sql)
 		return nil, err
 	}
 	var column []Column
 	err = scanner.Scan(rows, &column)
-	slog.Infof("table column is: %v", column)
+	logger.Infof("Table column is: %v", column)
 	return &column, err
 }
 
@@ -74,7 +74,7 @@ func GetTableName(sql string) (string, error) {
 	p := parser.New()
 	stmtNodes, _, err := p.Parse(sql, "", "")
 	if err != nil {
-		slog.Errorf("get table name,parse sql failed, sql : %s", sql)
+		logger.Errorf("get Table name,parse sql failed, sql : %s", sql)
 		return "", err
 	}
 	var left ast.ResultSetNode
@@ -89,13 +89,13 @@ func GetTableName(sql string) (string, error) {
 
 		tSource, ok := left.(*ast.TableSource)
 		if !ok {
-			slog.Errorf("get table name, assert failed, sql : %s", sql)
-			return "", errors.New("get table name failed")
+			logger.Errorf("get Table name, assert failed, sql : %s", sql)
+			return "", errors.New("get Table name failed")
 		}
 		tName, ok := tSource.Source.(*ast.TableName)
 		if !ok {
-			slog.Errorf("get table name, assert failed, sql : %s", sql)
-			return "", errors.New("get table name failed")
+			logger.Errorf("get Table name, assert failed, sql : %s", sql)
+			return "", errors.New("get Table name failed")
 		}
 		return tName.Name.L, nil
 	}
@@ -127,7 +127,7 @@ func GetCondition(sqlAfterWhere string) []string {
 			condition = append(condition, condi)
 		}
 	}
-	slog.Infof("sql condition is : %v", condition)
+	logger.Infof("sql condition is : %v", condition)
 	return condition
 }
 
@@ -174,7 +174,7 @@ func GetUpdateColumn(sql string) ([]string, error) {
 			}
 		default:
 			errStr := fmt.Sprintf("get sql update cols err, not update operate, sql: %s", sql)
-			slog.Errorf(errStr)
+			logger.Errorf(errStr)
 			return nil, errors.New(errStr)
 		}
 	}
@@ -189,7 +189,7 @@ type ColsSeq struct {
 // columnInfos：所有的顺序的列信息， column： 待排序列信息
 // 注意这个返回值里有空值，为了对应其原来的顺序和位置
 // eg : {"id","","age"}
-func sortColOnOriginSeq(columnInfos []Column, column []string) []string {
+func SortColOnOriginSeq(columnInfos []Column, column []string) []string {
 	length := len(columnInfos)
 	resp := make([]string, length, length)
 	for _, colName := range column {
@@ -211,7 +211,7 @@ func getNotNullSortedCols(cols []string) (resp []string) {
 	return resp
 }
 
-func getTablePrimaryInfo(columnInfos []Column) (primaryCol []string, index []int) {
+func GetTablePrimaryInfo(columnInfos []Column) (primaryCol []string, index []int) {
 	for i, v := range columnInfos {
 		if v.Key == "PRI" {
 			primaryCol = append(primaryCol, v.Field)
@@ -237,7 +237,7 @@ var Parser *parser.Parser = parser.New()
 func GetSqlAfterWhere(sql string) string {
 	stmtNodes, _, err := Parser.Parse(sql, "", "")
 	if err != nil {
-		slog.Errorf("get sql condition err: %s", err.Error())
+		logger.Errorf("get sql condition err: %s", err.Error())
 	}
 
 	writer := &WriterBuffer{}
@@ -249,7 +249,7 @@ func GetSqlAfterWhere(sql string) string {
 		case *ast.DeleteStmt:
 			node.Where.Restore(ctx)
 		default:
-			slog.Errorf("get sql after err, not supported type. sql: %s", sql)
+			logger.Errorf("get sql after err, not supported type. sql: %s", sql)
 		}
 	}
 	return writer.Condition.String()
@@ -258,7 +258,7 @@ func GetSqlAfterWhere(sql string) string {
 func SplitMultiSql(sql string) (resp []string, err error) {
 	stmtNodes, _, err := getParser().Parse(sql, "utf8mb4", "")
 	if err != nil {
-		slog.Infof("parser sql error : %s", err.Error())
+		logger.Infof("parser sql error : %s", err.Error())
 		return nil, err
 	}
 
@@ -279,11 +279,11 @@ func getParser() *parser.Parser {
 }
 
 const (
-	semicolon   = `;`
-	space       = ` `
-	doubleSpace = `  `
-	table       = `	`
-	newLine     = `
+	Semicolon   = `;`
+	Space       = ` `
+	DoubleSpace = `  `
+	Table       = `	`
+	NewLine     = `
 `
 )
 
@@ -292,7 +292,7 @@ func deleteSpecifyCharAtHead(str string) string {
 		return str
 	}
 	head := str[:1]
-	if head == semicolon || head == space || head == newLine {
+	if head == Semicolon || head == Space || head == NewLine {
 		return deleteSpecifyCharAtHead(str[1:])
 	}
 	return str
@@ -302,14 +302,14 @@ func replaceSpecifyChar(str string) string {
 	if len(str) < 1 {
 		return str
 	}
-	if !strings.Contains(str, doubleSpace) &&
-		!strings.Contains(str, table) &&
-		!strings.Contains(str, newLine) {
+	if !strings.Contains(str, DoubleSpace) &&
+		!strings.Contains(str, Table) &&
+		!strings.Contains(str, NewLine) {
 		return str
 	}
-	str = strings.ReplaceAll(str, newLine, space)
-	str = strings.ReplaceAll(str, table, space)
-	return replaceSpecifyChar(strings.ReplaceAll(str, doubleSpace, space))
+	str = strings.ReplaceAll(str, NewLine, Space)
+	str = strings.ReplaceAll(str, Table, Space)
+	return replaceSpecifyChar(strings.ReplaceAll(str, DoubleSpace, Space))
 }
 
 const KeyJoinChar = "+"

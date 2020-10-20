@@ -6,14 +6,19 @@ import (
 	"github.com/pingcap/parser"
 	"github.com/pingcap/parser/ast"
 
+	"vitess.io/vitess/go/vt/sqlparser"
+
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
+
+
 // Audit 待评审的SQL结构体，由原SQL和其对应的抽象语法树组成
 type Audit struct {
 	Query  string              // 查询语句
+	Stmt   sqlparser.Statement // 通过Vitess解析出的抽象语法树
 	TiStmt []ast.StmtNode      // 通过TiDB解析出的抽象语法树
 }
 
@@ -49,6 +54,8 @@ func (audit *Audit) ListRules() interface{} {
 // NewQuery4Audit return a struct for Audit
 func NewAudit(sql, charset, collation string) (*Audit, error) {
 	q := &Audit{Query: sql}
+	// vitess 语法解析不上报，以 tidb parser 为主
+	q.Stmt, _ = sqlparser.Parse(sql)
 
 	// tdib parser 语法解析
 	var warns []error

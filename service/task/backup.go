@@ -9,15 +9,15 @@ import (
 	"unicode"
 
 	"github.com/pingcap/parser/ast"
-	"github.com/shawnfeng/sutil/slog"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
 
 type BackupDao interface {
 	AddBackup(backup *DbInjectionBackup) (int64, error)
-	UpdateBackupStatus(backup *DbInjectionBackup) error
+	UpdateBackup(backup *DbInjectionBackup) error //todo no usage is a bug
 	GetBackupInfoById(id int64) (*DbInjectionBackup, error)
 }
 
@@ -31,7 +31,7 @@ type DbInjectionBackup struct {
 	ID           int64  `json:"id" bdb:"id"`
 	Data         string `json:"data" bdb:"data"`
 	Ct           int64  `json:"ct" bdb:"ct"`
-	RollbackTime uint64 `json:"rollback_time" bdb:"rollback_time"`
+	RollbackTime int64 `json:"rollback_time" bdb:"rollback_time"`
 	RollbackUser string `json:"rollback_user" bdb:"rollback_user"`
 	IsRollBacked int    `json:"is_roll_backed" bdb:"is_roll_backed"`
 }
@@ -47,18 +47,19 @@ const (
 	replaceNUL        = "4252a939eaac0e4f457f296e60882ebe"
 )
 
+
 func backup(db *sql.DB, taskType, sql string) (execBackup bool, backupId int64, err error) {
 	if taskType != DML ||
 		!needBackup(sql) {
-		slog.Infof("not a update or delete operate , don't backup")
+		logger.Infof("not a update or delete operate , don't backup")
 		return
 	}
 	execBackup = true
-	slog.Infof("start backup data ...")
+	logger.Infof("start backup data ...")
 
 	selectSql, tableName, err := getSqlInfo(sql)
 	if err != nil {
-		slog.Errorf("convert sql to select err: %s", err.Error())
+		logger.Errorf("convert sql to select err: %s", err.Error())
 		return
 	}
 	isEmpty, backupId, err := fetchAndStoreBackupInfo(db, selectSql, tableName)
@@ -85,7 +86,7 @@ func needBackup(sql string) bool {
 func fetchAndStoreBackupInfo(db *sql.DB, selectSql, tableName string) (isEmpty bool, backupId int64, err error) {
 	rows, err := db.Query(selectSql)
 	if err != nil {
-		slog.Warnf("exec backup db exec err:%v", err)
+		logger.Warnf("exec backup db_info exec err:%v", err)
 		return
 	}
 
@@ -97,7 +98,7 @@ func fetchAndStoreBackupInfo(db *sql.DB, selectSql, tableName string) (isEmpty b
 	dataStr := formatData(rows, column)
 	if strings.TrimSpace(dataStr) == "" {
 		isEmpty = true
-		slog.Warnf("while backup, condition match nothing")
+		logger.Warnf("while backup, condition match nothing")
 		return
 	}
 
@@ -113,7 +114,7 @@ func getSqlInfo(sql string) (selectSql string, tableName string, err error) {
 
 	where := sql_util.GetSqlAfterWhere(sql)
 	selectSql = fmt.Sprintf("select * from %s where %s", tableName, sql_util.HandelKeyWorldForCondition(where))
-	slog.Infof("build backup select sql : %s ", selectSql)
+	logger.Infof("build backup select sql : %s ", selectSql)
 
 	return
 }
@@ -125,7 +126,7 @@ func formatData(row *sql.Rows, columns *[]sql_util.Column) string {
 	defer row.Close()
 	values, err := scanner.ScanMap(row)
 	if err != nil {
-		slog.Errorf("format data scanMap rows failed : %s", err.Error())
+		logger.Errorf("format data scanMap rows failed : %s", err.Error())
 		return ""
 	}
 
@@ -136,7 +137,7 @@ func formatData(row *sql.Rows, columns *[]sql_util.Column) string {
 			if fieldValue, ok := rowMap[column.Field]; ok {
 				rowStr += splitFieldAsterisk + convertField(uint8ToString(fieldValue))
 			} else {
-				slog.Errorf("backup data format data error, column : %s not found . data : %v", column.Field, rowMap)
+				logger.Errorf("backup data format data error, column : %s not found . data : %v", column.Field, rowMap)
 			}
 		}
 		if len(rowStr) >= 1 {
@@ -176,7 +177,7 @@ func reverseConvertField(str string) string {
 func uint8ToString(inter interface{}) string {
 	uint8Array, ok := inter.([]uint8)
 	if !ok {
-		slog.Errorf("uint8 to string error : received interface isn't a uint8 slice, data: %v", inter)
+		logger.Errorf("uint8 to string error : received interface isn't a uint8 slice, data: %v", inter)
 		return ""
 	}
 

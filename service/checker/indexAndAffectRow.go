@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	_ "github.com/pingcap/tidb/types/parser_driver"
-	"github.com/shawnfeng/sutil/slog"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
 
@@ -24,7 +24,7 @@ const (
 func IndexMach(info *task.DBInfo, sql string) (bool, error) {
 	sql = strings.ToLower(sql)
 	if !strings.Contains(sql, "where") {
-		slog.Infof("sql check： sql not contain 'where' ")
+		logger.Infof("sql check： sql not contain 'where' ")
 		return false, errors.New("sql not contain 'where' ")
 	}
 
@@ -35,7 +35,7 @@ func IndexMach(info *task.DBInfo, sql string) (bool, error) {
 	}
 	keysInfo, err := getIndexInfo(info, sql)
 	if err != nil {
-		slog.Warnf("sql check, get index info err: %s", err.Error())
+		logger.Warnf("sql check, get index info err: %s", err.Error())
 		return false, err
 	}
 	condition := sql_util.GetCondition(sqlAfterWhere)
@@ -87,7 +87,7 @@ func indexMatchConditionOrdinal(keys *[]KeysInfo, condition []string) bool {
 			}
 		}
 		if !matchI {
-			slog.Infof("sql condition not math, num : %d, condition: %s, index: %v", i, v, *keys)
+			logger.Infof("sql condition not math, num : %d, condition: %s, index: %v", i, v, *keys)
 			return false
 		}
 	}
@@ -107,7 +107,7 @@ func getIndexInfo(info *task.DBInfo, sql string) (*[]KeysInfo, error) {
 		return nil, err
 	}
 	indexSql := fmt.Sprintf("show index from %s", tableName)
-	slog.Infof("build get index sql : %s", indexSql)
+	logger.Infof("build get index sql : %s", indexSql)
 
 	res, err := info.DB.QueryContext(context.TODO(), indexSql)
 	if err != nil {
@@ -120,7 +120,7 @@ func getIndexInfo(info *task.DBInfo, sql string) (*[]KeysInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	slog.Infof("sql index info: %v, index sql: %s", *keysInfo, indexSql)
+	logger.Infof("sql index info: %v, index sql: %s", *keysInfo, indexSql)
 	return keysInfo, nil
 }
 
@@ -144,7 +144,7 @@ func operateDisableIndex(sqlAfterWhere string) bool {
 		strings.Contains(sqlAfterWhere, indexDisableConditionNotIn) ||
 		strings.Contains(sqlAfterWhere, "<>") ||
 		strings.Contains(sqlAfterWhere, indexDisableConditionNull) {
-		slog.Infof("sql contain 'or' or '!=' or '<>' or 'null' ")
+		logger.Infof("sql contain 'or' or '!=' or '<>' or 'null' ")
 		return true
 	}
 
@@ -152,7 +152,7 @@ func operateDisableIndex(sqlAfterWhere string) bool {
 		strings.Contains(sqlAfterWhere, "-") ||
 		strings.Contains(sqlAfterWhere, "*") ||
 		strings.Contains(sqlAfterWhere, "/") {
-		slog.Infof(`sql contain '+' or '-' or '*' or '/' `)
+		logger.Infof(`sql contain '+' or '-' or '*' or '/' `)
 		return true
 	}
 
@@ -161,12 +161,12 @@ func operateDisableIndex(sqlAfterWhere string) bool {
 	for {
 		if index := strings.Index(sql, "like"); index > 0 {
 			if len(sql) < index+5 {
-				slog.Infof("sql check error : like have no value")
+				logger.Infof("sql check error : like have no value")
 				//正确性检测与此无关,其他地方会做
 				return true
 			}
 			if sql[index+5] == '%' {
-				slog.Infof("sql contain 'like' , and begin as percent sign ")
+				logger.Infof("sql contain 'like' , and begin as percent sign ")
 				return true
 			}
 			sql = strings.Replace(sql, "like", "", 1)
@@ -177,7 +177,7 @@ func operateDisableIndex(sqlAfterWhere string) bool {
 
 	resp := scopeOperateDisableIndex(sqlAfterWhere)
 	if resp {
-		slog.Infof("sql contains scope condition, disable index ")
+		logger.Infof("sql contains scope condition, disable index ")
 	}
 	return resp
 }
@@ -233,13 +233,13 @@ func scopeOperateDisableIndex(sqlAfterWhere string) bool {
 func getAffectRow(info *task.DBInfo, sql string) (int, error) {
 	sql, err := dmlSqlToCount(sql)
 	if err != nil {
-		slog.Warnf("get dml convert select sql error : %s", err.Error())
+		logger.Warnf("get dml convert select sql error : %s", err.Error())
 		return -1, err
 	}
 	var count int64
 	err = info.DB.QueryRow(sql).Scan(&count)
 	if err != nil {
-		slog.Warnf("get dml sql affect row error : %s", err.Error())
+		logger.Warnf("get dml sql affect row error : %s", err.Error())
 		return -1, err
 	}
 
@@ -257,7 +257,7 @@ func dmlSqlToCount(sql string) (string, error) {
 		return "", err
 	}
 	countSql := fmt.Sprintf("select count(*) from %s where %s", tableName, sql_util.GetSqlAfterWhere(sql))
-	slog.Infof("build count sql : %s", countSql)
+	logger.Infof("build count sql : %s", countSql)
 
 	return countSql, nil
 }

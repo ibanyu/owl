@@ -85,7 +85,7 @@ func ExecTask(paramTask *DbInjectionTask) error {
 
 // backup, exec, update status
 func BackupAndExec(db *sql.DB, item *DbInjectionExecItem, taskType string) error {
-	backSuccess, backupId, backupErr := backup(db, taskType, item.SQL)
+	backSuccess, backupId, backupErr := backup(db, taskType, item.SQLContent)
 	if backSuccess {
 		item.BackupStatus = ItemBackupSuccess
 	} else {
@@ -103,7 +103,7 @@ func BackupAndExec(db *sql.DB, item *DbInjectionExecItem, taskType string) error
 		}
 	}
 
-	result, err := db.Exec(item.SQL)
+	result, err := db.Exec(item.SQLContent)
 	if err != nil {
 		item.Status = ItemFailed
 		item.ExecInfo = err.Error()

@@ -42,17 +42,18 @@ type TaskDao interface {
 
 var taskDao TaskDao
 
-func setTaskDao(impl TaskDao) {
+func SetTaskDao(impl TaskDao) {
 	taskDao = impl
 }
 
 type SubTaskDao interface {
 	UpdateItem(item *DbInjectionExecItem) error
+	UpdateItemByBackupId(item *DbInjectionExecItem) error
 }
 
 var subTaskDao SubTaskDao
 
-func setSubTaskDao(impl SubTaskDao) {
+func SetSubTaskDao(impl SubTaskDao) {
 	subTaskDao = impl
 }
 
@@ -85,7 +86,7 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 		}
 
 		for itemIdx, item := range subTask.ExecItems {
-			pass, suggestion, affectRow := checker.SqlCheck(item.SQL, "", "", dbConn)
+			pass, suggestion, affectRow := checker.SqlCheck(item.SQLContent, "", "", dbConn)
 			if affectRow > 0 {
 				task.SubTasks[idx].ExecItems[itemIdx].AffectRows = 0
 			}
@@ -108,13 +109,13 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 func splitSubTaskExecItems(subTask *DbInjectionSubtask) (*DbInjectionSubtask, error) {
 	var items []DbInjectionExecItem
 	for _, execItem := range subTask.ExecItems {
-		sqls, err := sql_util.SplitMultiSql(execItem.SQL)
+		sqls, err := sql_util.SplitMultiSql(execItem.SQLContent)
 		if err != nil {
 			return nil, err
 		}
 		for _, v := range sqls {
 			newItem := execItem
-			newItem.SQL = v
+			newItem.SQLContent = v
 			items = append(items, newItem)
 		}
 	}
