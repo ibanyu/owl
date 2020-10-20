@@ -4,7 +4,7 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
 
-type BackupImpl struct { 
+type BackupImpl struct {
 }
 
 var BackupDAO BackupImpl

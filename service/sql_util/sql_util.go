@@ -63,6 +63,8 @@ func GetTableColumn(tableName string, db *sql.DB) (*[]Column, error) {
 		logger.Warnf("get Table column info err:%v, sql content: %s", err, sql)
 		return nil, err
 	}
+	defer rows.Close()
+
 	var column []Column
 	err = scanner.Scan(rows, &column)
 	logger.Infof("Table column is: %v", column)
