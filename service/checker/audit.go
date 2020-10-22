@@ -13,8 +13,6 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
-
-
 // Audit 待评审的SQL结构体，由原SQL和其对应的抽象语法树组成
 type Audit struct {
 	Query  string              // 查询语句
@@ -35,7 +33,7 @@ func (audit *Audit) SqlCheck(sql, charset, collation string, info *task.DBInfo) 
 		}
 
 		pass, suggestion, affectRow = v.CheckFuncPass(&v, audit, info)
-		if  !pass{
+		if !pass {
 			pass = false
 			suggestion += "; " + v.Summary
 			if IsBreakRule(v.Name) {

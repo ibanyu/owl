@@ -31,7 +31,7 @@ type DbInjectionBackup struct {
 	ID           int64  `json:"id" bdb:"id"`
 	Data         string `json:"data" bdb:"data"`
 	Ct           int64  `json:"ct" bdb:"ct"`
-	RollbackTime int64 `json:"rollback_time" bdb:"rollback_time"`
+	RollbackTime int64  `json:"rollback_time" bdb:"rollback_time"`
 	RollbackUser string `json:"rollback_user" bdb:"rollback_user"`
 	IsRollBacked int    `json:"is_roll_backed" bdb:"is_roll_backed"`
 }
@@ -46,7 +46,6 @@ const (
 	replaceNumberSign = "c13c1fce3ca97e765860002118ca3bb8"
 	replaceNUL        = "4252a939eaac0e4f457f296e60882ebe"
 )
-
 
 func backup(db *sql.DB, taskType, sql string) (execBackup bool, backupId int64, err error) {
 	if taskType != DML ||

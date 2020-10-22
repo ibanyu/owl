@@ -160,7 +160,6 @@ hello`,
 	}
 }
 
-
 func TestHandleKeyWordForCondition(t *testing.T) {
 	type data struct {
 		origin string
@@ -222,7 +221,6 @@ func TestGetCondition(t *testing.T) {
 		}
 	}
 }
-
 
 func TestIsSubKey(t *testing.T) {
 	type Key struct {

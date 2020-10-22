@@ -50,7 +50,7 @@ func ExecTask(paramTask *DbInjectionTask) error {
 			}
 			jump = false
 
-			err := BackupAndExec(dbConn.DB, &item, subTask.TaskType)
+			err := BackupAndExec(dbConn, &item, subTask.TaskType)
 			if err != nil {
 				err = taskDao.UpdateTask(&DbInjectionTask{
 					ID:       task.ID,
@@ -92,7 +92,7 @@ func BackupAndExec(db *sql.DB, item *DbInjectionExecItem, taskType string) error
 		err := subTaskDao.UpdateItem(&DbInjectionExecItem{
 			ID:           item.ID,
 			BackupStatus: ItemBackupFailed,
-			BackupInfo:     backupErr.Error(),
+			BackupInfo:   backupErr.Error(),
 		})
 		if err != nil {
 			logger.Errorf("while backup failed, update item backup status err, %s", err.Error())

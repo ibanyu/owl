@@ -7,7 +7,7 @@ type authTools interface {
 
 var authTool authTools
 
-func setAuthTools(impl authTools) {
+func SetAuthTools(impl authTools) {
 	authTool = impl
 }
 
@@ -122,7 +122,7 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 		}
 	case ReviewPass:
 		//如果是dml，则不需要dba审核
-		if isReviewer && allIsDmlTask(task){
+		if isReviewer && allIsDmlTask(task) {
 			if detail {
 				return &EditAuth{
 					SysReviewEnable:  true,
@@ -241,8 +241,8 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 }
 
 func allIsDmlTask(task *DbInjectionTask) bool {
-	for _, v := range task.SubTasks{
-		if v.TaskType != DML{
+	for _, v := range task.SubTasks {
+		if v.TaskType != DML {
 			return false
 		}
 	}

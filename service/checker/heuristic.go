@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"strings"
 
 	"github.com/pingcap/parser/ast"
@@ -13,6 +12,7 @@ import (
 
 	"vitess.io/vitess/go/vt/sqlparser"
 
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/builder"

@@ -9,12 +9,12 @@ type DBInfo struct {
 }
 
 type dbTools interface {
-	GetDBConn(dbName, cluster string) (*DBInfo, error)
+	GetDBConn(dbName, cluster string) (*sql.DB, error)
 }
 
 var dbTool dbTools
 
-func setDbTools(impl dbTools) {
+func SetDbTools(impl dbTools) {
 	dbTool = impl
 }
 

@@ -29,10 +29,10 @@ func Router() *gin.Engine {
 
 	task := r.Group("/db-injection/task")
 	{
+		task.POST("/add", HandlerWrapper(controller.AddTask))
 		task.POST("/list", HandlerWrapper(controller.ListTask))
 		task.POST("/get", HandlerWrapper(controller.GetTask))
 		task.POST("/update", HandlerWrapper(controller.UpdateTask))
-		task.POST("/del", HandlerWrapper(controller.DelCluster))
 	}
 
 	r.POST("/db-injection/rule/list", HandlerWrapper(controller.LisRule))

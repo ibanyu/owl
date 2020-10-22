@@ -39,7 +39,7 @@ func ListRollbackData(req *RollBackReq) (*BackupDataResp, error) {
 		logger.Errorf("get db_info conn err: %s", err.Error())
 	}
 
-	index, cols, err := getUpdateColsInfo(req.OriginSql, db.DB)
+	index, cols, err := getUpdateColsInfo(req.OriginSql, db)
 	if err != nil {
 		logger.Warnf("get update index err:%+v", err.Error())
 		// index 用于标记被更改的列，可以容忍
@@ -130,9 +130,9 @@ func Rollback(req *RollBackReq) error {
 	for _, tiStmt := range stmtNodes {
 		switch tiStmt.(type) {
 		case *tidb.UpdateStmt:
-			err = rollbackUpdate(req.OriginSql, backup.Data, db.DB)
+			err = rollbackUpdate(req.OriginSql, backup.Data, db)
 		case *tidb.DeleteStmt:
-			err = rollbackDel(req.OriginSql, backup.Data, db.DB)
+			err = rollbackDel(req.OriginSql, backup.Data, db)
 		default:
 			logger.Warnf("rollback, operate type not found")
 			return errors.New("sql operate type not support, only update, delete supported")
