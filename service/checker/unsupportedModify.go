@@ -61,7 +61,7 @@ func IsBanned(column []sql_util.Column, old string, newFieldType byte, NewFieldL
 		}
 	}
 	if oldCol == nil {
-		logger.Errorf("while check is banned change, get oldCol err,old: %s cols : %v", old, column)
+		logger.Warnf("while check is banned change, get oldCol err,old: %s cols : %v", old, column)
 		return false
 	}
 

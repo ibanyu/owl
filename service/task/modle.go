@@ -14,7 +14,7 @@ type DbInjectionExecItem struct {
 	ID           int64  `json:"id" gorm:"column:id"`
 	TaskID       int64  `json:"task_id" gorm:"column:task_id"`
 	SubtaskID    int64  `json:"subtask_id" gorm:"column:subtask_id"`
-	SQLContent   string `json:"sql" gorm:"column:sql"`
+	SQLContent   string `json:"sql_content" gorm:"column:sql_content"`
 	Remark       string `json:"remark" gorm:"column:remark"`
 	AffectRows   int    `json:"affect_rows" gorm:"column:affect_rows"`
 	RuleComments string `json:"rule_comments" gorm:"column:rule_comments"`

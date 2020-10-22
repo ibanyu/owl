@@ -5,12 +5,13 @@ server:
   log_level: "debug" # debug, info, warning, error
   log_dir: "./"
   show_sql: true
+  num_once_limit: 100
   exec_no_backup: false
 db:
   address: "127.0.0.1"
-  port: 4000
-  user: "user@banyu"
-  password: "pwd"
-  db_name: "db_injection"
+  port: 3306
+  user: "root"
+  password: "aaaaaa"
+  db_name: "dbinjection"
   max_idle_conn: 2
   max_open_conn: 30

@@ -7,4 +7,3 @@ type Pagination struct {
 
 	Operator string `json:"operator"`
 }
-

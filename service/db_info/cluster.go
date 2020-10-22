@@ -4,6 +4,7 @@ type DbInjectionCluster struct {
 	ID          int64  `json:"id" gorm:"column:id"`
 	Name        string `json:"name" gorm:"column:name"`
 	Description string `json:"description" gorm:"column:description"`
+	DefaultDB   string `json:"default_db" gorm:"column:default_db"`
 	Addr        string `json:"addr" gorm:"column:addr"` //ip : port
 	User        string `json:"user" gorm:"column:user"`
 	Pwd         string `json:"pwd" gorm:"column:pwd"`

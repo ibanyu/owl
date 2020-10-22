@@ -5,14 +5,15 @@ import (
 	"fmt"
 )
 
-type Database struct {
-	Database []string `json:"database"`
+type DBInfoTool struct {
 }
 
-func GetDBConn(clusterName, dbName string) (*sql.DB, error) {
+var DBTool DBInfoTool
+
+func (DBInfoTool) GetDBConn(clusterName, dbName string) (*sql.DB, error) {
 	cluster, err := clusterDao.GetClusterByName(clusterName)
-	if err != nil{
-		return nil, err
+	if err != nil {
+		return nil, fmt.Errorf("get cluster info err: %s", err.Error())
 	}
 
 	return sql.Open("mysql",
@@ -43,7 +44,7 @@ func ListAllDB() (map[string][]string, error) {
 
 func ListDbByCluster(cluster *DbInjectionCluster) ([]string, error) {
 	conn, err := sql.Open("mysql",
-		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", cluster.User, cluster.Pwd, cluster.Addr, "test"))
+		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", cluster.User, cluster.Pwd, cluster.Addr, cluster.DefaultDB))
 	if err != nil {
 		return nil, fmt.Errorf("open db_info conn err: %s", err.Error())
 	}
@@ -54,6 +55,13 @@ func ListDbByCluster(cluster *DbInjectionCluster) ([]string, error) {
 	}
 	defer rows.Close()
 
-	var dbs Database
-	return dbs.Database, rows.Scan(&dbs)
+	var dbs []string
+	for rows.Next() {
+		var dbName string
+		if err = rows.Scan(&dbName); err != nil {
+			return nil, err
+		}
+		dbs = append(dbs, dbName)
+	}
+	return dbs, nil
 }

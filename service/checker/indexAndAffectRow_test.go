@@ -105,4 +105,3 @@ func TestDmlSqlToCount(t *testing.T) {
 		}
 	}
 }
-

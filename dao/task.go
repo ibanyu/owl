@@ -38,18 +38,17 @@ func (TaskDaoImpl) AddTask(task *task.DbInjectionTask) (int64, error) {
 }
 
 func (TaskDaoImpl) UpdateTask(task *task.DbInjectionTask) error {
-	return GetDB().Where("id = ?", task.ID).Update(task).Error
+	return GetDB().Model(task).Where("id = ?", task.ID).Update(task).Error
 }
 
-const listTaskCondition = "name like ? or `type` = ?"
+const listTaskCondition = "name like ? or creator like ?"
 
 func (TaskDaoImpl) ListTask(page *service.Pagination) ([]task.DbInjectionTask, int, error) {
 	page.Key = "%" + page.Key + "%"
 
 	var count int
 	if err := GetDB().Model(&task.DbInjectionTask{}).Where(listTaskCondition,
-		page.Key, page.Key).Count(&count).Error;
-		err != nil {
+		page.Key, page.Key).Count(&count).Error; err != nil {
 		return nil, 0, err
 	}
 
