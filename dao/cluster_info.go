@@ -13,7 +13,7 @@ func (ClusterImpl) AddCluster(cluster *db_info.DbInjectionCluster) (int64, error
 }
 
 func (ClusterImpl) UpdateCluster(cluster *db_info.DbInjectionCluster) error {
-	return GetDB().Where("id = ?", cluster.ID).Update(cluster).Error
+	return GetDB().Model(cluster).Where("id = ?", cluster.ID).Update(cluster).Error
 }
 
 func (ClusterImpl) DelCluster(id int64) error {

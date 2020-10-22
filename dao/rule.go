@@ -21,5 +21,5 @@ func (RuleDaoImpl) UpdateRuleStatus(ruleStatus *checker.DbInjectionRuleStatus) e
 		return GetDB().Create(ruleStatus).Error
 	}
 
-	return GetDB().Where("name = ?", ruleStatus.Name).Error
+	return GetDB().Model(ruleStatus).Where("name = ?", ruleStatus.Name).Update(ruleStatus).Error
 }
