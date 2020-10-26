@@ -11,16 +11,10 @@ import (
 
 //exec and update status
 //exec from head, skip at some one, or begin at some one
-func ExecTask(paramTask *DbInjectionTask) error {
+func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 	//todo, 注意检查获取，执行的顺序
-	task, err := taskDao.GetTask(paramTask.ID)
-	if err != nil {
-		return err
-	}
 
-	task.ExecItems = fmtExecItemFromOneTask(task)
-
-	startId, err := getExecStartId(paramTask.Action, task.ExecItems, &paramTask.ExecItem)
+	startId, err := getExecStartId(paramTask.Action, dbTask.ExecItems, paramTask.ExecItem)
 	if err != nil {
 		return err
 	}
@@ -38,8 +32,8 @@ func ExecTask(paramTask *DbInjectionTask) error {
 	jump := true
 	failed := false
 	beginTime := time.Now().Unix()
-	for _, subTask := range task.SubTasks {
-		dbConn, err := dbTool.GetDBConn(subTask.DbName, subTask.ClusterName)
+	for _, subTask := range dbTask.SubTasks { //todo
+		dbInfo, err := dbTool.GetDBConn(subTask.DbName, subTask.ClusterName)
 		if err != nil {
 			return err
 		}
@@ -50,10 +44,10 @@ func ExecTask(paramTask *DbInjectionTask) error {
 			}
 			jump = false
 
-			err := BackupAndExec(dbConn, &item, subTask.TaskType)
+			err := BackupAndExec(dbInfo.DB, &item, subTask.TaskType)
 			if err != nil {
 				err = taskDao.UpdateTask(&DbInjectionTask{
-					ID:       task.ID,
+					ID:       dbTask.ID,
 					Status:   ExecFailed,
 					Et:       beginTime,
 					Executor: paramTask.Executor,
@@ -69,7 +63,7 @@ func ExecTask(paramTask *DbInjectionTask) error {
 
 	if !failed {
 		err = taskDao.UpdateTask(&DbInjectionTask{
-			ID:       task.ID,
+			ID:       dbTask.ID,
 			Status:   ExecSuccess,
 			Et:       beginTime,
 			Ft:       time.Now().Unix(),
@@ -85,8 +79,10 @@ func ExecTask(paramTask *DbInjectionTask) error {
 
 // backup, exec, update status
 func BackupAndExec(db *sql.DB, item *DbInjectionExecItem, taskType string) error {
-	backSuccess, backupId, backupErr := backup(db, taskType, item.SQLContent)
-	if backSuccess {
+	execBackup, backupId, backupErr := backup(db, taskType, item.SQLContent)
+	if !execBackup {
+		item.BackupStatus = ItemNoBackup
+	} else if backupErr == nil {
 		item.BackupStatus = ItemBackupSuccess
 	} else {
 		err := subTaskDao.UpdateItem(&DbInjectionExecItem{
@@ -158,6 +154,7 @@ func getExecStartId(action Action, subItems []DbInjectionExecItem, targetItem *D
 	}
 }
 
+//todo
 func fmtExecItemFromOneTask(task *DbInjectionTask) (items []DbInjectionExecItem) {
 	for _, subTask := range task.SubTasks {
 		for _, v := range subTask.ExecItems {

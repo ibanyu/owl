@@ -27,7 +27,7 @@ type DbInjectionTask struct {
 
 	SubTasks  []DbInjectionSubtask  `json:"sub_tasks" gorm:"-"`
 	ExecItems []DbInjectionExecItem `json:"exec_items" gorm:"-"`
-	ExecItem  DbInjectionExecItem   `json:"exec_item" gorm:"-"`
+	ExecItem  *DbInjectionExecItem  `json:"exec_item" gorm:"-"`
 	EditAuth  *EditAuth             `json:"edit_auth" gorm:"-"`
 
 	Action Action `json:"action" gorm:"-"`
@@ -80,13 +80,13 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 	// check sql
 	checkPass := true
 	for idx, subTask := range task.SubTasks {
-		dbConn, err := dbTool.GetDBConn(subTask.DbName, subTask.ClusterName)
+		dbInfo, err := dbTool.GetDBConn(subTask.DbName, subTask.ClusterName)
 		if err != nil {
 			return 0, err
 		}
 
 		for itemIdx, item := range subTask.ExecItems {
-			pass, suggestion, affectRow := checker.SqlCheck(item.SQLContent, "", "", dbConn)
+			pass, suggestion, affectRow := checker.SqlCheck(item.SQLContent, "", "", dbInfo)
 			if affectRow > 0 {
 				task.SubTasks[idx].ExecItems[itemIdx].AffectRows = 0
 			}
@@ -157,19 +157,20 @@ func UpdateTask(task *DbInjectionTask) error {
 
 	switch task.Action {
 	case EditItem:
-		return subTaskDao.UpdateItem(&task.ExecItem)
+		return subTaskDao.UpdateItem(task.ExecItem)
 	case DoCancel:
 		return doCancel(task, dbTask, isDba)
 	case SkipAt, BeginAt:
-		return ExecTask(task)
+		return ExecTask(task,dbTask)
 	case Progress:
-		return ProgressEdit(task)
+		return ProgressEdit(task, dbTask)
 	case DoReject:
 		return taskDao.UpdateTask(&DbInjectionTask{
-			ID:       task.ID,
-			Status:   Reject,
-			Executor: task.Executor,
-			Ut:       time.Now().Unix(),
+			ID:            task.ID,
+			Status:        Reject,
+			Executor:      task.Executor,
+			RejectContent: task.RejectContent,
+			Ut:            time.Now().Unix(),
 		})
 	default:
 		return fmt.Errorf("action type not found, action: %s", task.Action)
@@ -193,16 +194,16 @@ func doCancel(task, dbTask *DbInjectionTask, isDba bool) error {
 	})
 }
 
-func ProgressEdit(task *DbInjectionTask) error {
-	switch task.Status {
+func ProgressEdit(task, dbTask *DbInjectionTask) error {
+	switch dbTask.Status {
 	case CheckPass:
 		task.Status = ReviewPass
 	case ReviewPass:
 		task.Status = DBAPass
 	case DBAPass:
-		return ExecTask(task)
+		return ExecTask(task, dbTask)
 	default:
-		return fmt.Errorf("progress failed, task status invalid, status: %s", task.Status)
+		return fmt.Errorf("progress failed, task status invalid, status: %s", dbTask.Status)
 	}
 
 	return taskDao.UpdateTask(&DbInjectionTask{
@@ -241,7 +242,7 @@ func GetTask(id int64, operator string) (*DbInjectionTask, error) {
 		return nil, err
 	}
 
-	task.ExecItems = fmtExecItemFromOneTask(task)
+	//task.ExecItems = fmtExecItemFromOneTask(task)
 	task.EditAuth = GetTaskOperateAuth(true, operator == task.Creator, isDba, strings.Contains(task.Reviewer, operator), task)
 	return task, nil
 }

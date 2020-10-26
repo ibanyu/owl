@@ -3,21 +3,36 @@ package db_info
 import (
 	"database/sql"
 	"fmt"
+	
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
+
+const defaultDBName = "information_schema"
 
 type DBInfoTool struct {
 }
 
 var DBTool DBInfoTool
 
-func (DBInfoTool) GetDBConn(clusterName, dbName string) (*sql.DB, error) {
+func (DBInfoTool) GetDBConn(dbName, clusterName string) (*task.DBInfo, error) {
 	cluster, err := clusterDao.GetClusterByName(clusterName)
 	if err != nil {
 		return nil, fmt.Errorf("get cluster info err: %s", err.Error())
 	}
 
-	return sql.Open("mysql",
-		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", cluster.User, cluster.Pwd, cluster.Addr, "test"))
+	db, err := sql.Open("mysql",
+		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", cluster.User, cluster.Pwd, cluster.Addr, dbName))
+	if err != nil {
+		return nil, fmt.Errorf("open db conn err: %s", err.Error())
+	}
+
+	defaultDB, err := sql.Open("mysql",
+		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", cluster.User, cluster.Pwd, cluster.Addr, defaultDBName))
+	if err != nil {
+		return nil, fmt.Errorf("open db conn err: %s", err.Error())
+	}
+
+	return &task.DBInfo{DB: db, DefaultDB: defaultDB, DBName: dbName}, nil
 }
 
 // return dbs and mapping cluster
