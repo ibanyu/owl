@@ -28,12 +28,12 @@ func SetBackupDao(impl BackupDao) {
 }
 
 type DbInjectionBackup struct {
-	ID           int64  `json:"id" bdb:"id"`
-	Data         string `json:"data" bdb:"data"`
-	Ct           int64  `json:"ct" bdb:"ct"`
-	RollbackTime int64  `json:"rollback_time" bdb:"rollback_time"`
-	RollbackUser string `json:"rollback_user" bdb:"rollback_user"`
-	IsRollBacked int    `json:"is_roll_backed" bdb:"is_roll_backed"`
+	ID             int64  `json:"id" gorm:"column:id"`
+	Data           string `json:"data" gorm:"column:data"`
+	Ct             int64  `json:"ct" gorm:"column:ct"`
+	RollbackTime   int64  `json:"rollback_time" gorm:"column:rollback_time"`
+	RollbackUser   string `json:"rollback_user" gorm:"column:rollback_user"`
+	IsRolledBack int    `json:"is_rolled_back" gorm:"column:is_rolled_back"`
 }
 
 const (

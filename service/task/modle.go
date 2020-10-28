@@ -20,12 +20,15 @@ type DbInjectionExecItem struct {
 	RuleComments string `json:"rule_comments" gorm:"column:rule_comments"`
 	Status       string `json:"status" gorm:"column:status"`
 	ExecInfo     string `json:"exec_info" gorm:"column:exec_info"`
-	BackupInfo   string `json:"backup_info" gorm:"column:exec_info"`
+	BackupInfo   string `json:"backup_info" gorm:"column:backup_info"`
 	BackupStatus string `json:"backup_status" gorm:"column:backup_status"`
 	BackupID     int64  `json:"backup_id" gorm:"column:backup_id"`
 
 	Ut int64 `json:"ut" gorm:"column:ut"`
 	Et int64 `json:"et" gorm:"column:et"`
+
+	DBName      string `json:"db_name" gorm:"-"`
+	ClusterName string `json:"cluster_name" gorm:"-"`
 }
 
 type Status = string

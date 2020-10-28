@@ -34,12 +34,12 @@ func ListRollbackData(req *RollBackReq) (*BackupDataResp, error) {
 		return nil, err
 	}
 
-	db, err := dbTool.GetDBConn(req.DBName, req.ClusterName)
+	dbInfo, err := dbTool.GetDBConn(req.DBName, req.ClusterName)
 	if err != nil {
 		logger.Errorf("get db_info conn err: %s", err.Error())
 	}
 
-	index, cols, err := getUpdateColsInfo(req.OriginSql, db)
+	index, cols, err := getUpdateColsInfo(req.OriginSql, dbInfo.DB)
 	if err != nil {
 		logger.Warnf("get update index err:%+v", err.Error())
 		// index 用于标记被更改的列，可以容忍
@@ -99,7 +99,7 @@ type RollBackReq struct {
 	ClusterName string `json:"cluster_name"`
 	OriginSql   string `json:"origin_sql"`
 	BackupId    int64  `json:"backup_id"`
-	Creator     string `json:"creator"`
+	Executor    string `json:"executor"`
 }
 
 // 原sql，判断是删还是改
@@ -108,14 +108,14 @@ type RollBackReq struct {
 // 如果是改,判断哪些字段，根据主键，把原来的字段set回去。
 // 最后更改备份状态
 func Rollback(req *RollBackReq) error {
-	if req.OriginSql == "" || req.ClusterName == "" || req.DBName == "" || req.BackupId < 1 || req.Creator == "" {
-		logger.Infof("check param failed, originSql : %s ,clusterName :%s ,DBName: %s, backupId: %d, creator: %s",
-			req.OriginSql, req.ClusterName, req.DBName, req.BackupId, req.Creator)
+	if req.OriginSql == "" || req.ClusterName == "" || req.DBName == "" || req.BackupId < 1 || req.Executor == "" {
+		logger.Infof("check param failed, originSql : %s ,clusterName :%s ,DBName: %s, backupId: %d, executor: %s",
+			req.OriginSql, req.ClusterName, req.DBName, req.BackupId, req.Executor)
 		return fmt.Errorf("get param failed, expert: originSql : %s, clusterName :%s ,DBName: %s, backupId: %d, creator: %s",
-			req.OriginSql, req.ClusterName, req.DBName, req.BackupId, req.Creator)
+			req.OriginSql, req.ClusterName, req.DBName, req.BackupId, req.Executor)
 	}
 
-	db, err := dbTool.GetDBConn(req.DBName, req.ClusterName)
+	dbInfo, err := dbTool.GetDBConn(req.DBName, req.ClusterName)
 	if err != nil {
 		return err
 	}
@@ -130,9 +130,9 @@ func Rollback(req *RollBackReq) error {
 	for _, tiStmt := range stmtNodes {
 		switch tiStmt.(type) {
 		case *tidb.UpdateStmt:
-			err = rollbackUpdate(req.OriginSql, backup.Data, db)
+			err = rollbackUpdate(req.OriginSql, backup.Data, dbInfo.DB)
 		case *tidb.DeleteStmt:
-			err = rollbackDel(req.OriginSql, backup.Data, db)
+			err = rollbackDel(req.OriginSql, backup.Data, dbInfo.DB)
 		default:
 			logger.Warnf("rollback, operate type not found")
 			return errors.New("sql operate type not support, only update, delete supported")
@@ -141,10 +141,10 @@ func Rollback(req *RollBackReq) error {
 
 	if err != nil {
 		logger.Errorf("rollback sql err: %s", err.Error())
-		updateBackupStatus(ItemRollBackFailed, req.BackupId, req.Creator)
+		updateBackupStatus(ItemRollBackFailed, req.BackupId, req.Executor)
 		return fmt.Errorf("rollback err: %s", err.Error())
 	}
-	updateBackupStatus(ItemRollBackSuccess, req.BackupId, req.Creator)
+	updateBackupStatus(ItemRollBackSuccess, req.BackupId, req.Executor)
 
 	return nil
 }
@@ -161,10 +161,10 @@ func updateBackupStatus(status ItemStatus, backupId int64, creator string) {
 	}
 
 	if err := backupDao.UpdateBackup(&DbInjectionBackup{
-		ID:           backupId,
-		RollbackTime: time.Now().Unix(),
-		RollbackUser: creator,
-		IsRollBacked: 1,
+		ID:             backupId,
+		RollbackTime:   time.Now().Unix(),
+		RollbackUser:   creator,
+		IsRolledBack: 1,
 	}); err != nil {
 		logger.Errorf("update backup record info err: %s", err.Error())
 	}

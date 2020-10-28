@@ -20,7 +20,11 @@ type Audit struct {
 	TiStmt []ast.StmtNode      // 通过TiDB解析出的抽象语法树
 }
 
-func (audit *Audit) SqlCheck(sql, charset, collation string, info *task.DBInfo) (pass bool, suggestion string, affectRow int) {
+type CheckerService struct {
+}
+var Checker CheckerService
+
+func (CheckerService) SqlCheck(sql, charset, collation string, info *task.DBInfo) (pass bool, suggestion string, affectRow int) {
 	audit, err := NewAudit(sql, charset, collation)
 	if err != nil {
 		return false, fmt.Sprintf("sql解析错误：%s", err.Error()), 0
@@ -45,7 +49,7 @@ func (audit *Audit) SqlCheck(sql, charset, collation string, info *task.DBInfo) 
 	return pass, suggestion, affectRow
 }
 
-func (audit *Audit) ListRules() interface{} {
+func (CheckerService) ListRules() interface{} {
 	return Rules
 }
 

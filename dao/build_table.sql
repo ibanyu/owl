@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `db_injection_subtask`
     `cluster_name` VARCHAR(120)    NOT NULL DEFAULT '' COMMENT '数据库集群',
 
     PRIMARY KEY (`id`),
-    UNIQUE uniq_name (`cluster_name`)
+    KEY t_id (`task_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin
@@ -103,3 +103,20 @@ CREATE TABLE IF NOT EXISTS `db_injection_cluster`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin
   AUTO_INCREMENT = 7077 COMMENT '集群信息表';
+
+DROP TABLE IF EXISTS `db_injection_backup`;
+CREATE TABLE IF NOT EXISTS `db_injection_backup`
+(
+    `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+    `data`           MEDIUMTEXT      NOT NULL COMMENT '备份数据',
+    `rollback_user`  VARCHAR(60)     NOT NULL DEFAULT '' COMMENT '恢复执行人',
+    `is_rolled_back` TINYINT         NOT NULL DEFAULT 0 COMMENT '是否已恢复',
+
+    `ct`             BIGINT          NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `rollback_time`  BIGINT          NOT NULL DEFAULT 0 COMMENT '回滚时间',
+
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin
+  AUTO_INCREMENT = 7077 COMMENT '备份信息表';

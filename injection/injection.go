@@ -13,6 +13,7 @@ func Injection() {
 	task.SetTaskDao(dao.Task)
 	task.SetSubTaskDao(dao.SubTask)
 	task.SetDbTools(db_info.DBTool)
+	task.SetChecker(checker.Checker)
 	checker.SetRuleStatusDao(dao.Rule)
 	db_info.SetClusterDao(dao.Cluster)
 

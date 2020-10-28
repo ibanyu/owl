@@ -27,6 +27,8 @@ func Router() *gin.Engine {
 		})
 	})
 
+	r.POST("/db-injection/login", HandlerWrapper(controller.Login))
+
 	task := r.Group("/db-injection/task")
 	{
 		task.POST("/add", HandlerWrapper(controller.AddTask))
