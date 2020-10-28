@@ -7,6 +7,7 @@ server:
   show_sql: true
   num_once_limit: 100
   exec_no_backup: false
+
 db:
   address: "127.0.0.1"
   port: 3306
@@ -15,3 +16,15 @@ db:
   db_name: "dbinjection"
   max_idle_conn: 2
   max_open_conn: 30
+
+login:
+  ldap:
+    host: "ldap.test.com"
+    port: 389
+    base_dn: "dc=test,dc=com"
+    use_ssl: false
+    bind_dn: "cn=hi,dc=test,dc=com"
+    bind_pwd: "password"
+  login_path: "http://baidu.com"
+  token_secret: ""
+  token_effective_hour: 1

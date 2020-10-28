@@ -21,6 +21,7 @@ const (
 
 func Router() *gin.Engine {
 	r := gin.Default()
+
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
@@ -28,6 +29,8 @@ func Router() *gin.Engine {
 	})
 
 	r.POST("/db-injection/login", HandlerWrapper(controller.Login))
+
+	r.Use(controller.AuthorizeJWT())
 
 	task := r.Group("/db-injection/task")
 	{

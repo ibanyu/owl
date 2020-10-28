@@ -7,6 +7,8 @@ import (
 const (
 	Success = 0
 
+	Redirect = 301
+
 	ParamInvalid   = 400
 	UserNotFound   = 401
 	PageNotFound   = 404
