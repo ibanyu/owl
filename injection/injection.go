@@ -1,6 +1,7 @@
 package injection
 
 import (
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/checker"
@@ -17,7 +18,14 @@ func Injection() {
 	checker.SetRuleStatusDao(dao.Rule)
 	db_info.SetClusterDao(dao.Cluster)
 
-	MockInjection()
+	switch config.Conf.Role.From {
+	case "conf":
+		task.SetAuthTools(auth.ConfAuthService)
+	case "net":
+		task.SetAuthTools(auth.NetAuthService)
+	default:
+		MockInjection()
+	}
 }
 
 func MockInjection() {

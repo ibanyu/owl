@@ -1,10 +1,5 @@
 package auth
 
-type authTools interface {
-	GetReviewer(userName string) (reviewerName string, err error)
-	IsDba(userName string) (isDba bool, err error)
-}
-
 type MockAuth struct {
 }
 
