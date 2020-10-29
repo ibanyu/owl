@@ -35,13 +35,13 @@ func (NetAuthToolImpl) GetReviewer(userName string) (reviewerName string, err er
 	header.Set("Content-Type", "application/json")
 	header.Set("Authorization", config.Conf.Role.Net.ReviewerAPIToken)
 
-	resData, err := util.DoHttpReq(http.MethodPost, config.Conf.Role.Net.ReviewerAPIAddress, fmt.Sprintf(getReviewParam, userName), header)
+	respData, err := util.DoHttpReq(http.MethodPost, config.Conf.Role.Net.ReviewerAPIAddress, fmt.Sprintf(getReviewParam, userName), header)
 	if err != nil {
 		return "", err
 	}
 
 	var resp NetResp
-	if err = json.Unmarshal(resData, &resp); err != nil {
+	if err = json.Unmarshal(respData, &resp); err != nil {
 		return "", fmt.Errorf("unmarshal reviewer api resp err: %s", err.Error())
 	}
 	if len(resp.Data.Ent.Items) < 1 {
