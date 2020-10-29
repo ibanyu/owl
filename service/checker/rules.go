@@ -86,7 +86,7 @@ func init() {
 		{
 			Item:          RuleCreate010,
 			Name:          "injection check column not null",
-			Summary:       "每个列使用not null，text字段除外",
+			Summary:       "每个列使用not null，text字段除外；text不能有默认值",
 			CheckFuncPass: (*Rule).RuleCreateTableNotNullValue,
 		},
 		{
