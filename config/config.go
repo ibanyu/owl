@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
@@ -27,6 +27,21 @@ type Config struct {
 		MaxIdleConn int    `yaml:"max_idle_conn"`
 		MaxOpenConn int    `yaml:"max_open_conn"`
 	} `yaml:"db"`
+
+	Login struct {
+		LDAP struct {
+			BaseDN  string `yaml:"base_dn"`
+			Host    string `yaml:"host"`
+			Port    int    `yaml:"port"`
+			UseSSL  bool   `yaml:"use_ssl"`
+			BindDN  string `yaml:"bind_dn"`
+			BindPwd string `yaml:"bind_pwd"`
+		} `yaml:"ldap"`
+
+		LoginPath          string `yaml:"login_path"`
+		TokenSecret        string `yaml:"token_secret"`
+		TokenEffectiveHour int    `yaml:"token_effective_hour"`
+	}
 }
 
 var Conf *Config
