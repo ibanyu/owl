@@ -241,6 +241,7 @@ func GetTask(id int64, operator string) (*DbInjectionTask, error) {
 	if err != nil {
 		return nil, err
 	}
+	task.SubTasks = nil
 
 	//task.ExecItems = fmtExecItemFromOneTask(task)
 	task.EditAuth = GetTaskOperateAuth(true, operator == task.Creator, isDba, strings.Contains(task.Reviewer, operator), task)
