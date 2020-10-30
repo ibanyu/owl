@@ -33,12 +33,12 @@ func GenerateToken(username, password string) (string, error) {
 		},
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return tokenClaims.SignedString(config.Conf.Login.TokenSecret)
+	return tokenClaims.SignedString([]byte(config.Conf.Login.TokenSecret))
 }
 
 func ParseToken(token string) (*Claims, error) {
 	tokenClaims, err := jwt.ParseWithClaims(token, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-		return config.Conf.Login.TokenSecret, nil
+		return []byte(config.Conf.Login.TokenSecret), nil
 	})
 	if err != nil {
 		return nil, err

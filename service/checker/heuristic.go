@@ -304,6 +304,11 @@ func (q *Rule) RuleCreateTableNotNullValue(audit *Audit, info *task.DBInfo) (pas
 		case *ast.CreateTableStmt:
 			for _, c := range n.Cols {
 				if c.Tp.Tp == mysql.TypeBlob || c.Tp.Tp == mysql.TypeTinyBlob || c.Tp.Tp == mysql.TypeMediumBlob || c.Tp.Tp == mysql.TypeLongBlob || c.Tp.Tp == mysql.TypeJSON {
+					for _, o := range c.Options {
+						if o.Tp == ast.ColumnOptionDefaultValue {
+							return false, q.Summary, 0
+						}
+					}
 					continue
 				}
 				var bSetNotNull bool
@@ -322,6 +327,11 @@ func (q *Rule) RuleCreateTableNotNullValue(audit *Audit, info *task.DBInfo) (pas
 				case ast.AlterTableAddColumns, ast.AlterTableChangeColumn, ast.AlterTableModifyColumn:
 					for _, c := range s.NewColumns {
 						if c.Tp.Tp == mysql.TypeBlob || c.Tp.Tp == mysql.TypeTinyBlob || c.Tp.Tp == mysql.TypeMediumBlob || c.Tp.Tp == mysql.TypeLongBlob || c.Tp.Tp == mysql.TypeJSON {
+							for _, o := range c.Options {
+								if o.Tp == ast.ColumnOptionDefaultValue {
+									return false, q.Summary, 0
+								}
+							}
 							continue
 						}
 						var bSetNotNull bool

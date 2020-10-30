@@ -18,6 +18,7 @@ func ListTask(ctx *gin.Context) Resp {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s ", f, err.Error()), Code: code.ParamInvalid}
 	}
 
+	page.Operator = ctx.MustGet("user").(string)
 	task, count, err := task.ListTask(&page)
 	if err != nil {
 		return Resp{Message: fmt.Sprintf("%s: list Cabinet err: %s", f, err.Error()), Code: code.InternalErr}
@@ -31,11 +32,8 @@ func ListTask(ctx *gin.Context) Resp {
 
 func GetTask(ctx *gin.Context) Resp {
 	f := "GetTask() -->"
-	user, err := ctx.Cookie("user")
-	if err != nil {
-		return Resp{Message: fmt.Sprintf("%s: get user failed, err: %s", f, err.Error()), Code: code.UserNotFound}
-	}
 
+	user := ctx.MustGet("user").(string)
 	idStr := ctx.Query("id")
 	id, err := strconv.ParseInt(idStr, 10, 64)
 	if err != nil {
@@ -60,6 +58,7 @@ func UpdateTask(ctx *gin.Context) Resp {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s", f, err.Error()), Code: code.ParamInvalid}
 	}
 
+	taskParam.Executor = ctx.MustGet("user").(string)
 	if err := task.UpdateTask(&taskParam); err != nil {
 		return Resp{Message: fmt.Sprintf("%s, update task failed :%s", f, err.Error()), Code: code.InternalErr}
 	}
@@ -73,6 +72,7 @@ func AddTask(ctx *gin.Context) Resp {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s", f, err.Error()), Code: code.ParamInvalid}
 	}
 
+	taskParam.Creator = ctx.MustGet("user").(string)
 	id, err := task.AddTask(&taskParam)
 	if err != nil {
 		return Resp{Message: fmt.Sprintf("%s, get task failed :%s", f, err.Error()), Code: code.InternalErr}

@@ -25,6 +25,23 @@ login:
     use_ssl: false
     bind_dn: "cn=hi,dc=test,dc=com"
     bind_pwd: "password"
-  login_path: "http://baidu.com"
+  login_path: "https://ipalfish.com/login"
   token_secret: ""
   token_effective_hour: 1
+
+
+role:
+  from: "net" # net or conf
+  conf:
+    dba:
+      - "zhangdashu"
+      - "wamgdazhang"
+    reviewer_relation:
+      - reviewer: "wangsan"
+        members:
+          - "zhanger"
+          - "lisi"
+      - reviewer: "liusi"
+        members:
+          - "lihuahuaw"
+          - "wangyiyi"

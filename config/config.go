@@ -41,7 +41,27 @@ type Config struct {
 		LoginPath          string `yaml:"login_path"`
 		TokenSecret        string `yaml:"token_secret"`
 		TokenEffectiveHour int    `yaml:"token_effective_hour"`
-	}
+	} `yaml:"login"`
+
+	Role struct {
+		From string `yaml:"from"`
+
+		Conf struct {
+			DBA              []string `yaml:"dba"`
+			ReviewerRelation []struct {
+				Reviewer string   `yaml:"reviewer"`
+				Members  []string `yaml:"members"`
+			} `yaml:"reviewer_relation"`
+		} `yaml:"conf"`
+
+		Net struct {
+			ReviewerAPIAddress string `yaml:"reviewer_api_address"`
+			ReviewerAPIToken   string `yaml:"reviewer_api_token"`
+			DBAAPIAddress      string `yaml:"dba_api_address"`
+			DBAAPIToken        string `yaml:"dba_api_token"`
+			DBADepartmentID    int    `yaml:"dba_department_id"`
+		} `yaml:"net"`
+	} `yaml:"role"`
 }
 
 var Conf *Config
