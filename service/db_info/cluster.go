@@ -1,5 +1,7 @@
 package db_info
 
+import "gitlab.pri.ibanyu.com/middleware/dbinjection/util"
+
 type DbInjectionCluster struct {
 	ID          int64  `json:"id" gorm:"column:id"`
 	Name        string `json:"name" gorm:"column:name"`
@@ -29,6 +31,12 @@ func SetClusterDao(impl ClusterDao) {
 }
 
 func AddCluster(cluster *DbInjectionCluster) (int64, error) {
+	cryptoData, err := util.AesCrypto([]byte(cluster.Pwd))
+	if err != nil {
+		return 0, err
+	}
+
+	cluster.Pwd = string(cryptoData)
 	return clusterDao.AddCluster(cluster)
 }
 
@@ -41,7 +49,17 @@ func DelCluster(id int64) error {
 }
 
 func GetClusterByName(name string) (*DbInjectionCluster, error) {
-	return clusterDao.GetClusterByName(name)
+	cluster, err := clusterDao.GetClusterByName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	deCryptoData, err := util.AesDeCrypto([]byte(cluster.Pwd))
+	if err != nil {
+		return nil, err
+	}
+	cluster.Pwd = string(deCryptoData)
+	return cluster, nil
 }
 
 func ListCluster() ([]DbInjectionCluster, error) {

@@ -15,7 +15,7 @@ type DBInfoTool struct {
 var DBTool DBInfoTool
 
 func (DBInfoTool) GetDBConn(dbName, clusterName string) (*task.DBInfo, error) {
-	cluster, err := clusterDao.GetClusterByName(clusterName)
+	cluster, err := GetClusterByName(clusterName)
 	if err != nil {
 		return nil, fmt.Errorf("get cluster info err: %s", err.Error())
 	}
