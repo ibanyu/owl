@@ -248,3 +248,7 @@ func allIsDmlTask(task *DbInjectionTask) bool {
 	}
 	return true
 }
+
+func IsDba(userName string) (isDba bool, err error)  {
+	return authTool.IsDba(userName)
+}

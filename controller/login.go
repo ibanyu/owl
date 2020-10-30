@@ -9,6 +9,7 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
 
 func Login(ctx *gin.Context) Resp {
@@ -39,7 +40,44 @@ func AuthorizeJWT() gin.HandlerFunc {
 			return
 		}
 
+		if err := claims.Valid(); err != nil{
+			c.JSON(http.StatusPermanentRedirect, Resp{
+				Code:    code.Redirect,
+				Message: "token expired, place login",
+				Data:    config.Conf.Login.LoginPath,
+			})
+			c.Abort()
+			return
+		}
+
 		c.Set("user", claims.Username)
+		c.Next()
+	}
+}
+
+func OnlyDba() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		user := c.MustGet("user").(string)
+		isDba, err := task.IsDba(user)
+		if err != nil{
+			c.JSON(http.StatusOK, Resp{
+				Code:    code.InternalErr,
+				Message: fmt.Sprintf("check dba auth failed, %s", err.Error()),
+			})
+			c.Abort()
+			return
+		}
+
+		if !isDba{
+			c.JSON(http.StatusOK, Resp{
+				Code:    code.InternalErr,
+				Message: "only dba can operate cluster",
+			})
+			c.Abort()
+			return
+		}
+
 		c.Next()
 	}
 }

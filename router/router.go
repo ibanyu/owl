@@ -41,20 +41,21 @@ func Router() *gin.Engine {
 	}
 
 	r.POST("/db-injection/rule/list", HandlerWrapper(controller.LisRule))
+	r.POST("/db-injection/db/list", HandlerWrapper(controller.ListDB))
 
+	backup := r.Group("/db-injection/backup")
+	{
+		backup.POST("/data", HandlerWrapper(controller.ListRollbackData))
+		backup.POST("/rollback", HandlerWrapper(controller.Rollback))
+	}
+
+	r.Use(controller.OnlyDba())
 	cluster := r.Group("/db-injection/cluster")
 	{
 		cluster.POST("/list", HandlerWrapper(controller.ListCluster))
 		cluster.POST("/update", HandlerWrapper(controller.UpdateCluster))
 		cluster.POST("/del", HandlerWrapper(controller.DelCluster))
 		cluster.POST("/add", HandlerWrapper(controller.AddCluster))
-		cluster.POST("/db/list", HandlerWrapper(controller.ListDB))
-	}
-
-	backup := r.Group("/db-injection/backup")
-	{
-		backup.POST("/data", HandlerWrapper(controller.ListRollbackData))
-		backup.POST("/rollback", HandlerWrapper(controller.Rollback))
 	}
 
 	return r

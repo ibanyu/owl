@@ -20,12 +20,11 @@ func Login(userName, Pwd string) (string, error) {
 type Claims struct {
 	Username           string `json:"username"  binding:"required"`
 	Password           string `json:"password"  binding:"required"`
-	jwt.StandardClaims `json:"-"`
+	jwt.StandardClaims
 }
 
 func GenerateToken(username, password string) (string, error) {
-	nowTime := time.Now()
-	expireTime := nowTime.Add(time.Duration(config.Conf.Login.TokenEffectiveHour) * time.Hour)
+	expireTime := time.Now().Add(time.Duration(config.Conf.Login.TokenEffectiveHour) * time.Hour)
 	claims := Claims{username, password,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
@@ -33,6 +32,7 @@ func GenerateToken(username, password string) (string, error) {
 		},
 	}
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
 	return tokenClaims.SignedString([]byte(config.Conf.Login.TokenSecret))
 }
 
