@@ -1,11 +1,24 @@
 package task
 
-import "database/sql"
+import (
+	"database/sql"
+	
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+)
 
 type DBInfo struct {
 	DB        *sql.DB
 	DefaultDB *sql.DB
 	DBName    string
+}
+
+func (db *DBInfo) CloseConn() {
+	if err := db.DB.Close(); err != nil {
+		logger.Errorf("close db conn err: %s", err.Error())
+	}
+	if err := db.DefaultDB.Close(); err != nil {
+		logger.Errorf("close default db conn err: %s", err.Error())
+	}
 }
 
 type dbTools interface {

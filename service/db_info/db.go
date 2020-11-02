@@ -70,6 +70,7 @@ func ListDbByCluster(cluster *DbInjectionCluster) ([]string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("open db_info conn err: %s", err.Error())
 	}
+	defer conn.Close()
 
 	rows, err := conn.Query("show databases;")
 	if err != nil {

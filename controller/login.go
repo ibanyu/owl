@@ -40,7 +40,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 			return
 		}
 
-		if err := claims.Valid(); err != nil{
+		if err := claims.Valid(); err != nil {
 			c.JSON(http.StatusPermanentRedirect, Resp{
 				Code:    code.Redirect,
 				Message: "token expired, place login",
@@ -57,10 +57,9 @@ func AuthorizeJWT() gin.HandlerFunc {
 
 func OnlyDba() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		user := c.MustGet("user").(string)
 		isDba, err := task.IsDba(user)
-		if err != nil{
+		if err != nil {
 			c.JSON(http.StatusOK, Resp{
 				Code:    code.InternalErr,
 				Message: fmt.Sprintf("check dba auth failed, %s", err.Error()),
@@ -69,7 +68,7 @@ func OnlyDba() gin.HandlerFunc {
 			return
 		}
 
-		if !isDba{
+		if !isDba {
 			c.JSON(http.StatusOK, Resp{
 				Code:    code.InternalErr,
 				Message: "only dba can operate cluster",
