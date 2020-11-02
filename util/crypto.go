@@ -1,6 +1,5 @@
 package util
 
-
 import (
 	"crypto/aes"
 	"crypto/cipher"
@@ -16,13 +15,11 @@ func AesCrypto(source []byte) ([]byte, error) {
 		return nil, fmt.Errorf("crypto err: %s", err.Error())
 	}
 	stream := cipher.NewCTR(block, []byte(config.Conf.Server.AesIv))
-	var dest []byte
-	stream.XORKeyStream(source, dest)
-	return dest, nil
+	stream.XORKeyStream(source, source)
+	return source, nil
 }
 
 //解密
 func AesDeCrypto(cryptoData []byte) ([]byte, error) {
 	return AesCrypto(cryptoData)
 }
-

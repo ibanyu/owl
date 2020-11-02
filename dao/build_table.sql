@@ -89,7 +89,6 @@ CREATE TABLE IF NOT EXISTS `db_injection_cluster`
     `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `name`        VARCHAR(160)    NOT NULL DEFAULT '' COMMENT '名称',
     `description` VARCHAR(200)    NOT NULL DEFAULT '' COMMENT '描述',
-    `default_db`  VARCHAR(80)     NOT NULL DEFAULT '' COMMENT '默认db',
     `addr`        VARCHAR(80)     NOT NULL DEFAULT '' COMMENT '访问地址',
     `user`        VARCHAR(120)    NOT NULL DEFAULT '' COMMENT '用户',
     `pwd`         VARCHAR(120)    NOT NULL DEFAULT '' COMMENT '加密后秘钥',
