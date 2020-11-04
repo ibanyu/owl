@@ -4,7 +4,13 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
+
+func init()  {
+	logger.InitLog()
+}
 
 func TestGetUpdateColumn(t *testing.T) {
 	type data struct {
@@ -180,7 +186,7 @@ func TestHandleKeyWordForCondition(t *testing.T) {
 		},
 		{
 			origin: "uid = 40792760 AND courseid = 295748327620620 AND index >1 and user not in ('hi','hei');",
-			target: "uid = 40792760 AND courseid = 295748327620620 AND `index` >1 and `user` not in ('hi','hei');",
+			target: "uid = 40792760 AND courseid = 295748327620620 AND `index` >1 and user not in ('hi','hei');",
 		},
 	}
 

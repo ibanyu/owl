@@ -18,7 +18,7 @@ import (
 
 func injectClusterMock(t *testing.T) *mock.MockClusterDao {
 	ctl := gomock.NewController(t)
-	injectAuthTool(t, ctl)
+	injectAuthTool(ctl)
 
 	mockClusterDao := mock.NewMockClusterDao(ctl)
 	db_info.SetClusterDao(mockClusterDao)
