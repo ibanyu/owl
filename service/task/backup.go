@@ -28,11 +28,11 @@ func SetBackupDao(impl BackupDao) {
 }
 
 type DbInjectionBackup struct {
-	ID             int64  `json:"id" gorm:"column:id"`
-	Data           string `json:"data" gorm:"column:data"`
-	Ct             int64  `json:"ct" gorm:"column:ct"`
-	RollbackTime   int64  `json:"rollback_time" gorm:"column:rollback_time"`
-	RollbackUser   string `json:"rollback_user" gorm:"column:rollback_user"`
+	ID           int64  `json:"id" gorm:"column:id"`
+	Data         string `json:"data" gorm:"column:data"`
+	Ct           int64  `json:"ct" gorm:"column:ct"`
+	RollbackTime int64  `json:"rollback_time" gorm:"column:rollback_time"`
+	RollbackUser string `json:"rollback_user" gorm:"column:rollback_user"`
 	IsRolledBack int    `json:"is_rolled_back" gorm:"column:is_rolled_back"`
 }
 
@@ -176,7 +176,9 @@ func reverseConvertField(str string) string {
 func uint8ToString(inter interface{}) string {
 	uint8Array, ok := inter.([]uint8)
 	if !ok {
-		logger.Errorf("uint8 to string error : received interface isn't a uint8 slice, data: %v", inter)
+		if inter != nil {
+			logger.Errorf("uint8 to string error : received interface isn't a uint8 slice, data: %v", inter)
+		}
 		return ""
 	}
 
