@@ -38,6 +38,7 @@ func ListRollbackData(req *RollBackReq) (*BackupDataResp, error) {
 	if err != nil {
 		logger.Errorf("get db_info conn err: %s", err.Error())
 	}
+	defer dbInfo.CloseConn()
 
 	index, cols, err := getUpdateColsInfo(req.OriginSql, dbInfo.DB)
 	if err != nil {
@@ -119,6 +120,7 @@ func Rollback(req *RollBackReq) error {
 	if err != nil {
 		return err
 	}
+	defer dbInfo.CloseConn()
 
 	backup, err := backupDao.GetBackupInfoById(req.BackupId)
 	if err != nil {

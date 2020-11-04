@@ -95,6 +95,8 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 				task.SubTasks[idx].ExecItems[itemIdx].RuleComments = suggestion
 			}
 		}
+
+		dbInfo.CloseConn()
 	}
 
 	if checkPass {
@@ -161,7 +163,7 @@ func UpdateTask(task *DbInjectionTask) error {
 	case DoCancel:
 		return doCancel(task, dbTask, isDba)
 	case SkipAt, BeginAt:
-		return ExecTask(task,dbTask)
+		return ExecTask(task, dbTask)
 	case Progress:
 		return ProgressEdit(task, dbTask)
 	case DoReject:
@@ -241,6 +243,7 @@ func GetTask(id int64, operator string) (*DbInjectionTask, error) {
 	if err != nil {
 		return nil, err
 	}
+	task.SubTasks = nil
 
 	//task.ExecItems = fmtExecItemFromOneTask(task)
 	task.EditAuth = GetTaskOperateAuth(true, operator == task.Creator, isDba, strings.Contains(task.Reviewer, operator), task)

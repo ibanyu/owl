@@ -59,6 +59,8 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 				break
 			}
 		}
+
+		dbInfo.CloseConn()
 	}
 
 	if !failed {

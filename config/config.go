@@ -16,6 +16,8 @@ type Config struct {
 		ShowSql      bool   `yaml:"show_sql"`
 		NumOnceLimit int    `yaml:"num_once_limit"`
 		ExecNoBackup bool   `yaml:"exec_no_backup"`
+		AesKey       string `yaml:"aes_key"`
+		AesIv        string `yaml:"aes_iv"`
 	} `yaml:"server"`
 
 	DB struct {

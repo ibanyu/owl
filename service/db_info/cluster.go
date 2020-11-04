@@ -1,10 +1,13 @@
 package db_info
 
+import (
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util"
+)
+
 type DbInjectionCluster struct {
 	ID          int64  `json:"id" gorm:"column:id"`
 	Name        string `json:"name" gorm:"column:name"`
 	Description string `json:"description" gorm:"column:description"`
-	DefaultDB   string `json:"default_db" gorm:"column:default_db"`
 	Addr        string `json:"addr" gorm:"column:addr"` //ip : port
 	User        string `json:"user" gorm:"column:user"`
 	Pwd         string `json:"pwd" gorm:"column:pwd"`
@@ -29,10 +32,25 @@ func SetClusterDao(impl ClusterDao) {
 }
 
 func AddCluster(cluster *DbInjectionCluster) (int64, error) {
+	cryptoData, err := util.AesCrypto([]byte(cluster.Pwd))
+	if err != nil {
+		return 0, err
+	}
+
+	cluster.Pwd = util.StringifyByteDirectly(cryptoData)
 	return clusterDao.AddCluster(cluster)
 }
 
 func UpdateCluster(cluster *DbInjectionCluster) error {
+	if cluster.Pwd != "" {
+		cryptoData, err := util.AesCrypto([]byte(cluster.Pwd))
+		if err != nil {
+			return err
+		}
+
+		cluster.Pwd = util.StringifyByteDirectly(cryptoData)
+	}
+
 	return clusterDao.UpdateCluster(cluster)
 }
 
@@ -41,7 +59,17 @@ func DelCluster(id int64) error {
 }
 
 func GetClusterByName(name string) (*DbInjectionCluster, error) {
-	return clusterDao.GetClusterByName(name)
+	cluster, err := clusterDao.GetClusterByName(name)
+	if err != nil {
+		return nil, err
+	}
+
+	deCryptoData, err := util.AesDeCrypto(util.ParseStringedByte(cluster.Pwd))
+	if err != nil {
+		return nil, err
+	}
+	cluster.Pwd = string(deCryptoData)
+	return cluster, nil
 }
 
 func ListCluster() ([]DbInjectionCluster, error) {

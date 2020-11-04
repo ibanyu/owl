@@ -3,8 +3,9 @@ package db_info
 import (
 	"database/sql"
 	"fmt"
-	
+
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util"
 )
 
 const defaultDBName = "information_schema"
@@ -15,7 +16,7 @@ type DBInfoTool struct {
 var DBTool DBInfoTool
 
 func (DBInfoTool) GetDBConn(dbName, clusterName string) (*task.DBInfo, error) {
-	cluster, err := clusterDao.GetClusterByName(clusterName)
+	cluster, err := GetClusterByName(clusterName)
 	if err != nil {
 		return nil, fmt.Errorf("get cluster info err: %s", err.Error())
 	}
@@ -58,11 +59,18 @@ func ListAllDB() (map[string][]string, error) {
 }
 
 func ListDbByCluster(cluster *DbInjectionCluster) ([]string, error) {
+	deCryptoData, err := util.AesDeCrypto(util.ParseStringedByte(cluster.Pwd))
+	if err != nil{
+		return nil, err
+	}
+
+	cluster.Pwd = fmt.Sprintf("%s", deCryptoData)
 	conn, err := sql.Open("mysql",
-		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", cluster.User, cluster.Pwd, cluster.Addr, cluster.DefaultDB))
+		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", cluster.User, cluster.Pwd, cluster.Addr, defaultDBName))
 	if err != nil {
 		return nil, fmt.Errorf("open db_info conn err: %s", err.Error())
 	}
+	defer conn.Close()
 
 	rows, err := conn.Query("show databases;")
 	if err != nil {
