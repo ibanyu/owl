@@ -17,7 +17,7 @@ import (
 
 type BackupDao interface {
 	AddBackup(backup *DbInjectionBackup) (int64, error)
-	UpdateBackup(backup *DbInjectionBackup) error //todo no usage is a bug
+	UpdateBackup(backup *DbInjectionBackup) error
 	GetBackupInfoById(id int64) (*DbInjectionBackup, error)
 }
 

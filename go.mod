@@ -12,6 +12,7 @@ require (
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-ldap/ldap v3.0.3+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/golang/mock v1.4.3
 	github.com/jinzhu/gorm v1.9.16
 	github.com/jtblin/go-ldap-client v0.0.0-20170223121919-b73f66626b33
 	github.com/juju/testing v0.0.0-20200923013621-75df6121fbb0 // indirect
@@ -39,5 +40,6 @@ require (
 	gopkg.in/stretchr/testify.v1 v1.2.2 // indirect
 	gopkg.in/yaml.v2 v2.3.0
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c
+	gotest.tools v2.2.0+incompatible
 	vitess.io/vitess v0.7.0
 )

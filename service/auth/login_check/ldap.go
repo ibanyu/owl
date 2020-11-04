@@ -1,4 +1,4 @@
-package auth
+package login_check
 
 import (
 	"fmt"
@@ -9,7 +9,12 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
-func LdapCheck(userName, pwd string) error {
+type LoginServiceImpl struct {
+}
+
+var LoginService LoginServiceImpl
+
+func (LoginServiceImpl) Login(userName, pwd string) error {
 	ok, _, err := getLdapConn().Authenticate(userName, pwd)
 	if err != nil {
 		return fmt.Errorf("authenticating user err %s: %+v ", userName, err)
@@ -17,7 +22,7 @@ func LdapCheck(userName, pwd string) error {
 	if !ok {
 		return fmt.Errorf("authenticating failed for user %s", "username")
 	}
-	logger.Infof("user: %s login", userName)
+	logger.Infof("user: %s Login", userName)
 	return nil
 }
 
@@ -29,7 +34,8 @@ func getLdapConn() *ldap.LDAPClient {
 }
 
 var once sync.Once
-func setLdapConn()  {
+
+func setLdapConn() {
 	ldapConn = &ldap.LDAPClient{
 		Base:         config.Conf.Login.LDAP.BaseDN,
 		Host:         config.Conf.Login.LDAP.Host,
