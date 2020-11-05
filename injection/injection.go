@@ -4,6 +4,7 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth/login_check"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/checker"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/db_info"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
@@ -17,6 +18,7 @@ func Injection() {
 	task.SetChecker(checker.Checker)
 	checker.SetRuleStatusDao(dao.Rule)
 	db_info.SetClusterDao(dao.Cluster)
+	auth.SetLoginService(login_check.LoginService)
 
 	switch config.Conf.Role.From {
 	case "conf":

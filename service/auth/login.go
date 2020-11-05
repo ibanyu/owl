@@ -10,7 +10,7 @@ import (
 )
 
 func Login(userName, Pwd string) (string, error) {
-	if err := LdapCheck(userName, Pwd); err != nil {
+	if err := loginService.Login(userName, Pwd); err != nil {
 		return "", err
 	}
 
@@ -20,7 +20,7 @@ func Login(userName, Pwd string) (string, error) {
 type Claims struct {
 	Username           string `json:"username"  binding:"required"`
 	Password           string `json:"password"  binding:"required"`
-	jwt.StandardClaims
+	jwt.StandardClaims `json:"-"`
 }
 
 func GenerateToken(username, password string) (string, error) {

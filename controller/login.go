@@ -33,7 +33,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 		if err != nil {
 			c.JSON(http.StatusPermanentRedirect, Resp{
 				Code:    code.Redirect,
-				Message: "check token failed, place login",
+				Message: "check token failed, please login",
 				Data:    config.Conf.Login.LoginPath,
 			})
 			c.Abort()
