@@ -558,6 +558,22 @@ func (q *Rule) RuleVarcharLengthLimit(audit *Audit, info *task.DBInfo) (pass boo
 	return true, q.Summary, 0
 }
 
+const autoIncrementLimit = 10000
+
+func (q *Rule) RuleAutoIncrementLimit(audit *Audit, info *task.DBInfo) (pass bool, newSummary string, affectRows int) {
+	for _, node := range audit.TiStmt {
+		switch n := node.(type) {
+		case *ast.CreateTableStmt:
+			for _, v := range n.Options {
+				if v.Tp == ast.TableOptionAutoIncrement && v.UintValue > autoIncrementLimit {
+					return false, q.Summary, 0
+				}
+			}
+		}
+	}
+	return true, q.Summary, 0
+}
+
 // RuleAlterTableDropColumn Alter.001
 func (q *Rule) RuleAlterTableDropColumn(audit *Audit, info *task.DBInfo) (pass bool, newSummary string, affectRows int) {
 	switch audit.Stmt.(type) {
