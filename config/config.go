@@ -1,10 +1,13 @@
 package config
 
 import (
+	"context"
 	"log"
 	"os"
 
 	"gopkg.in/yaml.v3"
+
+	"gitlab.pri.ibanyu.com/middleware/seaweed/xlog"
 )
 
 type Config struct {
@@ -75,6 +78,7 @@ func InitConfig(path string) {
 
 	conf, err := newConfig(path)
 	if err != nil {
+		xlog.Warnf(context.TODO(), "init config failed, err: %s, path: %s", err.Error(), path)
 		log.Fatal("init config failed: ", err.Error())
 	}
 	Conf = conf
