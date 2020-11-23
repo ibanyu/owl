@@ -78,6 +78,7 @@ type Action = string
 
 const (
 	EditItem Action = "editItem"
+	DelItem  Action = "delItem"
 	DoCancel        = "cancel"
 	SkipAt          = "skipAt"
 	BeginAt         = "beginAt"
