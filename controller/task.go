@@ -25,8 +25,10 @@ func ListTask(ctx *gin.Context) Resp {
 	}
 
 	return Resp{Data: ListData{
-		Items: task,
-		Count: count,
+		Items:  task,
+		Total:  count,
+		More:   count > page.Offset+page.Limit,
+		Offset: page.Offset,
 	}}
 }
 

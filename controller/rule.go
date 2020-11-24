@@ -9,7 +9,9 @@ import (
 func LisRule(ctx *gin.Context) Resp {
 	rules := checker.ListRules()
 	return Resp{Data: ListData{
-		Items: rules,
-		Count: len(rules),
+		Items:  rules,
+		Total:  len(rules),
+		More:   false,
+		Offset: 0,
 	}}
 }
