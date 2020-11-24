@@ -48,6 +48,7 @@ func SetTaskDao(impl TaskDao) {
 
 type SubTaskDao interface {
 	UpdateItem(item *DbInjectionExecItem) error
+	DelItem(item *DbInjectionExecItem) error
 	UpdateItemByBackupId(item *DbInjectionExecItem) error
 }
 
@@ -160,6 +161,8 @@ func UpdateTask(task *DbInjectionTask) error {
 	switch task.Action {
 	case EditItem:
 		return subTaskDao.UpdateItem(task.ExecItem)
+	case DelItem:
+		return subTaskDao.DelItem(task.ExecItem)
 	case DoCancel:
 		return doCancel(task, dbTask, isDba)
 	case SkipAt, BeginAt:

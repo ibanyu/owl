@@ -30,8 +30,10 @@ func ListCluster(ctx *gin.Context) Resp {
 	}
 
 	return Resp{Data: ListData{
-		Items: cluster,
-		Count: len(cluster),
+		Items:  cluster,
+		Total:  len(cluster),
+		More:   false,
+		Offset: 0,
 	}}
 }
 

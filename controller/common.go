@@ -7,6 +7,8 @@ type Resp struct {
 }
 
 type ListData struct {
-	Count int         `json:"count"`
-	Items interface{} `json:"items"`
+	Total  int         `json:"total"`
+	Items  interface{} `json:"items"`
+	More   bool        `json:"more"`
+	Offset int         `json:"offset"`
 }

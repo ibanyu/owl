@@ -36,7 +36,7 @@ func (CheckerService) SqlCheck(sql, charset, collation string, info *task.DBInfo
 			continue
 		}
 
-		pass, suggestion, affectRow = v.CheckFuncPass(&v, audit, info)
+		pass, suggestion, affectRow = v.CheckFunc(&v, audit, info)
 		if !pass {
 			pass = false
 			suggestion += "; " + v.Summary
