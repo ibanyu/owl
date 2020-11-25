@@ -91,10 +91,11 @@ func getHandleInfo(handler LogicHandler, c *gin.Context) controller.Resp {
 	}
 
 	fName := runtime.FuncForPC(reflect.ValueOf(handler).Pointer()).Name()
-	user := c.MustGet("user").(string)
-	if user == "" {
-		logger.Errorf("%s get user in wrapper failed", fName)
+	user, err := c.Cookie("user")
+	if err != nil {
+		logger.Warnf("%s get user in wrapper failed", fName)
 	}
+
 	if resp.Code == code.Success {
 		logger.Infof("%s exec %s success", user, fName)
 	} else {
