@@ -50,6 +50,9 @@ func Router() *gin.Engine {
 	}
 
 	r.Use(controller.OnlyDba())
+
+	r.POST("/db-injection/rule/update", HandlerWrapper(controller.UpdateRuleStatus))
+
 	cluster := r.Group("/db-injection/cluster")
 	{
 		cluster.POST("/list", HandlerWrapper(controller.ListCluster))
