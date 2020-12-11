@@ -2,7 +2,7 @@ package dao
 
 import (
 	"github.com/jinzhu/gorm"
-	
+
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
@@ -90,6 +90,7 @@ func getTaskExecItems(db *gorm.DB, taskP *task.DbInjectionTask) ([]task.DbInject
 		for _, v := range items {
 			v.DBName = subTask.DbName
 			v.ClusterName = subTask.ClusterName
+			v.TaskType = subTask.TaskType
 			formattedItems = append(formattedItems, v)
 		}
 	}

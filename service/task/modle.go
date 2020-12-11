@@ -29,6 +29,7 @@ type DbInjectionExecItem struct {
 
 	DBName      string `json:"db_name" gorm:"-"`
 	ClusterName string `json:"cluster_name" gorm:"-"`
+	TaskType    string `json:"task_type" gorm:"-"`
 }
 
 type Status = string
