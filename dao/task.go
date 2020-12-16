@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
@@ -44,20 +45,53 @@ func (TaskDaoImpl) UpdateTask(task *task.DbInjectionTask) error {
 	return GetDB().Model(task).Where("id = ?", task.ID).Update(task).Error
 }
 
-const listTaskCondition = "name like ? or creator like ?"
+func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool) ([]task.DbInjectionTask, int, error) {
+	condition := "(name like ? or creator like ?) and status not in (?)"
+	if !isDBA {
+		condition = fmt.Sprintf("(creator = %s or reviewer = %s) and ", page.Operator, page.Operator) + condition
+	}
 
-func (TaskDaoImpl) ListTask(page *service.Pagination) ([]task.DbInjectionTask, int, error) {
 	page.Key = "%" + page.Key + "%"
-
 	var count int
-	if err := GetDB().Model(&task.DbInjectionTask{}).Where(listTaskCondition,
-		page.Key, page.Key).Count(&count).Error; err != nil {
+	if err := GetDB().Model(&task.DbInjectionTask{}).Where(condition,
+		page.Key, page.Key, task.HistoryStatus()).Count(&count).Error; err != nil {
 		return nil, 0, err
 	}
 
 	var tasks []task.DbInjectionTask
 	if err := GetDB().Order("ct desc").Offset(page.Offset).Limit(page.Limit).
-		Find(&tasks, listTaskCondition, page.Key, page.Key).Error; err != nil {
+		Find(&tasks, condition, page.Key, page.Key).Error; err != nil {
+		return nil, 0, err
+	}
+
+	for idx, taskV := range tasks {
+		formattedItems, _, err := getTaskExecItems(GetDB(), &taskV)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		tasks[idx].ExecItems = formattedItems
+	}
+
+	return tasks, count, nil
+}
+
+func (TaskDaoImpl) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task.DbInjectionTask, int, error) {
+	condition := "(name like ? or creator like ?) and status in (?)"
+	if !isDBA {
+		condition = fmt.Sprintf(" and (creator = %s or reviewer = %s)", page.Operator, page.Operator) + condition
+	}
+
+	page.Key = "%" + page.Key + "%"
+	var count int
+	if err := GetDB().Model(&task.DbInjectionTask{}).Where(condition,
+		page.Key, page.Key, task.HistoryStatus()).Count(&count).Error; err != nil {
+		return nil, 0, err
+	}
+
+	var tasks []task.DbInjectionTask
+	if err := GetDB().Order("ct desc").Offset(page.Offset).Limit(page.Limit).
+		Find(&tasks, condition, page.Key, page.Key).Error; err != nil {
 		return nil, 0, err
 	}
 

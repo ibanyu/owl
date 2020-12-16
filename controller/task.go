@@ -21,7 +21,28 @@ func ListTask(ctx *gin.Context) Resp {
 	page.Operator = ctx.MustGet("user").(string)
 	task, count, err := task.ListTask(&page)
 	if err != nil {
-		return Resp{Message: fmt.Sprintf("%s: list Cabinet err: %s", f, err.Error()), Code: code.InternalErr}
+		return Resp{Message: fmt.Sprintf("%s: list ListTask err: %s", f, err.Error()), Code: code.InternalErr}
+	}
+
+	return Resp{Data: ListData{
+		Items:  task,
+		Total:  count,
+		More:   count > page.Offset+page.Limit,
+		Offset: page.Offset,
+	}}
+}
+
+func ListHistoryTask(ctx *gin.Context) Resp {
+	f := "ListHistoryTask() -->"
+	var page service.Pagination
+	if err := ctx.BindJSON(&page); err != nil {
+		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s ", f, err.Error()), Code: code.ParamInvalid}
+	}
+
+	page.Operator = ctx.MustGet("user").(string)
+	task, count, err := task.ListHistoryTask(&page)
+	if err != nil {
+		return Resp{Message: fmt.Sprintf("%s: list ListHistoryTask err: %s", f, err.Error()), Code: code.InternalErr}
 	}
 
 	return Resp{Data: ListData{

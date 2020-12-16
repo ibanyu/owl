@@ -43,7 +43,7 @@ const (
 	ExecFailed         = "execFailed"
 	ExecSuccess        = "execSuccess"
 
-	//中止状态
+	//终止状态
 	Reject     Status = "reject"
 	Cancel            = "cancel"
 	ExecCancel        = "execCancel"
@@ -79,10 +79,17 @@ type Action = string
 
 const (
 	EditItem Action = "editItem"
-	DelItem  Action = "delItem"
+	DelItem         = "delItem"
 	DoCancel        = "cancel"
 	SkipAt          = "skipAt"
 	BeginAt         = "beginAt"
 	Progress        = "progress"
 	DoReject        = "reject"
 )
+
+//todo, list not in, history in;
+//列表及历史 添加能见过滤；创建者，reviewer
+//本地部署，添加dockerfile；
+func HistoryStatus() []ItemStatus {
+	return []ItemStatus{Reject, Cancel, ExecCancel, ExecFailed, ExecSuccess}
+}

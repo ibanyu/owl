@@ -36,6 +36,7 @@ func Router() *gin.Engine {
 	{
 		task.POST("/add", HandlerWrapper(controller.AddTask))
 		task.POST("/list", HandlerWrapper(controller.ListTask))
+		task.POST("/history", HandlerWrapper(controller.ListHistoryTask))
 		task.POST("/get", HandlerWrapper(controller.GetTask))
 		task.POST("/update", HandlerWrapper(controller.UpdateTask))
 	}
