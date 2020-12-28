@@ -31,7 +31,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 		token := c.GetHeader("token")
 		claims, err := auth.ParseToken(token)
 		if err != nil {
-			c.JSON(http.StatusPermanentRedirect, Resp{
+			c.JSON(http.StatusOK, Resp{
 				Code:    code.Redirect,
 				Message: "check token failed, please login",
 				Data:    config.Conf.Login.LoginPath,
@@ -41,7 +41,7 @@ func AuthorizeJWT() gin.HandlerFunc {
 		}
 
 		if err := claims.Valid(); err != nil {
-			c.JSON(http.StatusPermanentRedirect, Resp{
+			c.JSON(http.StatusOK, Resp{
 				Code:    code.Redirect,
 				Message: "token expired, place login",
 				Data:    config.Conf.Login.LoginPath,
@@ -61,7 +61,7 @@ func OnlyDba() gin.HandlerFunc {
 		isDba, err := task.IsDba(user)
 		if err != nil {
 			c.JSON(http.StatusOK, Resp{
-				Code:    code.InternalErr,
+				Code:    code.ParamInvalid,
 				Message: fmt.Sprintf("check dba auth failed, %s", err.Error()),
 			})
 			c.Abort()
