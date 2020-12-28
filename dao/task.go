@@ -60,7 +60,7 @@ func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool) ([]task.DbInje
 
 	var tasks []task.DbInjectionTask
 	if err := GetDB().Order("ct desc").Offset(page.Offset).Limit(page.Limit).
-		Find(&tasks, condition, page.Key, page.Key).Error; err != nil {
+		Find(&tasks, condition, page.Key, page.Key, task.HistoryStatus()).Error; err != nil {
 		return nil, 0, err
 	}
 
@@ -91,7 +91,7 @@ func (TaskDaoImpl) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task
 
 	var tasks []task.DbInjectionTask
 	if err := GetDB().Order("ct desc").Offset(page.Offset).Limit(page.Limit).
-		Find(&tasks, condition, page.Key, page.Key).Error; err != nil {
+		Find(&tasks, condition, page.Key, page.Key, task.HistoryStatus()).Error; err != nil {
 		return nil, 0, err
 	}
 
