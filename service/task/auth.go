@@ -133,6 +133,8 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 			return &EditAuth{
 				ReviewEnable:   true,
 				TurnDownEnable: true,
+				SubmitExecEnable: true,
+				ExecEnable: true,
 			}
 		}
 
@@ -194,7 +196,6 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 			return &EditAuth{
 				ReviewEnable:   true,
 				TurnDownEnable: true,
-				ExecEnable:     true,
 			}
 		}
 		if isCreator {

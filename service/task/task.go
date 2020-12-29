@@ -90,7 +90,7 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 		for itemIdx, item := range subTask.ExecItems {
 			pass, suggestion, affectRow := checker.SqlCheck(item.SQLContent, "", "", dbInfo)
 			if affectRow > 0 {
-				task.SubTasks[idx].ExecItems[itemIdx].AffectRows = 0
+				task.SubTasks[idx].ExecItems[itemIdx].AffectRows = affectRow
 			}
 			if !pass {
 				checkPass = false
@@ -263,6 +263,6 @@ func GetTask(id int64, operator string) (*DbInjectionTask, error) {
 	task.SubTasks = nil
 
 	//task.ExecItems = fmtExecItemFromOneTask(task)
-	task.EditAuth = GetTaskOperateAuth(true, operator == task.Creator, isDba, strings.Contains(task.Reviewer, operator), task)
+	task.EditAuth = GetTaskOperateAuth(true, operator == task.Creator, strings.Contains(task.Reviewer, operator),isDba, task)
 	return task, nil
 }

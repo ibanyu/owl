@@ -904,7 +904,7 @@ func (q *Rule) RuleDmlNoMoreThan100(audit *Audit, info *task.DBInfo) (pass bool,
 		}
 		logger.Infof("%s sql check dml affect row, affectRow: %d", RuleDml009, affectRow)
 
-		if affectRows > 0 {
+		if affectRow > 0 {
 			affectRows = affectRow
 		}
 
