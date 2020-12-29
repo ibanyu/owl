@@ -35,7 +35,8 @@ func Router() *gin.Engine {
 	task := r.Group("/db-injection/task")
 	{
 		task.POST("/add", HandlerWrapper(controller.AddTask))
-		task.POST("/list", HandlerWrapper(controller.ListTask))
+		task.POST("/reviewer/list", HandlerWrapper(controller.ListReviewerTask))
+		task.POST("/exec/list", HandlerWrapper(controller.ListExecTask))
 		task.POST("/history", HandlerWrapper(controller.ListHistoryTask))
 		task.POST("/get", HandlerWrapper(controller.GetTask))
 		task.POST("/update", HandlerWrapper(controller.UpdateTask))

@@ -36,7 +36,7 @@ type DbInjectionTask struct {
 type TaskDao interface {
 	AddTask(task *DbInjectionTask) (int64, error)
 	UpdateTask(task *DbInjectionTask) error
-	ListTask(pagination *service.Pagination, isDBA bool) ([]DbInjectionTask, int, error)
+	ListTask(pagination *service.Pagination, isDBA bool, status []ItemStatus) ([]DbInjectionTask, int, error)
 	ListHistoryTask(page *service.Pagination, isDBA bool) ([]DbInjectionTask, int, error)
 	GetTask(id int64) (*DbInjectionTask, error)
 }
@@ -103,6 +103,8 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 
 	if checkPass {
 		task.Status = CheckPass
+	}else {
+		task.Status = CheckFailed
 	}
 	task.Ct = time.Now().Unix()
 
@@ -220,17 +222,18 @@ func ProgressEdit(task, dbTask *DbInjectionTask) error {
 	})
 }
 
-func ListTask(pagination *service.Pagination) ([]DbInjectionTask, int, error) {
+func ListTask(pagination *service.Pagination, status []ItemStatus) ([]DbInjectionTask, int, error) {
 	isDba, err := authTool.IsDba(pagination.Operator)
 	if err != nil {
 		return nil, 0, err
 	}
-	tasks, count, err := taskDao.ListTask(pagination, isDba)
+	tasks, count, err := taskDao.ListTask(pagination, isDba, status)
 	if err != nil {
 		return nil, 0, err
 	}
 
 	for i, v := range tasks {
+		tasks[i].Status = StatusName(v.Status)
 		tasks[i].EditAuth = GetTaskOperateAuth(false, v.Creator == pagination.Operator, strings.Contains(v.Reviewer, pagination.Operator), isDba, &v)
 	}
 
@@ -245,6 +248,11 @@ func ListHistoryTask(pagination *service.Pagination) ([]DbInjectionTask, int, er
 	tasks, count, err := taskDao.ListHistoryTask(pagination, isDba)
 	if err != nil {
 		return nil, 0, err
+	}
+
+	for i, v := range tasks {
+		tasks[i].Status = StatusName(v.Status)
+		//tasks[i].EditAuth = GetTaskOperateAuth(false, v.Creator == pagination.Operator, strings.Contains(v.Reviewer, pagination.Operator), isDba, &v)
 	}
 
 	return tasks, count, nil
