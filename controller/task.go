@@ -122,5 +122,7 @@ func AddTask(ctx *gin.Context) Resp {
 		return Resp{Message: fmt.Sprintf("%s, get task failed :%s", f, err.Error()), Code: code.InternalErr}
 	}
 
-	return Resp{Data: id}
+	return Resp{Data: struct {
+		Id int64 `json:"id"`
+	}{id}}
 }

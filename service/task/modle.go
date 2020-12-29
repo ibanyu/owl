@@ -57,7 +57,7 @@ const (
 func StatusName(status Status) string {
 	switch status {
 	case CheckFailed:
-		return "检测失败"
+		return "系统检测失败"
 	case CheckPass:
 		return "待leader审核"
 	case ReviewPass:
@@ -82,9 +82,11 @@ func StatusName(status Status) string {
 type ItemStatus = string
 
 const (
-	ItemFailed  ItemStatus = "failed"
-	ItemSuccess            = "success"
-	ItemSkipped            = "skipped"
+	ItemFailed      ItemStatus = "failed"
+	ItemCheckFailed            = "check_failed"
+	ItemCheckPass              = "check_pass"
+	ItemSuccess                = "success"
+	ItemSkipped                = "skipped"
 
 	ItemNoBackup              ItemStatus = "rollBackFailed"
 	ItemBackupSuccess                    = "backupSuccess"

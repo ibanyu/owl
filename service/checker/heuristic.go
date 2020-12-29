@@ -234,7 +234,7 @@ func (q *Rule) RuleCreateTableIndexColNum(audit *Audit, info *task.DBInfo) (pass
 			}
 		}
 	}
-	return false, q.Summary, 0
+	return true, q.Summary, 0
 }
 
 //RuleCreateTableIndexNum Create.008
@@ -639,6 +639,7 @@ func (q *Rule) RuleUnsupportedType(audit *Audit, info *task.DBInfo) (pass bool, 
 
 //RuleDMLTableNoWhere DML.001
 func (q *Rule) RuleDMLTableNoWhere(audit *Audit, info *task.DBInfo) (pass bool, newSummary string, affectRows int) {
+	pass = true
 	sqlparser.Walk(func(node sqlparser.SQLNode) (kontinue bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.Delete:
@@ -660,6 +661,7 @@ func (q *Rule) RuleDMLTableNoWhere(audit *Audit, info *task.DBInfo) (pass bool, 
 
 // RuleMeaninglessWhere DML.002
 func (q *Rule) RuleMeaninglessWhere(audit *Audit, info *task.DBInfo) (pass bool, newSummary string, affectRows int) {
+	pass = true
 	sqlparser.Walk(func(node sqlparser.SQLNode) (continueWalk bool, err error) {
 		switch n := node.(type) {
 		case *sqlparser.ComparisonExpr:
@@ -702,6 +704,7 @@ func (q *Rule) RuleMeaninglessWhere(audit *Audit, info *task.DBInfo) (pass bool,
 
 // RuleMultiDeleteUpdate DML.003
 func (q *Rule) RuleMultiDeleteUpdate(audit *Audit, info *task.DBInfo) (pass bool, newSummary string, affectRows int) {
+	pass = true
 	switch audit.Stmt.(type) {
 	case *sqlparser.Delete, *sqlparser.Update:
 		sqlparser.Walk(func(node sqlparser.SQLNode) (continueWalk bool, err error) {
@@ -788,13 +791,10 @@ func (q *Rule) RuleAlterTableExist(audit *Audit, info *task.DBInfo) (pass bool, 
 
 // RuleAlterTableColumnExist DML.007
 func (q *Rule) RuleAlterTableColumnExist(audit *Audit, info *task.DBInfo) (pass bool, newSummary string, affectRows int) {
-
-	var tbs []string
 	var cols []string
 	for _, tiStmt := range audit.TiStmt {
 		switch n := tiStmt.(type) {
 		case *ast.AlterTableStmt:
-			tbs = append(tbs, n.Table.Name.String())
 			for _, v := range n.Specs {
 				if v.Tp == ast.AlterTableAddColumns {
 					continue
@@ -808,12 +808,34 @@ func (q *Rule) RuleAlterTableColumnExist(audit *Audit, info *task.DBInfo) (pass 
 				}
 			}
 		case *ast.InsertStmt:
-			tbs = append(tbs, n.Table.TableRefs.Left.(*ast.TableSource).Source.(*ast.TableName).Name.String())
 			for _, v := range n.Columns {
 				cols = append(cols, v.Name.String())
 			}
 		}
 	}
+
+	//todo, rewrite
+	var tbs []string
+	for _, tiStmt := range audit.TiStmt {
+		switch n := tiStmt.(type) {
+		case *ast.AlterTableStmt:
+			tbs = append(tbs, n.Table.Name.String())
+		case *ast.DropTableStmt, *ast.TruncateTableStmt:
+			return false, q.Summary, 0
+		case *ast.DeleteStmt:
+			tbs = append(tbs, n.TableRefs.TableRefs.Left.(*ast.TableSource).Source.(*ast.TableName).Name.String())
+		case *ast.InsertStmt:
+			tbs = append(tbs, n.Table.TableRefs.Left.(*ast.TableSource).Source.(*ast.TableName).Name.String())
+		case *ast.UpdateStmt:
+			switch n.TableRefs.TableRefs.Left.(type) {
+			case *ast.Join:
+				tbs = append(tbs, n.TableRefs.TableRefs.Left.(*ast.Join).Left.(*ast.TableSource).Source.(*ast.TableName).Name.String())
+			default:
+				tbs = append(tbs, n.TableRefs.TableRefs.Left.(*ast.TableSource).Source.(*ast.TableName).Name.String())
+			}
+		}
+	}
+
 	if len(tbs) != 1 {
 		return false, q.Summary, 0
 	}

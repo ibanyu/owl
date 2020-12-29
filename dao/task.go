@@ -48,7 +48,7 @@ func (TaskDaoImpl) UpdateTask(task *task.DbInjectionTask) error {
 func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool, status []task.ItemStatus) ([]task.DbInjectionTask, int, error) {
 	condition := "(name like ? or creator like ?) and status in (?)"
 	if !isDBA {
-		condition = fmt.Sprintf("(creator = %s or reviewer = %s) and ", page.Operator, page.Operator) + condition
+		condition = fmt.Sprintf("(creator = '%s' or reviewer = '%s') and ", page.Operator, page.Operator) + condition
 	}
 
 	page.Key = "%" + page.Key + "%"
@@ -79,7 +79,7 @@ func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool, status []task.
 func (TaskDaoImpl) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task.DbInjectionTask, int, error) {
 	condition := "(name like ? or creator like ?) and status in (?)"
 	if !isDBA {
-		condition = fmt.Sprintf(" and (creator = %s or reviewer = %s)", page.Operator, page.Operator) + condition
+		condition = condition + fmt.Sprintf(" and (creator = '%s' or reviewer = '%s')", page.Operator, page.Operator)
 	}
 
 	page.Key = "%" + page.Key + "%"
