@@ -776,6 +776,8 @@ func (q *Rule) RuleAlterTableExist(audit *Audit, info *task.DBInfo) (pass bool, 
 			default:
 				tbs = append(tbs, n.TableRefs.TableRefs.Left.(*ast.TableSource).Source.(*ast.TableName).Name.String())
 			}
+		default:
+			return true, q.Summary, 0
 		}
 	}
 	if len(tbs) != 1 {
@@ -811,6 +813,8 @@ func (q *Rule) RuleAlterTableColumnExist(audit *Audit, info *task.DBInfo) (pass 
 			for _, v := range n.Columns {
 				cols = append(cols, v.Name.String())
 			}
+		default:
+			return true, q.Summary, 0
 		}
 	}
 
