@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
@@ -31,21 +30,13 @@ func AuthorizeJWT() gin.HandlerFunc {
 		token := c.GetHeader("token")
 		claims, err := auth.ParseToken(token)
 		if err != nil {
-			c.JSON(http.StatusOK, Resp{
-				Code:    code.Redirect,
-				Message: "check token failed, please login",
-				Data:    config.Conf.Login.LoginPath,
-			})
+			c.JSON(http.StatusOK, "please login")
 			c.Abort()
 			return
 		}
 
 		if err := claims.Valid(); err != nil {
-			c.JSON(http.StatusOK, Resp{
-				Code:    code.Redirect,
-				Message: "token expired, place login",
-				Data:    config.Conf.Login.LoginPath,
-			})
+			c.JSON(http.StatusOK, "place login")
 			c.Abort()
 			return
 		}
