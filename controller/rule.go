@@ -22,13 +22,15 @@ func LisRule(ctx *gin.Context) Resp {
 func UpdateRuleStatus(ctx *gin.Context) Resp {
 	f := "UpdateRuleStatus()-->"
 
-	taskName := ctx.Query("task_name")
-	action := ctx.Query("action")
-	if taskName == "" || action == "" {
-		return Resp{Message: fmt.Sprintf("%s, get param failed ", f), Code: code.ParamInvalid}
+	params := struct {
+		Name   string `json:"name" binding:"required"`
+		Action string `json:"action" binding:"required"`
+	}{}
+	if err := ctx.BindJSON(&params); err != nil {
+		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s ", f, err.Error()), Code: code.ParamInvalid}
 	}
 
-	if err := checker.UpdateRuleStatus(taskName, action); err != nil {
+	if err := checker.UpdateRuleStatus(params.Name, params.Action); err != nil {
 		return Resp{Message: fmt.Sprintf("%s,update RuleStatus failed :%s ", f, err.Error()), Code: code.ParamInvalid}
 	}
 
