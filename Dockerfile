@@ -4,4 +4,6 @@ LABEL MAINTAINER=devops@ipalfish.com
 
 COPY dbinjectionopensource /data/home/serv/deploy/service/bin/
 
+WORKDIR /data
+
 ENTRYPOINT ["/data/home/serv/deploy/service/bin/dbinjectionopensource"]

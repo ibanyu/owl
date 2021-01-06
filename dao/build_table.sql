@@ -66,17 +66,12 @@ CREATE TABLE IF NOT EXISTS `db_injection_exec_item`
   COLLATE = utf8mb4_bin
   AUTO_INCREMENT = 7077 COMMENT '子任务里的一条sql，执行单位';
 
-DROP TABLE IF EXISTS `db_injection_rules`;
-CREATE TABLE IF NOT EXISTS `db_injection_rules`
+DROP TABLE IF EXISTS `db_injection_rule_status`;
+CREATE TABLE IF NOT EXISTS `db_injection_rule_status`
 (
     `id`      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `name`    VARCHAR(80)     NOT NULL DEFAULT '' COMMENT '规则名',
-    `content` VARCHAR(200)    NOT NULL DEFAULT '' COMMENT '规则内容、描述',
-    `switch`  TINYINT         NOT NULL DEFAULT 0 COMMENT '开关',
-
-    `ct`      BIGINT          NOT NULL DEFAULT 0 COMMENT '创建时间',
-    `ut`      BIGINT          NOT NULL DEFAULT 0 COMMENT '更改时间',
-
+    `close`  TINYINT         NOT NULL DEFAULT 0 COMMENT '开关',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4

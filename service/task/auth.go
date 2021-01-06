@@ -42,6 +42,20 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 			}
 		}
 	case CheckPass:
+		if (isReviewer || isDba) && isCreator {
+			if detail {
+				return &EditAuth{
+					ReviewPassEnable: true,
+					TurnDownEnable:   true,
+					WithdrawEnable:   true,
+				}
+			}
+			return &EditAuth{
+				ReviewPassEnable: true,
+				TurnDownEnable:   true,
+				WithdrawEnable:   true,
+			}
+		}
 		if isCreator {
 			if detail {
 				return &EditAuth{
@@ -60,19 +74,20 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 		//既是创建人，又是审核人；撤销和驳回的意义不大了
 		if isCreator && isReviewer {
 			return &EditAuth{
-				ReviewEnable: true,
+				ReviewPassEnable: true,
+				WithdrawEnable:   true,
 			}
 		}
-		if isReviewer {
+		if isReviewer || isDba {
 			if detail {
 				return &EditAuth{
-					ReviewEnable:   true,
-					TurnDownEnable: true,
+					ReviewPassEnable: true,
+					TurnDownEnable:   true,
 				}
 			}
 			return &EditAuth{
-				ReviewEnable:   true,
-				TurnDownEnable: true,
+				ReviewPassEnable: true,
+				TurnDownEnable:   true,
 			}
 		}
 	case Reject:
@@ -85,7 +100,7 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 			}
 			// 非detail模式，展示的还是审核
 			return &EditAuth{
-				ReviewEnable: true,
+				ReviewPassEnable: true,
 			}
 		}
 		if isCreator {
@@ -102,9 +117,9 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 				}
 			}
 			return &EditAuth{
-				ReviewEnable:   true,
-				TurnDownEnable: true,
-				WithdrawEnable: true,
+				ReviewPassEnable: true,
+				TurnDownEnable:   true,
+				WithdrawEnable:   true,
 			}
 		}
 
@@ -116,23 +131,39 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 				}
 			}
 			return &EditAuth{
-				ReviewEnable:   true,
-				TurnDownEnable: true,
+				ReviewPassEnable: true,
+				TurnDownEnable:   true,
 			}
 		}
 	case ReviewPass:
 		//如果是dml，则不需要dba审核
+		if isDba {
+			if detail {
+				return &EditAuth{
+					ReviewPassEnable: true,
+					TurnDownEnable:   true,
+					SubmitExecEnable: true,
+					ExecEnable:       true,
+				}
+			}
+			return &EditAuth{
+				ReviewPassEnable: true,
+				TurnDownEnable:   true,
+				SubmitExecEnable: true,
+			}
+		}
+
 		if isReviewer && allIsDmlTask(task) {
 			if detail {
 				return &EditAuth{
-					SysReviewEnable:  true,
 					TurnDownEnable:   true,
 					SubmitExecEnable: true,
 				}
 			}
 			return &EditAuth{
-				ReviewEnable:   true,
-				TurnDownEnable: true,
+				TurnDownEnable:   true,
+				SubmitExecEnable: true,
+				ExecEnable:       true,
 			}
 		}
 
@@ -145,13 +176,7 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 				}
 			}
 			return &EditAuth{
-				ReviewEnable: true,
-			}
-		}
-
-		if isCreator {
-			return &EditAuth{
-				WithdrawEnable: true,
+				ReviewPassEnable: true,
 			}
 		}
 		if isReviewer {
@@ -164,21 +189,14 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 				}
 			}
 			return &EditAuth{
-				ReviewEnable:   true,
-				TurnDownEnable: true,
-				WithdrawEnable: true,
+				ReviewPassEnable: true,
+				TurnDownEnable:   true,
+				WithdrawEnable:   true,
 			}
 		}
-		if isDba {
-			if detail {
-				return &EditAuth{
-					ReviewEnable:   true,
-					TurnDownEnable: true,
-				}
-			}
+		if isCreator {
 			return &EditAuth{
-				ReviewEnable:   true,
-				TurnDownEnable: true,
+				WithdrawEnable: true,
 			}
 		}
 	case DBAPass:
@@ -192,9 +210,8 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 				}
 			}
 			return &EditAuth{
-				ReviewEnable:   true,
-				TurnDownEnable: true,
-				ExecEnable:     true,
+				ReviewPassEnable: true,
+				TurnDownEnable:   true,
 			}
 		}
 		if isCreator {
@@ -249,6 +266,6 @@ func allIsDmlTask(task *DbInjectionTask) bool {
 	return true
 }
 
-func IsDba(userName string) (isDba bool, err error)  {
+func IsDba(userName string) (isDba bool, err error) {
 	return authTool.IsDba(userName)
 }

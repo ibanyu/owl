@@ -108,7 +108,7 @@ func BackupAndExec(db *sql.DB, item *DbInjectionExecItem, taskType string) error
 	} else {
 		item.Status = ItemSuccess
 		item.BackupID = backupId
-		item.ExecInfo = fmt.Sprintf("%v", result)
+		item.ExecInfo = fmtExecInfo(result)
 	}
 
 	item.Et = time.Now().Unix()
@@ -117,6 +117,16 @@ func BackupAndExec(db *sql.DB, item *DbInjectionExecItem, taskType string) error
 		logger.Errorf("after exec, update execItem status err, err： %s", updateStatusErr.Error())
 	}
 	return err
+}
+
+func fmtExecInfo(result sql.Result) string {
+	if result == nil {
+		return ""
+	}
+
+	affect, _ := result.RowsAffected()
+	lastId, _ := result.LastInsertId()
+	return fmt.Sprintf("affect nums: %d, last insert id: %d", affect, lastId)
 }
 
 func getExecStartId(action Action, subItems []DbInjectionExecItem, targetItem *DbInjectionExecItem) (int64, error) {

@@ -20,7 +20,7 @@ func Login(userName, Pwd string) (string, error) {
 type Claims struct {
 	Username           string `json:"username"  binding:"required"`
 	Password           string `json:"password"  binding:"required"`
-	jwt.StandardClaims `json:"-"`
+	jwt.StandardClaims
 }
 
 func GenerateToken(username, password string) (string, error) {

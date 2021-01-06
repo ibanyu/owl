@@ -64,9 +64,9 @@ func (mr *MockTaskDaoMockRecorder) UpdateTask(task interface{}) *gomock.Call {
 }
 
 // ListTask mocks base method
-func (m *MockTaskDao) ListTask(pagination *service.Pagination) ([]task.DbInjectionTask, int, error) {
+func (m *MockTaskDao) ListTask(pagination *service.Pagination, isDBA bool) ([]task.DbInjectionTask, int, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListTask", pagination)
+	ret := m.ctrl.Call(m, "ListTask", pagination, isDBA)
 	ret0, _ := ret[0].([]task.DbInjectionTask)
 	ret1, _ := ret[1].(int)
 	ret2, _ := ret[2].(error)
@@ -74,9 +74,25 @@ func (m *MockTaskDao) ListTask(pagination *service.Pagination) ([]task.DbInjecti
 }
 
 // ListTask indicates an expected call of ListTask
-func (mr *MockTaskDaoMockRecorder) ListTask(pagination interface{}) *gomock.Call {
+func (mr *MockTaskDaoMockRecorder) ListTask(pagination, isDBA interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTask", reflect.TypeOf((*MockTaskDao)(nil).ListTask), pagination)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTask", reflect.TypeOf((*MockTaskDao)(nil).ListTask), pagination, isDBA)
+}
+
+// ListHistoryTask mocks base method
+func (m *MockTaskDao) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task.DbInjectionTask, int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListHistoryTask", page, isDBA)
+	ret0, _ := ret[0].([]task.DbInjectionTask)
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// ListHistoryTask indicates an expected call of ListHistoryTask
+func (mr *MockTaskDaoMockRecorder) ListHistoryTask(page, isDBA interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListHistoryTask", reflect.TypeOf((*MockTaskDao)(nil).ListHistoryTask), page, isDBA)
 }
 
 // GetTask mocks base method
@@ -129,6 +145,20 @@ func (m *MockSubTaskDao) UpdateItem(item *task.DbInjectionExecItem) error {
 func (mr *MockSubTaskDaoMockRecorder) UpdateItem(item interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateItem", reflect.TypeOf((*MockSubTaskDao)(nil).UpdateItem), item)
+}
+
+// DelItem mocks base method
+func (m *MockSubTaskDao) DelItem(item *task.DbInjectionExecItem) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DelItem", item)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DelItem indicates an expected call of DelItem
+func (mr *MockSubTaskDaoMockRecorder) DelItem(item interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DelItem", reflect.TypeOf((*MockSubTaskDao)(nil).DelItem), item)
 }
 
 // UpdateItemByBackupId mocks base method

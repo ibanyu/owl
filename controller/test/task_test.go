@@ -116,10 +116,34 @@ func TestListTask(t *testing.T) {
 		Limit:  10,
 		Operator: "fish",
 	}
-	mockTaskDao.EXPECT().ListTask(&page).Return([]task.DbInjectionTask{taskIns}, 1, nil)
+	mockTaskDao.EXPECT().ListTask(&page, true).Return([]task.DbInjectionTask{taskIns}, 1, nil)
 
 	pageByte, _ := json.Marshal(page)
 	req, _ := http.NewRequest("POST", "/db-injection/task/list", bytes.NewBuffer(pageByte))
+	req.Header.Set("token", token)
+	respWriter := serverRouter(req)
+	assert.Equal(t, 200, respWriter.Code)
+
+	resp := &controller.Resp{}
+	json.Unmarshal(respWriter.Body.Bytes(), resp)
+
+	assert.Equal(t, 0, resp.Code)
+}
+
+
+func TestListHistoryTask(t *testing.T) {
+	mockTaskDao := injectTaskMock(t)
+
+	taskIns := task.DbInjectionTask{}
+	page := service.Pagination{
+		Offset: 5,
+		Limit:  10,
+		Operator: "fish",
+	}
+	mockTaskDao.EXPECT().ListHistoryTask(&page, true).Return([]task.DbInjectionTask{taskIns}, 1, nil)
+
+	pageByte, _ := json.Marshal(page)
+	req, _ := http.NewRequest("POST", "/db-injection/task/history", bytes.NewBuffer(pageByte))
 	req.Header.Set("token", token)
 	respWriter := serverRouter(req)
 	assert.Equal(t, 200, respWriter.Code)
