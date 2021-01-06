@@ -414,6 +414,13 @@ func (q *Rule) RuleCreateTableCoIndexOrder(audit *Audit, info *task.DBInfo) (pas
 						if len(v.Keys) <= 1 {
 							continue
 						}
+						// colType[*v.Keys[0].Column] 为空，下面调 Tp 直接空指针了
+						// colType[*v.Keys[0].Column] 之所以为空是因为有人传了不存在的key进来
+						// 例如，KEY `idx_a_b` (`a`, `b`)，但是建表的过程中根本没有a这个列
+						_, ok := colType[*v.Keys[0].Column]
+						if !ok {
+							return false, "key引用了不存在的字段: " + v.Keys[0].Column.String(), 0
+						}
 						if colType[*v.Keys[0].Column].Tp == mysql.TypeTimestamp || colType[*v.Keys[0].Column].Tp == mysql.TypeDatetime {
 							return false, q.Summary, 0
 						}

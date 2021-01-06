@@ -12,6 +12,8 @@ import (
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller/test/mock"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/injection"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
@@ -152,4 +154,38 @@ func TestListHistoryTask(t *testing.T) {
 	json.Unmarshal(respWriter.Body.Bytes(), resp)
 
 	assert.Equal(t, 0, resp.Code)
+}
+
+func TestGuo(t *testing.T) {
+	injection.Injection()
+	dao.InitDB()
+	taskIns := &task.DbInjectionTask{
+		Status:   task.CheckPass,
+		Creator:  userName,
+		Reviewer: userName,
+		Ct:       time.Now().Unix(),
+		SubTasks: []task.DbInjectionSubtask{
+			{
+				DbName:      "training",
+				ClusterName: "test1",
+				TaskType:    task.DDL,
+				ExecItems: []task.DbInjectionExecItem{
+					{
+						//
+						// COMMENT '自增主键'
+						//NOT NULL
+						SQLContent: "CREATE TABLE `kidstudentother_event_record` (`id` bigint(20) UNSIGNED AUTO_INCREMENT,  `eventtype` int(9) NOT NULL DEFAULT '0' COMMENT '事件类型',  `eventid` bigint(20) NOT NULL DEFAULT '0' COMMENT '事件id',   PRIMARY KEY (`id`),  KEY `idx_uid_etype` (`uid`, `eventtype`)) ENGINE = InnoDB CHARSET = utf8mb4 COLLATE utf8mb4_bin COMMENT '用户事件记录表';",
+						Remark:     "建表",
+					},
+				},
+			},
+		},
+	}
+
+	id, err := task.AddTask(taskIns)
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	t.Log(id)
 }
