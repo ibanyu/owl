@@ -11,17 +11,59 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
 
-func ListTask(ctx *gin.Context) Resp {
-	f := "ListTask() -->"
+func ListExecTask(ctx *gin.Context) Resp {
+	f := "ListExecTask() -->"
 	var page service.Pagination
 	if err := ctx.BindJSON(&page); err != nil {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s ", f, err.Error()), Code: code.ParamInvalid}
 	}
 
 	page.Operator = ctx.MustGet("user").(string)
-	task, count, err := task.ListTask(&page)
+	task, count, err := task.ListTask(&page, task.ExecStatus())
 	if err != nil {
-		return Resp{Message: fmt.Sprintf("%s: list Cabinet err: %s", f, err.Error()), Code: code.InternalErr}
+		return Resp{Message: fmt.Sprintf("%s: list ListExecTask err: %s", f, err.Error()), Code: code.InternalErr}
+	}
+
+	return Resp{Data: ListData{
+		Items:  task,
+		Total:  count,
+		More:   count > page.Offset+page.Limit,
+		Offset: page.Offset,
+	}}
+}
+
+func ListReviewerTask(ctx *gin.Context) Resp {
+	f := "ListExecTask() -->"
+	var page service.Pagination
+	if err := ctx.BindJSON(&page); err != nil {
+		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s ", f, err.Error()), Code: code.ParamInvalid}
+	}
+
+	page.Operator = ctx.MustGet("user").(string)
+	task, count, err := task.ListTask(&page, task.ReviewerStatus())
+	if err != nil {
+		return Resp{Message: fmt.Sprintf("%s: list ListExecTask err: %s", f, err.Error()), Code: code.InternalErr}
+	}
+
+	return Resp{Data: ListData{
+		Items:  task,
+		Total:  count,
+		More:   count > page.Offset+page.Limit,
+		Offset: page.Offset,
+	}}
+}
+
+func ListHistoryTask(ctx *gin.Context) Resp {
+	f := "ListHistoryTask() -->"
+	var page service.Pagination
+	if err := ctx.BindJSON(&page); err != nil {
+		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s ", f, err.Error()), Code: code.ParamInvalid}
+	}
+
+	page.Operator = ctx.MustGet("user").(string)
+	task, count, err := task.ListHistoryTask(&page)
+	if err != nil {
+		return Resp{Message: fmt.Sprintf("%s: list ListHistoryTask err: %s", f, err.Error()), Code: code.InternalErr}
 	}
 
 	return Resp{Data: ListData{
@@ -80,5 +122,7 @@ func AddTask(ctx *gin.Context) Resp {
 		return Resp{Message: fmt.Sprintf("%s, get task failed :%s", f, err.Error()), Code: code.InternalErr}
 	}
 
-	return Resp{Data: id}
+	return Resp{Data: struct {
+		Id int64 `json:"id"`
+	}{id}}
 }

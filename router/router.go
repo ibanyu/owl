@@ -35,7 +35,9 @@ func Router() *gin.Engine {
 	task := r.Group("/db-injection/task")
 	{
 		task.POST("/add", HandlerWrapper(controller.AddTask))
-		task.POST("/list", HandlerWrapper(controller.ListTask))
+		task.POST("/reviewer/list", HandlerWrapper(controller.ListReviewerTask))
+		task.POST("/exec/list", HandlerWrapper(controller.ListExecTask))
+		task.POST("/history", HandlerWrapper(controller.ListHistoryTask))
 		task.POST("/get", HandlerWrapper(controller.GetTask))
 		task.POST("/update", HandlerWrapper(controller.UpdateTask))
 	}
@@ -50,6 +52,9 @@ func Router() *gin.Engine {
 	}
 
 	r.Use(controller.OnlyDba())
+
+	r.POST("/db-injection/rule/update", HandlerWrapper(controller.UpdateRuleStatus))
+
 	cluster := r.Group("/db-injection/cluster")
 	{
 		cluster.POST("/list", HandlerWrapper(controller.ListCluster))
@@ -91,10 +96,11 @@ func getHandleInfo(handler LogicHandler, c *gin.Context) controller.Resp {
 	}
 
 	fName := runtime.FuncForPC(reflect.ValueOf(handler).Pointer()).Name()
-	user := c.MustGet("user").(string)
-	if user == "" {
-		logger.Errorf("%s get user in wrapper failed", fName)
+	user, err := c.Cookie("user")
+	if err != nil {
+		logger.Warnf("%s get user in wrapper failed", fName)
 	}
+
 	if resp.Code == code.Success {
 		logger.Infof("%s exec %s success", user, fName)
 	} else {

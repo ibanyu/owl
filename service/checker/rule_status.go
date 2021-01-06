@@ -24,7 +24,7 @@ func SetRuleStatusDao(impl RuleStatusDao) {
 	ruleStatusDao = impl
 }
 
-func SetRuleStatus() {
+func InitRuleStatus() {
 	ruleStatuses, err := ruleStatusDao.ListAllStatus()
 	if err != nil {
 		logger.Errorf("init rules, set rule status err: %s", err.Error())

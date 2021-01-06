@@ -20,6 +20,9 @@ func (RuleDaoImpl) UpdateRuleStatus(ruleStatus *checker.DbInjectionRuleStatus) e
 	if err != nil && gorm.IsRecordNotFoundError(err) {
 		return GetDB().Create(ruleStatus).Error
 	}
+	if err != nil {
+		return err
+	}
 
 	return GetDB().Model(ruleStatus).Where("name = ?", ruleStatus.Name).Update(ruleStatus).Error
 }

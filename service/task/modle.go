@@ -1,5 +1,7 @@
 package task
 
+import "fmt"
+
 type DbInjectionSubtask struct {
 	ID          int64  `json:"id" gorm:"column:id"`
 	TaskID      int64  `json:"task_id" gorm:"column:task_id"`
@@ -29,6 +31,7 @@ type DbInjectionExecItem struct {
 
 	DBName      string `json:"db_name" gorm:"-"`
 	ClusterName string `json:"cluster_name" gorm:"-"`
+	TaskType    string `json:"task_type" gorm:"-"`
 }
 
 type Status = string
@@ -42,7 +45,7 @@ const (
 	ExecFailed         = "execFailed"
 	ExecSuccess        = "execSuccess"
 
-	//中止状态
+	//终止状态
 	Reject     Status = "reject"
 	Cancel            = "cancel"
 	ExecCancel        = "execCancel"
@@ -51,12 +54,39 @@ const (
 	SkipExec Status = "skipExec"
 )
 
+func StatusName(status Status) string {
+	switch status {
+	case CheckFailed:
+		return "系统检测失败"
+	case CheckPass:
+		return "待leader审核"
+	case ReviewPass:
+		return "待dba审核"
+	case DBAPass:
+		return "待执行"
+	case ExecFailed:
+		return "执行失败"
+	case ExecSuccess:
+		return "执行成功"
+	case Reject:
+		return "驳回"
+	case Cancel:
+		return "撤销"
+	case ExecCancel:
+		return "撤销执行"
+	default:
+		return fmt.Sprintf("未知状态:%s", status)
+	}
+}
+
 type ItemStatus = string
 
 const (
-	ItemFailed  ItemStatus = "failed"
-	ItemSuccess            = "success"
-	ItemSkipped            = "skipped"
+	ItemFailed      ItemStatus = "failed"
+	ItemCheckFailed            = "check_failed"
+	ItemCheckPass              = "check_pass"
+	ItemSuccess                = "success"
+	ItemSkipped                = "skipped"
 
 	ItemNoBackup              ItemStatus = "rollBackFailed"
 	ItemBackupSuccess                    = "backupSuccess"
@@ -78,10 +108,24 @@ type Action = string
 
 const (
 	EditItem Action = "editItem"
-	DelItem  Action = "delItem"
+	DelItem         = "delItem"
 	DoCancel        = "cancel"
 	SkipAt          = "skipAt"
 	BeginAt         = "beginAt"
 	Progress        = "progress"
 	DoReject        = "reject"
 )
+
+//列表及历史 添加能见过滤；创建者，reviewer
+//本地部署，添加dockerfile；
+func HistoryStatus() []ItemStatus {
+	return []ItemStatus{Reject, Cancel, ExecCancel, ExecFailed, ExecSuccess}
+}
+
+func ReviewerStatus() []ItemStatus {
+	return []ItemStatus{CheckPass, CheckFailed, ReviewPass, ExecCancel}
+}
+
+func ExecStatus() []ItemStatus {
+	return []ItemStatus{ReviewPass, DBAPass, ExecCancel}
+}

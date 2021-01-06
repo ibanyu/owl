@@ -22,6 +22,7 @@ type Audit struct {
 
 type CheckerService struct {
 }
+
 var Checker CheckerService
 
 func (CheckerService) SqlCheck(sql, charset, collation string, info *task.DBInfo) (pass bool, suggestion string, affectRow int) {
@@ -31,18 +32,18 @@ func (CheckerService) SqlCheck(sql, charset, collation string, info *task.DBInfo
 	}
 
 	pass = true
+	oneAffectRow := 0
 	for _, v := range Rules {
 		if v.Close {
 			continue
 		}
 
-		pass, suggestion, affectRow = v.CheckFunc(&v, audit, info)
+		pass, suggestion, oneAffectRow = v.CheckFunc(&v, audit, info)
+		if affectRow < oneAffectRow {
+			affectRow = oneAffectRow
+		}
 		if !pass {
-			pass = false
-			suggestion += "; " + v.Summary
-			if IsBreakRule(v.Name) {
-				break
-			}
+			break
 		}
 	}
 

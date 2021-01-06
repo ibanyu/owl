@@ -8,6 +8,7 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/injection"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/router"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/checker"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
@@ -20,6 +21,7 @@ func main() {
 	config.InitConfig("")
 	dao.InitDB()
 	injection.Injection()
+	checker.InitRuleStatus()
 
 	router.Run()
 }
