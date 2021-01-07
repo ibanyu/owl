@@ -12,6 +12,8 @@ import (
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller/test/mock"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/injection"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
