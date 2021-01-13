@@ -18,7 +18,7 @@ func main() {
 	flag.Parse()
 	log.Println("version:", Version)
 	config.InitConfig("")
-	logger.InitLog(config.Conf.Server.LogDir, "serv.log", config.Conf.Server.LogLevel)
+	logger.InitLog(config.Conf.Server.LogDir, "dbinjection.log", config.Conf.Server.LogLevel)
 	dao.InitDB()
 	injection.Injection()
 	checker.InitRuleStatus()
