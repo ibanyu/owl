@@ -12,7 +12,6 @@ import (
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
-	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
 
 type BackupDao interface {
@@ -123,7 +122,7 @@ func getSqlInfo(sql string) (selectSql string, tableName string, err error) {
 // 需要把字段中的 # * 空字符替换掉, 展示以及回滚的时候再替换回来
 func formatData(row *sql.Rows, columns *[]sql_util.Column) string {
 	defer row.Close()
-	values, err := scanner.ScanMap(row)
+	values, err := sql_util.ScanMap(row)
 	if err != nil {
 		logger.Errorf("format data scanMap rows failed : %s", err.Error())
 		return ""

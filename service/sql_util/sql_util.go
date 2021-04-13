@@ -14,7 +14,6 @@ import (
 	_ "github.com/pingcap/tidb/types/parser_driver"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
-	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
 
 //取出数据的顺序同建表语句的顺序
@@ -66,7 +65,13 @@ func GetTableColumn(tableName string, db *sql.DB) (*[]Column, error) {
 	defer rows.Close()
 
 	var column []Column
-	err = scanner.Scan(rows, &column)
+	for rows.Next() {
+		var col Column
+		if err := rows.Scan(&col); err != nil {
+			return nil, err
+		}
+		column = append(column, col)
+	}
 	logger.Infof("Table column is: %v", column)
 	return &column, err
 }
@@ -450,4 +455,49 @@ func SinglePrimaryKeyIsInt(nodes []ast.StmtNode) bool {
 		}
 	}
 	return false
+}
+
+//Rows defines methods that scanner needs, which database/sql.Rows already implements
+type Rows interface {
+	Close() error
+
+	Columns() ([]string, error)
+
+	Next() bool
+
+	Scan(dest ...interface{}) error
+}
+
+func ScanMap(rows Rows) ([]map[string]interface{}, error) {
+	return resolveDataFromRows(rows)
+}
+
+func resolveDataFromRows(rows Rows) ([]map[string]interface{}, error) {
+	if nil == rows {
+		return nil, errors.New("[scanner]: rows is nil")
+	}
+	columns, err := rows.Columns()
+	if nil != err {
+		return nil, err
+	}
+	length := len(columns)
+	var result []map[string]interface{}
+	//unnecessary to put below into rows.Next loop,reduce allocating
+	values := make([]interface{}, length)
+	for i := 0; i < length; i++ {
+		values[i] = new(interface{})
+	}
+	for rows.Next() {
+		err = rows.Scan(values...)
+		if nil != err {
+			return nil, err
+		}
+		mp := make(map[string]interface{})
+		for idx, name := range columns {
+			//mp[name] = reflect.ValueOf(values[idx]).Elem().Interface()
+			mp[name] = *(values[idx].(*interface{}))
+		}
+		result = append(result, mp)
+	}
+	return result, nil
 }

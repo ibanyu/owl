@@ -11,7 +11,6 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
-	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
 
 type opType int
@@ -115,13 +114,17 @@ func getIndexInfo(info *task.DBInfo, sql string) (*[]KeysInfo, error) {
 	}
 	defer res.Close()
 
-	keysInfo := &[]KeysInfo{}
-	err = scanner.Scan(res, keysInfo)
-	if err != nil {
-		return nil, err
+	keysInfo := []KeysInfo{}
+	for res.Next() {
+		var keys KeysInfo
+		if err = res.Scan(&keys); err != nil {
+			return nil, err
+		}
+		keysInfo = append(keysInfo, keys)
 	}
-	logger.Infof("sql index info: %v, index sql: %s", *keysInfo, indexSql)
-	return keysInfo, nil
+
+	logger.Infof("sql index info: %v, index sql: %s", keysInfo, indexSql)
+	return &keysInfo, nil
 }
 
 //仅做导致索引失效的包含条件判断用
