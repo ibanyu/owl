@@ -3,10 +3,13 @@ module gitlab.pri.ibanyu.com/middleware/dbinjection
 go 1.13
 
 require (
+	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
+	github.com/coreos/etcd v3.3.17+incompatible // indirect
 	github.com/cznic/sortutil v0.0.0-20181122101858-f5f958428db8 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.6.3
+	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/mock v1.4.3
 	github.com/gorilla/websocket v1.4.2 // indirect
@@ -26,8 +29,10 @@ require (
 	github.com/pingcap/tidb v1.1.0-beta.0.20191023070859-58fc7d44f73b
 	github.com/pingcap/tipb v0.0.0-20200922074135-3a9de42ff15e // indirect
 	github.com/shirou/gopsutil v2.20.5+incompatible // indirect
+	github.com/stretchr/testify v1.6.1 // indirect
+	github.com/uber/jaeger-client-go v2.20.1+incompatible // indirect
+	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
 	github.com/unrolled/render v1.0.3 // indirect
-	gitlab.pri.ibanyu.com/middleware/seaweed v1.2.13
 	go.uber.org/zap v1.15.0
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a // indirect
 	golang.org/x/net v0.0.0-20200904194848-62affa334b73 // indirect

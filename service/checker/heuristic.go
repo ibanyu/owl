@@ -15,8 +15,6 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
-	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/builder"
-	"gitlab.pri.ibanyu.com/middleware/seaweed/xsql/scanner"
 )
 
 // RuleOK OK
@@ -955,24 +953,20 @@ type column struct {
 }
 
 func readTableStruct(table string, info *task.DBInfo) ([]column, error) {
-	var where = map[string]interface{}{
-		"TABLE_NAME":   table,
-		"TABLE_SCHEMA": info.DBName,
-	}
-	var selectFields = []string{"COLUMN_NAME", "COLUMN_TYPE", "COLUMN_COMMENT"}
-	cond, vals, err := builder.BuildSelect("COLUMNS", where, selectFields)
-	if nil != err {
-		return nil, err
-	}
-	rows, err := info.DefaultDB.Query(cond, vals...)
+	sql := fmt.Sprintf("select COLUMN_NAME, COLUMN_TYPE, COLUMN_COMMENT from %s where TABLE_NAME = %s and TABLE_SCHEMA = %s",
+		"COLUMNS", table, info.DBName)
+	rows, err := info.DefaultDB.Query(sql)
 	if nil != err {
 		return nil, err
 	}
 	defer rows.Close()
 	var ts []column
-	err = scanner.Scan(rows, &ts)
-	if nil != err {
-		return nil, err
+	for rows.Next() {
+		var col column
+		if err = rows.Scan(&col); nil != err {
+			return nil, err
+		}
+		ts = append(ts, col)
 	}
 	return ts, nil
 }
@@ -992,8 +986,7 @@ func getTableSysInfo(table string, info *task.DBInfo) (*tableSysInfo, error) {
 	}
 	defer res.Close()
 	var ts *tableSysInfo
-	err = scanner.Scan(res, &ts)
-	if nil != err {
+	if err = res.Scan(&ts); nil != err {
 		return nil, err
 	}
 	return ts, nil
