@@ -63,6 +63,13 @@ func Router() *gin.Engine {
 		cluster.POST("/add", HandlerWrapper(controller.AddCluster))
 	}
 
+	r.Use(controller.OnlyDbaOrAdmin())
+
+	admin := r.Group("/db-injection/admin")
+	{
+		admin.POST("/add", HandlerWrapper(controller.AddAdmin))
+	}
+
 	return r
 }
 

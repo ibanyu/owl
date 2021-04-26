@@ -114,3 +114,19 @@ CREATE TABLE IF NOT EXISTS `db_injection_backup`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin
   AUTO_INCREMENT = 7077 COMMENT '备份信息表';
+
+DROP TABLE IF EXISTS `db_injection_admin`;
+CREATE TABLE IF NOT EXISTS `db_injection_admin`
+(
+    `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+    `username`       VARCHAR(40)     NOT NULL DEFAULT '' COMMENT 'ldap账号',
+    `description`    VARCHAR(200)    NOT NULL DEFAULT '' COMMENT '描述',
+
+    `ct`             BIGINT          NOT NULL DEFAULT 0 COMMENT '创建时间',
+    `creator`        VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '操作人',
+
+    PRIMARY KEY (`id`)
+    ) ENGINE = InnoDB
+    DEFAULT CHARSET = utf8mb4
+    COLLATE = utf8mb4_bin
+    AUTO_INCREMENT = 7077 COMMENT '管理员表';
