@@ -47,32 +47,6 @@ func AuthorizeJWT() gin.HandlerFunc {
 	}
 }
 
-func OnlyDba() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		user := c.MustGet("user").(string)
-		isDba, err := task.IsDba(user)
-		if err != nil {
-			c.JSON(http.StatusOK, Resp{
-				Code:    code.ParamInvalid,
-				Message: fmt.Sprintf("check dba auth failed, %s", err.Error()),
-			})
-			c.Abort()
-			return
-		}
-
-		if !isDba {
-			c.JSON(http.StatusOK, Resp{
-				Code:    code.InternalErr,
-				Message: "only dba can operate cluster",
-			})
-			c.Abort()
-			return
-		}
-
-		c.Next()
-	}
-}
-
 func OnlyDbaOrAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user := c.MustGet("user").(string)
@@ -98,7 +72,7 @@ func OnlyDbaOrAdmin() gin.HandlerFunc {
 		if !isDba && !isAdmin {
 			c.JSON(http.StatusOK, Resp{
 				Code:    code.InternalErr,
-				Message: "only dba or admin can operate administrator module",
+				Message: "only dba or admin can operate cluster and administrator module",
 			})
 			c.Abort()
 			return
