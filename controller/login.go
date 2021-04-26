@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/admin"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
@@ -63,6 +64,41 @@ func OnlyDba() gin.HandlerFunc {
 			c.JSON(http.StatusOK, Resp{
 				Code:    code.InternalErr,
 				Message: "only dba can operate cluster",
+			})
+			c.Abort()
+			return
+		}
+
+		c.Next()
+	}
+}
+
+func OnlyDbaOrAdmin() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user := c.MustGet("user").(string)
+		isDba, err := task.IsDba(user)
+		if err != nil {
+			c.JSON(http.StatusOK, Resp{
+				Code:    code.ParamInvalid,
+				Message: fmt.Sprintf("check dba auth failed, %s", err.Error()),
+			})
+			c.Abort()
+			return
+		}
+
+		isAdmin, err := admin.IsAdmin(user)
+		if err != nil {
+			c.JSON(http.StatusOK, Resp{
+				Code:    code.ParamInvalid,
+				Message: fmt.Sprintf("check admin auth failed, %s", err.Error()),
+			})
+			c.Abort()
+			return
+		}
+		if !isDba && !isAdmin {
+			c.JSON(http.StatusOK, Resp{
+				Code:    code.InternalErr,
+				Message: "only dba or admin can operate administrator module",
 			})
 			c.Abort()
 			return

@@ -5,10 +5,10 @@ type authTools interface {
 	IsDba(userName string) (isDba bool, err error)
 }
 
-var authTool authTools
+var AuthTool authTools
 
 func SetAuthTools(impl authTools) {
-	authTool = impl
+	AuthTool = impl
 }
 
 type EditAuth struct {
@@ -267,5 +267,5 @@ func allIsDmlTask(task *DbInjectionTask) bool {
 }
 
 func IsDba(userName string) (isDba bool, err error) {
-	return authTool.IsDba(userName)
+	return AuthTool.IsDba(userName)
 }

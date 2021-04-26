@@ -61,7 +61,7 @@ func SetSubTaskDao(impl SubTaskDao) {
 }
 
 func AddTask(task *DbInjectionTask) (int64, error) {
-	reviewer, err := authTool.GetReviewer(task.Creator)
+	reviewer, err := AuthTool.GetReviewer(task.Creator)
 	if err != nil {
 		return 0, err
 	}
@@ -150,7 +150,7 @@ func UpdateTask(task *DbInjectionTask) error {
 	}
 
 	isReviewer := strings.Contains(dbTask.Reviewer, task.Executor)
-	isDba, err := authTool.IsDba(task.Executor)
+	isDba, err := AuthTool.IsDba(task.Executor)
 	if err != nil {
 		return err
 	}
@@ -276,7 +276,7 @@ func ProgressEdit(task, dbTask *DbInjectionTask) error {
 }
 
 func ListTask(pagination *service.Pagination, status []ItemStatus) ([]DbInjectionTask, int, error) {
-	isDba, err := authTool.IsDba(pagination.Operator)
+	isDba, err := AuthTool.IsDba(pagination.Operator)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -294,7 +294,7 @@ func ListTask(pagination *service.Pagination, status []ItemStatus) ([]DbInjectio
 }
 
 func ListHistoryTask(pagination *service.Pagination) ([]DbInjectionTask, int, error) {
-	isDba, err := authTool.IsDba(pagination.Operator)
+	isDba, err := AuthTool.IsDba(pagination.Operator)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -312,7 +312,7 @@ func ListHistoryTask(pagination *service.Pagination) ([]DbInjectionTask, int, er
 }
 
 func GetTask(id int64, operator string) (*DbInjectionTask, error) {
-	isDba, err := authTool.IsDba(operator)
+	isDba, err := AuthTool.IsDba(operator)
 	if err != nil {
 		return nil, err
 	}
