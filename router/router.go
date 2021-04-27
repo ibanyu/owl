@@ -51,7 +51,7 @@ func Router() *gin.Engine {
 		backup.POST("/rollback", HandlerWrapper(controller.Rollback))
 	}
 
-	r.Use(controller.OnlyDba())
+	r.Use(controller.OnlyDbaOrAdmin())
 
 	r.POST("/db-injection/rule/update", HandlerWrapper(controller.UpdateRuleStatus))
 
@@ -63,11 +63,11 @@ func Router() *gin.Engine {
 		cluster.POST("/add", HandlerWrapper(controller.AddCluster))
 	}
 
-	r.Use(controller.OnlyDbaOrAdmin())
-
 	admin := r.Group("/db-injection/admin")
 	{
 		admin.POST("/add", HandlerWrapper(controller.AddAdmin))
+		admin.POST("/list", HandlerWrapper(controller.ListAdmin))
+		admin.POST("/del", HandlerWrapper(controller.DelAdmin))
 	}
 
 	return r

@@ -125,8 +125,8 @@ CREATE TABLE IF NOT EXISTS `db_injection_admin`
     `ct`             BIGINT          NOT NULL DEFAULT 0 COMMENT '创建时间',
     `creator`        VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '操作人',
 
-    PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB
-    DEFAULT CHARSET = utf8mb4
-    COLLATE = utf8mb4_bin
-    AUTO_INCREMENT = 7077 COMMENT '管理员表';
+PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_bin
+  AUTO_INCREMENT = 7077 COMMENT '管理员表';

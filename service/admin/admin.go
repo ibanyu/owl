@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
+
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 )
 
 type DbInjectionAdmin struct {
@@ -18,6 +20,8 @@ type DbInjectionAdmin struct {
 type AdminDao interface {
 	AddAdmin(admin *DbInjectionAdmin) (int64, error)
 	GetAdmin(username string) (*DbInjectionAdmin, error)
+	ListAdmin(pagination *service.Pagination) ([]DbInjectionAdmin, int, error)
+	DelAdmin(id int64) error
 }
 
 var adminDao AdminDao
@@ -29,6 +33,14 @@ func SetAdminDao(impl AdminDao) {
 func AddAdmin(admin *DbInjectionAdmin) (int64, error) {
 	// add admin
 	return adminDao.AddAdmin(admin)
+}
+
+func ListAdmin(pagination *service.Pagination) ([]DbInjectionAdmin, int, error) {
+	return adminDao.ListAdmin(pagination)
+}
+
+func DelAdmin(id int64) error {
+	return adminDao.DelAdmin(id)
 }
 
 func IsAdmin(username string) (bool, error) {
