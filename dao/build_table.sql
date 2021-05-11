@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `db_injection_task`
     `creator`        VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '创建者',
     `reviewer`       VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '审查者',
     `executor`       VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '执行者',
-    `exec_info`      VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '执行信息',
+    `exec_info`      VARCHAR(200)     NOT NULL DEFAULT '' COMMENT '执行信息',
     `reject_content` varchar(500)    NOT NULL DEFAULT '' COMMENT '驳回信息',
 
     `ct`             BIGINT          NOT NULL DEFAULT 0 COMMENT '创建时间',

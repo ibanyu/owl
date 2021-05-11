@@ -9,6 +9,24 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
+func Exec(paramTask, dbTask *DbInjectionTask) error {
+	if paramTask.Et == 0 {
+		return ExecTask(paramTask, dbTask)
+	}
+
+	err := taskDao.UpdateTask(&DbInjectionTask{
+		ID:       dbTask.ID,
+		Status:   ExecWait,
+		Et:       paramTask.Et,
+		Executor: paramTask.Executor,
+	})
+	if err != nil {
+		return fmt.Errorf("before exec a cron task, persist it err:%s", err.Error())
+	}
+
+	return nil
+}
+
 //exec and update status
 //exec from head, skip at some one, or begin at some one
 func ExecTask(paramTask, dbTask *DbInjectionTask) error {
@@ -54,7 +72,8 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 					ExecInfo: err.Error(),
 				})
 				if err != nil {
-					logger.Errorf("after exec, update task status err, err： %s", err.Error())
+					failed = true
+					logger.Errorf("after exec failed, update task status to failed err, err： %s", err.Error())
 				}
 				break
 			}

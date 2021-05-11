@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"reflect"
 	"runtime"
+	"time"
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
@@ -11,6 +12,7 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
@@ -71,6 +73,33 @@ func Router() *gin.Engine {
 	}
 
 	return r
+}
+
+func ExecWaitTask() {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Errorf("The execWaitTask goroutine panic, err:%s", err)
+		}
+	}()
+
+	for {
+		<-time.After(time.Minute)
+
+		waitTasks, _, err := task.GetExecWaitTask()
+		if err != nil {
+			logger.Errorf("while booting, the goroutine get exec wait task err:%s", err)
+		}
+		for _, waitTask := range waitTasks {
+			countDown := waitTask.Et - time.Now().Unix()
+			if countDown <= 0 {
+				waitTask.Action = task.Progress
+				err = task.ExecTask(&waitTask, &waitTask)
+				if err != nil {
+					logger.Errorf("the goroutine exec wait task err:%s", err)
+				}
+			}
+		}
+	}
 }
 
 func Run() {

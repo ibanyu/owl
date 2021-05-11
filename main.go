@@ -23,5 +23,6 @@ func main() {
 	injection.Injection()
 	checker.InitRuleStatus()
 
+	go router.ExecWaitTask()
 	router.Run()
 }
