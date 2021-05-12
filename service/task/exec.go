@@ -17,6 +17,7 @@ func Exec(paramTask, dbTask *DbInjectionTask) error {
 	err := taskDao.UpdateTask(&DbInjectionTask{
 		ID:       dbTask.ID,
 		Status:   ExecWait,
+		Ut:       time.Now().Unix(),
 		Et:       paramTask.Et,
 		Executor: paramTask.Executor,
 	})

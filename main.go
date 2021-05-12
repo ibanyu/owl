@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/injection"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/router"
@@ -23,6 +24,6 @@ func main() {
 	injection.Injection()
 	checker.InitRuleStatus()
 
-	go router.ExecWaitTask()
+	go controller.ExecWaitTask()
 	router.Run()
 }
