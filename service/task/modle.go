@@ -42,6 +42,7 @@ const (
 	CheckPass          = "checkPass"
 	ReviewPass         = "reviewPass"
 	DBAPass            = "dbaPass" // exec wait
+	ExecWait           = "execWait"
 	ExecFailed         = "execFailed"
 	ExecSuccess        = "execSuccess"
 
