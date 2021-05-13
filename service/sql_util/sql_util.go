@@ -152,13 +152,13 @@ func getOneCondition(str string) string {
 		return strings.TrimSpace(strings.Split(str, ">=")[0])
 	case strings.Contains(str, "<="):
 		return strings.TrimSpace(strings.Split(str, "<=")[0])
-	case strings.Contains(str, "like"):
+	case strings.Contains(str, " like "):
 		return strings.TrimSpace(strings.Split(str, "like")[0])
-	case strings.Contains(str, "not in"):
+	case strings.Contains(str, " not in "):
 		return strings.TrimSpace(strings.Split(str, "not in")[0])
-	case strings.Contains(str, "in"):
+	case strings.Contains(str, " in "):
 		return strings.TrimSpace(strings.Split(str, "in")[0])
-	case strings.Contains(str, "between"):
+	case strings.Contains(str, " between "):
 		return strings.TrimSpace(strings.Split(str, "between")[0])
 	}
 
