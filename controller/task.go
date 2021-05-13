@@ -3,12 +3,14 @@ package controller
 import (
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
 func ListExecTask(ctx *gin.Context) Resp {
@@ -125,4 +127,33 @@ func AddTask(ctx *gin.Context) Resp {
 	return Resp{Data: struct {
 		Id int64 `json:"id"`
 	}{id}}
+}
+
+func ExecWaitTask() {
+	defer func() {
+		if err := recover(); err != nil {
+			logger.Errorf("The execWaitTask goroutine panic, err:%s", err)
+			// keep the goroutine running
+			ExecWaitTask()
+		}
+	}()
+
+	for {
+		<-time.After(time.Minute)
+
+		waitTasks, _, err := task.GetExecWaitTask()
+		if err != nil {
+			logger.Errorf("the goroutine get exec wait tasks err:%s", err)
+		}
+		for _, waitTask := range waitTasks {
+			countDown := waitTask.Et - time.Now().Unix()
+			if countDown <= 0 {
+				waitTask.Action = task.Progress
+				err = task.ExecTask(&waitTask, &waitTask)
+				if err != nil {
+					logger.Errorf("the goroutine exec wait task err:%s", err)
+				}
+			}
+		}
+	}
 }

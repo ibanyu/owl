@@ -147,3 +147,33 @@ func (TaskDaoImpl) GetTask(id int64) (*task.DbInjectionTask, error) {
 	task.ExecItems = formattedItems
 	return &task, nil
 }
+
+const ExecWaitTasksLimit = 5
+
+func (TaskDaoImpl) GetExecWaitTask() ([]task.DbInjectionTask, int, error) {
+	condition := "status in (?)"
+
+	var count int
+	if err := GetDB().Model(&task.DbInjectionTask{}).Where(condition,
+		task.ExecWait).Count(&count).Error; err != nil {
+		return nil, 0, err
+	}
+
+	var tasks []task.DbInjectionTask
+	if err := GetDB().Order("et asc").Limit(ExecWaitTasksLimit).
+		Find(&tasks, condition, task.ExecWait).Error; err != nil {
+		return nil, 0, err
+	}
+
+	for idx, taskV := range tasks {
+		formattedItems, subTasks, err := getTaskExecItems(GetDB(), &taskV)
+		if err != nil {
+			return nil, 0, err
+		}
+
+		tasks[idx].ExecItems = formattedItems
+		tasks[idx].SubTasks = subTasks
+	}
+
+	return tasks, count, nil
+}

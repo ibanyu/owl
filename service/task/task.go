@@ -40,6 +40,7 @@ type TaskDao interface {
 	ListTask(pagination *service.Pagination, isDBA bool, status []ItemStatus) ([]DbInjectionTask, int, error)
 	ListHistoryTask(page *service.Pagination, isDBA bool) ([]DbInjectionTask, int, error)
 	GetTask(id int64) (*DbInjectionTask, error)
+	GetExecWaitTask() ([]DbInjectionTask, int, error)
 }
 
 var taskDao TaskDao
@@ -176,7 +177,7 @@ func UpdateTask(task *DbInjectionTask) error {
 	case DoCancel:
 		return doCancel(task, dbTask, isDba)
 	case SkipAt, BeginAt:
-		return ExecTask(task, dbTask)
+		return Exec(task, dbTask)
 	case Progress:
 		return ProgressEdit(task, dbTask)
 	case DoReject:
@@ -262,7 +263,7 @@ func ProgressEdit(task, dbTask *DbInjectionTask) error {
 	case CheckPass:
 		task.Status = ReviewPass
 	case DBAPass, ReviewPass:
-		return ExecTask(task, dbTask)
+		return Exec(task, dbTask)
 	default:
 		return fmt.Errorf("progress failed, task status invalid, status: %s", dbTask.Status)
 	}
@@ -327,4 +328,17 @@ func GetTask(id int64, operator string) (*DbInjectionTask, error) {
 	//task.ExecItems = fmtExecItemFromOneTask(task)
 	task.EditAuth = GetTaskOperateAuth(true, operator == task.Creator, strings.Contains(task.Reviewer, operator), isDba, task)
 	return task, nil
+}
+
+func GetExecWaitTask() ([]DbInjectionTask, int, error) {
+	tasks, count, err := taskDao.GetExecWaitTask()
+	if err != nil {
+		return nil, 0, err
+	}
+
+	for i, v := range tasks {
+		tasks[i].StatusName = StatusName(v.Status)
+	}
+
+	return tasks, count, nil
 }
