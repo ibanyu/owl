@@ -342,3 +342,44 @@ func GetExecWaitTask() ([]DbInjectionTask, int, error) {
 
 	return tasks, count, nil
 }
+
+func CheckTaskType(task *DbInjectionTask) error {
+	for _, subTask := range task.SubTasks {
+		taskType := subTask.TaskType
+		for _, execItem := range subTask.ExecItems {
+			if err := checkTaskType(execItem.SQLContent, taskType); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func checkTaskType(sql string, taskType TaskType) error {
+	sql = strings.TrimSpace(sql)
+	parts := strings.SplitN(sql, " ", 2)
+	if len(parts) == 0 {
+		return fmt.Errorf("sql error")
+	}
+
+	var curType TaskType
+	switch strings.ToLower(parts[0]) {
+	case "create":
+		// create index、create unique index 属于改表
+		parts[1] = strings.TrimSpace(parts[1])
+		if strings.EqualFold(strings.SplitN(parts[1], " ", 2)[0], "index") ||
+			strings.EqualFold(strings.SplitN(parts[1], " ", 2)[0], "unique") {
+			curType = DDLUpdate
+		} else {
+			curType = DDLCreate
+		}
+	case "insert", "delete", "update":
+		curType = DML
+	default:
+		curType = DDLUpdate
+	}
+	if curType != taskType {
+		return fmt.Errorf("task type error")
+	}
+	return nil
+}

@@ -98,11 +98,12 @@ const (
 	ItemAlreadyRollBackFailed            = "rollBackSuccess"
 )
 
-type Type = string
+type TaskType = string
 
 const (
-	DML Type = "DML"
-	DDL      = "DDL"
+	DML       TaskType = "DML"
+	DDLCreate          = "CREATE"
+	DDLUpdate          = "UPDATE"
 )
 
 type Action = string
