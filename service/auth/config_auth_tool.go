@@ -2,6 +2,8 @@ package auth
 
 import (
 	"errors"
+	"strings"
+
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
 )
 
@@ -11,15 +13,7 @@ type ConfAuthToolImpl struct {
 var ConfAuthService ConfAuthToolImpl
 
 func (ConfAuthToolImpl) GetReviewer(userName string) (reviewerName string, err error) {
-	for _, v := range config.Conf.Role.Conf.ReviewerRelation {
-		for _, member := range v.Members {
-			if userName == member {
-				return v.Reviewer, nil
-			}
-		}
-	}
-
-	return "", errors.New("get reviewer from config failed, not found")
+	return  strings.Join(config.Conf.Role.Conf.DBA, ","), nil
 }
 
 func (ConfAuthToolImpl) IsDba(userName string) (isDba bool, err error) {

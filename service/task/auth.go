@@ -1,5 +1,6 @@
 package task
 
+// todo，去掉review概念，仅保留两层角色：普通用户、dba  ？？
 type authTools interface {
 	GetReviewer(userName string) (reviewerName string, err error)
 	IsDba(userName string) (isDba bool, err error)
