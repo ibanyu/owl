@@ -12,6 +12,11 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
 
+const (
+	roleAdmin = "ADMIN"
+	roleUser  = "USER"
+)
+
 func Login(ctx *gin.Context) Resp {
 	f := "Login()-->"
 	var authParam auth.Claims
@@ -21,9 +26,32 @@ func Login(ctx *gin.Context) Resp {
 
 	token, err := auth.Login(authParam.Username, authParam.Password)
 	if err != nil {
-		return Resp{Message: fmt.Sprintf("%s, login failed :%s", f, err.Error()), Code: code.ParamInvalid}
+		return Resp{Message: fmt.Sprintf("%s, login failed :%s", f, err.Error()), Code: code.InternalErr}
 	}
 	return Resp{Data: token}
+}
+
+func RoleGet(ctx *gin.Context) Resp {
+	f := "RoleGet()-->"
+	user := ctx.GetString("user")
+
+	isAdmin, err := admin.IsAdmin(user)
+	if err != nil {
+		return Resp{Message: fmt.Sprintf("%s,check admin failed :%s ", f, err.Error()), Code: code.InternalErr}
+	}
+
+	role := roleUser
+	if isAdmin {
+		role = roleAdmin
+	}
+
+	return Resp{Data: struct {
+		Role string `json:"role"`
+		Name string `json:"name"`
+	}{
+		Role: role,
+		Name: user,
+	}}
 }
 
 func AuthorizeJWT() gin.HandlerFunc {

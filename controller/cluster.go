@@ -47,7 +47,7 @@ func AddCluster(ctx *gin.Context) Resp {
 
 	id, err := db_info.AddCluster(&cluster)
 	if err != nil {
-		return Resp{Message: fmt.Sprintf("%s,add cluster failed :%s ", f, err.Error()), Code: code.ParamInvalid}
+		return Resp{Message: fmt.Sprintf("%s,add cluster failed :%s ", f, err.Error()), Code: code.InternalErr}
 	}
 
 	return Resp{Data: id}
@@ -62,7 +62,7 @@ func UpdateCluster(ctx *gin.Context) Resp {
 	}
 
 	if err := db_info.UpdateCluster(&cluster); err != nil {
-		return Resp{Message: fmt.Sprintf("%s,update cluster failed :%s ", f, err.Error()), Code: code.ParamInvalid}
+		return Resp{Message: fmt.Sprintf("%s,update cluster failed :%s ", f, err.Error()), Code: code.InternalErr}
 	}
 
 	return Resp{}
@@ -81,7 +81,7 @@ func DelCluster(ctx *gin.Context) Resp {
 	}
 
 	if err := db_info.DelCluster(id); err != nil {
-		return Resp{Message: fmt.Sprintf("%s,del cluster failed :%s ", f, err.Error()), Code: code.ParamInvalid}
+		return Resp{Message: fmt.Sprintf("%s,del cluster failed :%s ", f, err.Error()), Code: code.InternalErr}
 	}
 
 	return Resp{}

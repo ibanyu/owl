@@ -63,7 +63,7 @@ func DelAdmin(ctx *gin.Context) Resp {
 	}
 
 	if err := admin.DelAdmin(id); err != nil {
-		return Resp{Message: fmt.Sprintf("%s,del admin failed :%s ", f, err.Error()), Code: code.ParamInvalid}
+		return Resp{Message: fmt.Sprintf("%s,del admin failed :%s ", f, err.Error()), Code: code.InternalErr}
 	}
 
 	return Resp{}

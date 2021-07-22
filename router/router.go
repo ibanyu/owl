@@ -32,6 +32,8 @@ func Router() *gin.Engine {
 
 	r.Use(controller.AuthorizeJWT())
 
+	r.POST("/db-injection/user/role", HandlerWrapper(controller.RoleGet))
+
 	task := r.Group("/db-injection/task")
 	{
 		task.POST("/add", HandlerWrapper(controller.AddTask))

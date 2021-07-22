@@ -31,7 +31,7 @@ func UpdateRuleStatus(ctx *gin.Context) Resp {
 	}
 
 	if err := checker.UpdateRuleStatus(params.Name, params.Action); err != nil {
-		return Resp{Message: fmt.Sprintf("%s,update RuleStatus failed :%s ", f, err.Error()), Code: code.ParamInvalid}
+		return Resp{Message: fmt.Sprintf("%s,update RuleStatus failed :%s ", f, err.Error()), Code: code.InternalErr}
 	}
 
 	return Resp{}
