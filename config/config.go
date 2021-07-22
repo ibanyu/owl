@@ -52,10 +52,6 @@ type Config struct {
 
 		Conf struct {
 			DBA              []string `yaml:"dba"`
-			ReviewerRelation []struct {
-				Reviewer string   `yaml:"reviewer"`
-				Members  []string `yaml:"members"`
-			} `yaml:"reviewer_relation"`
 		} `yaml:"conf"`
 
 		Net struct {

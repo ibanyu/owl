@@ -118,6 +118,10 @@ func AddTask(ctx *gin.Context) Resp {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s", f, err.Error()), Code: code.ParamInvalid}
 	}
 
+	if err := task.CheckTaskType(&taskParam); err != nil {
+		return Resp{Message: err.Error(), Code: code.ParamInvalid}
+	}
+
 	taskParam.Creator = ctx.MustGet("user").(string)
 	id, err := task.AddTask(&taskParam)
 	if err != nil {
