@@ -60,11 +60,12 @@ package test
 import (
 	"database/sql"
 	"fmt"
+	"testing"
+
 	_ "github.com/go-sql-driver/mysql"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/checker"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/db_info"
 	task "gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
-	"testing"
 )
 
 func TestListRule(t *testing.T) {

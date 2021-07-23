@@ -29,11 +29,8 @@ func Router() *gin.Engine {
 	})
 
 	r.POST("/db-injection/login", HandlerWrapper(controller.Login))
-
 	r.Use(controller.AuthorizeJWT())
-
 	r.POST("/db-injection/user/role", HandlerWrapper(controller.RoleGet))
-
 	task := r.Group("/db-injection/task")
 	{
 		task.POST("/add", HandlerWrapper(controller.AddTask))
@@ -83,7 +80,10 @@ func Run() {
 	r := Router()
 	r.Use(gin.Recovery())
 
-	endless.ListenAndServe(fmt.Sprintf(":%s", config.Conf.Server.Port), r)
+	logger.Infof("start listening port: %s", config.Conf.Server.Port)
+	if err := endless.ListenAndServe(fmt.Sprintf(":%s", config.Conf.Server.Port), r); err != nil {
+		logger.Errorf("start server err: %s", err.Error())
+	}
 }
 
 type LogicHandler func(c *gin.Context) controller.Resp
