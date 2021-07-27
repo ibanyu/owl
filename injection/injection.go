@@ -27,6 +27,8 @@ func Injection() {
 		task.SetAuthTools(auth.ConfAuthService)
 	case "net":
 		task.SetAuthTools(auth.NetAuthService)
+	case "admin":
+		task.SetAuthTools(auth.AdminAuthService)
 	case "mock":
 		MockInjection()
 	default:

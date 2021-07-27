@@ -88,19 +88,10 @@ func OnlyDbaOrAdmin() gin.HandlerFunc {
 			return
 		}
 
-		isAdmin, err := admin.IsAdmin(user)
-		if err != nil {
-			c.JSON(http.StatusOK, Resp{
-				Code:    code.ParamInvalid,
-				Message: fmt.Sprintf("check admin auth failed, %s", err.Error()),
-			})
-			c.Abort()
-			return
-		}
-		if !isDba && !isAdmin {
+		if !isDba {
 			c.JSON(http.StatusOK, Resp{
 				Code:    code.InternalErr,
-				Message: "only dba and admin can operate cluster and administrator module",
+				Message: "only admin can operate cluster and administrator module",
 			})
 			c.Abort()
 			return
