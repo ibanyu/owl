@@ -64,9 +64,9 @@ func (mr *MockTaskDaoMockRecorder) UpdateTask(task interface{}) *gomock.Call {
 }
 
 // ListTask mocks base method
-func (m *MockTaskDao) ListTask(pagination *service.Pagination, isDBA bool) ([]task.DbInjectionTask, int, error) {
+func (m *MockTaskDao) ListTask(pagination *service.Pagination, isDBA bool, status []task.ItemStatus) ([]task.DbInjectionTask, int, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListTask", pagination, isDBA)
+	ret := m.ctrl.Call(m, "ListTask", pagination, isDBA, status)
 	ret0, _ := ret[0].([]task.DbInjectionTask)
 	ret1, _ := ret[1].(int)
 	ret2, _ := ret[2].(error)
@@ -74,9 +74,9 @@ func (m *MockTaskDao) ListTask(pagination *service.Pagination, isDBA bool) ([]ta
 }
 
 // ListTask indicates an expected call of ListTask
-func (mr *MockTaskDaoMockRecorder) ListTask(pagination, isDBA interface{}) *gomock.Call {
+func (mr *MockTaskDaoMockRecorder) ListTask(pagination, isDBA, status interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTask", reflect.TypeOf((*MockTaskDao)(nil).ListTask), pagination, isDBA)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListTask", reflect.TypeOf((*MockTaskDao)(nil).ListTask), pagination, isDBA, status)
 }
 
 // ListHistoryTask mocks base method
@@ -108,6 +108,22 @@ func (m *MockTaskDao) GetTask(id int64) (*task.DbInjectionTask, error) {
 func (mr *MockTaskDaoMockRecorder) GetTask(id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetTask", reflect.TypeOf((*MockTaskDao)(nil).GetTask), id)
+}
+
+// GetExecWaitTask mocks base method
+func (m *MockTaskDao) GetExecWaitTask() ([]task.DbInjectionTask, int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetExecWaitTask")
+	ret0, _ := ret[0].([]task.DbInjectionTask)
+	ret1, _ := ret[1].(int)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// GetExecWaitTask indicates an expected call of GetExecWaitTask
+func (mr *MockTaskDaoMockRecorder) GetExecWaitTask() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetExecWaitTask", reflect.TypeOf((*MockTaskDao)(nil).GetExecWaitTask))
 }
 
 // MockSubTaskDao is a mock of SubTaskDao interface

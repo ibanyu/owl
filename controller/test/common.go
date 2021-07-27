@@ -18,7 +18,7 @@ const (
 )
 
 func init()  {
-	logger.InitLog()
+	logger.InitLog(".", "test.log", "debug")
 	config.InitConfig("../../config/config.yml")
 }
 

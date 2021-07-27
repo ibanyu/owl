@@ -1,0 +1,128 @@
+{"level":"warn","ts":"2021-07-27 10:24:47.496","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 10:24:47.496","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login success"}
+{"level":"warn","ts":"2021-07-27 10:24:47.496","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 10:24:47.496","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule success"}
+{"level":"warn","ts":"2021-07-27 10:24:47.497","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 10:24:47.497","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask success"}
+{"level":"warn","ts":"2021-07-27 10:24:47.497","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 10:24:47.497","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask success"}
+{"level":"warn","ts":"2021-07-27 10:24:47.497","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 10:24:47.497","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask success"}
+{"level":"warn","ts":"2021-07-27 10:24:47.499","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 10:24:47.499","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask success"}
+{"level":"warn","ts":"2021-07-27 10:29:36.772","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 10:29:36.773","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login success"}
+{"level":"warn","ts":"2021-07-27 11:48:03.662","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:03.663","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.662","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.662","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.663","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.663","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.663","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.663","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.663","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.663","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.664","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.664","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.664","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.664","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.664","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.664","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.665","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.665","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.665","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.665","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask success"}
+{"level":"warn","ts":"2021-07-27 11:48:20.666","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 11:48:20.666","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:19.701","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:19.702","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.132","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.132","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.133","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.133","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.133","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.133","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.133","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.133","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.134","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.134","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.134","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.134","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:38.135","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.447","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.448","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask success"}
+{"level":"warn","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:23:53.449","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.052","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.052","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.052","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.052","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.053","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.053","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.053","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.053","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.053","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.053","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.053","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.053","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.054","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.054","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.054","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.054","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.054","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.054","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.054","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.055","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:07.055","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:07.055","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:17.087","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:17.087","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.231","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.231","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateCluster success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.231","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.231","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.DelCluster success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.232","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.232","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddCluster success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.232","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.232","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListCluster success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.232","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.232","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.Login success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.232","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.232","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.LisRule success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.233","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.233","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.UpdateTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.233","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.233","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.GetTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.233","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.234","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.AddTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.234","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.234","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListExecTask success"}
+{"level":"warn","ts":"2021-07-27 14:24:27.234","caller":"router/router.go:110","msg":"gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask get user in wrapper failed"}
+{"level":"info","ts":"2021-07-27 14:24:27.234","caller":"router/router.go:114","msg":" exec gitlab.pri.ibanyu.com/middleware/dbinjection/controller.ListHistoryTask success"}

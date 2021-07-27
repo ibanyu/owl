@@ -12,8 +12,6 @@ import (
 
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller/test/mock"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/injection"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
 )
@@ -38,11 +36,11 @@ func TestUpdateTask(t *testing.T) {
 	mockTaskDao := injectTaskMock(t)
 
 	taskIns := &task.DbInjectionTask{
-		ID: 707,
-		Status: task.CheckPass,
+		ID:       707,
+		Status:   task.CheckPass,
 		Executor: userName,
-		Ut: time.Now().Unix(),
-		Action: "progress",
+		Ut:       time.Now().Unix(),
+		Action:   "progress",
 	}
 
 	taskWant := *taskIns
@@ -68,10 +66,10 @@ func TestGetTask(t *testing.T) {
 	mockTaskDao := injectTaskMock(t)
 
 	taskIns := &task.DbInjectionTask{
-		Status: task.CheckPass,
-		Creator: userName,
+		Status:   task.CheckPass,
+		Creator:  userName,
 		Reviewer: userName,
-		Ct: time.Now().Unix(),
+		Ct:       time.Now().Unix(),
 	}
 	mockTaskDao.EXPECT().GetTask(int64(777)).Return(taskIns, nil)
 
@@ -90,10 +88,10 @@ func TestAddTask(t *testing.T) {
 	mockTaskDao := injectTaskMock(t)
 
 	taskIns := &task.DbInjectionTask{
-		Status: task.CheckPass,
-		Creator: userName,
+		Status:   task.CheckPass,
+		Creator:  userName,
 		Reviewer: userName,
-		Ct: time.Now().Unix(),
+		Ct:       time.Now().Unix(),
 	}
 	mockTaskDao.EXPECT().AddTask(taskIns).Return(int64(1), nil)
 
@@ -114,14 +112,14 @@ func TestListTask(t *testing.T) {
 
 	taskIns := task.DbInjectionTask{}
 	page := service.Pagination{
-		Offset: 5,
-		Limit:  10,
+		Offset:   5,
+		Limit:    10,
 		Operator: "fish",
 	}
-	mockTaskDao.EXPECT().ListTask(&page, true).Return([]task.DbInjectionTask{taskIns}, 1, nil)
+	mockTaskDao.EXPECT().ListTask(&page, true, []string{task.ReviewPass, task.DBAPass, task.ExecCancel}).Return([]task.DbInjectionTask{taskIns}, 1, nil)
 
 	pageByte, _ := json.Marshal(page)
-	req, _ := http.NewRequest("POST", "/db-injection/task/list", bytes.NewBuffer(pageByte))
+	req, _ := http.NewRequest("POST", "/db-injection/task/exec/list", bytes.NewBuffer(pageByte))
 	req.Header.Set("token", token)
 	respWriter := serverRouter(req)
 	assert.Equal(t, 200, respWriter.Code)
@@ -132,14 +130,13 @@ func TestListTask(t *testing.T) {
 	assert.Equal(t, 0, resp.Code)
 }
 
-
 func TestListHistoryTask(t *testing.T) {
 	mockTaskDao := injectTaskMock(t)
 
 	taskIns := task.DbInjectionTask{}
 	page := service.Pagination{
-		Offset: 5,
-		Limit:  10,
+		Offset:   5,
+		Limit:    10,
 		Operator: "fish",
 	}
 	mockTaskDao.EXPECT().ListHistoryTask(&page, true).Return([]task.DbInjectionTask{taskIns}, 1, nil)
