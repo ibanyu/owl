@@ -163,6 +163,8 @@ func UpdateTask(task *DbInjectionTask) error {
 		}
 	}
 
+	task.Ut = time.Now().Unix()
+
 	switch task.Action {
 	case EditItem:
 		if err := subTaskDao.UpdateItem(task.ExecItem); err != nil {

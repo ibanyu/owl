@@ -2,6 +2,7 @@ package admin
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/jinzhu/gorm"
 
@@ -32,6 +33,7 @@ func SetAdminDao(impl AdminDao) {
 
 func AddAdmin(admin *DbInjectionAdmin) (int64, error) {
 	// add admin
+	admin.Ct = time.Now().Unix()
 	return adminDao.AddAdmin(admin)
 }
 

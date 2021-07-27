@@ -1,6 +1,8 @@
 package db_info
 
 import (
+	"time"
+
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util"
 )
 
@@ -36,6 +38,7 @@ func AddCluster(cluster *DbInjectionCluster) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
+	cluster.Ct = time.Now().Unix()
 
 	cluster.Pwd = util.StringifyByteDirectly(cryptoData)
 	return clusterDao.AddCluster(cluster)
@@ -50,6 +53,7 @@ func UpdateCluster(cluster *DbInjectionCluster) error {
 
 		cluster.Pwd = util.StringifyByteDirectly(cryptoData)
 	}
+	cluster.Ut = time.Now().Unix()
 
 	return clusterDao.UpdateCluster(cluster)
 }
