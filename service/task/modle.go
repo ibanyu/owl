@@ -89,11 +89,11 @@ const (
 	ItemSuccess                = "success"
 	ItemSkipped                = "skipped"
 
-	ItemNoBackup              ItemStatus = "rollBackFailed"
-	ItemBackupSuccess                    = "backupSuccess"
-	ItemBackupFailed                     = "backupFailed"
-	ItemRollBackFailed                   = "rollBackFailed"
-	ItemRollBackSuccess                  = "rollBackSuccess"
+	ItemNoBackup        ItemStatus = "rollBackFailed"
+	ItemBackupSuccess              = "backupSuccess"
+	ItemBackupFailed               = "backupFailed"
+	ItemRollBackFailed             = "rollBackFailed"
+	ItemRollBackSuccess            = "rollBackSuccess"
 )
 
 type TaskType = string

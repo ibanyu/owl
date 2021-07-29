@@ -25,7 +25,7 @@ func injectAuthMock(t *testing.T) *mock.MockLoginChecker {
 func TestLogin(t *testing.T) {
 	mockAuth := injectAuthMock(t)
 
-	mockAuth.EXPECT().Login(userName,pwd).Return(nil)
+	mockAuth.EXPECT().Login(userName, pwd).Return(nil)
 	//expect
 
 	page := auth.Claims{

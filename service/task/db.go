@@ -2,7 +2,7 @@ package task
 
 import (
 	"database/sql"
-	
+
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 

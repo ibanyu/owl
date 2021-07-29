@@ -36,7 +36,7 @@ func IndexMach(info *task.DBInfo, sql string) (bool, error) {
 	}
 	if operateBinaryIndex(sqlAfterWhere) {
 		logger.Infof("operateBinaryIndex is true")
-		return false,nil
+		return false, nil
 	}
 	keysInfo, err := getIndexInfo(info, sql)
 	if err != nil {
@@ -191,12 +191,12 @@ func operateDisableIndex(sqlAfterWhere string) bool {
 	return resp
 }
 
-func operateBinaryIndex(sqlAfterWhere string)bool {
+func operateBinaryIndex(sqlAfterWhere string) bool {
 	//特殊处理 这样可以将where前边的+ - * /全都删除，只剩where 后边的 但parser 需要完全sql
-	sql := "select a from b where "+sqlAfterWhere
-	stmt,err := sqlparser.Parse(sql)
+	sql := "select a from b where " + sqlAfterWhere
+	stmt, err := sqlparser.Parse(sql)
 	if err != nil {
-		logger.Errorf( "new sql parser err %s",err.Error())
+		logger.Errorf("new sql parser err %s", err.Error())
 		return false
 	}
 	var re bool
@@ -206,16 +206,16 @@ func operateBinaryIndex(sqlAfterWhere string)bool {
 			switch n.Operator {
 			case sqlparser.PlusStr:
 				re = true
-				return false,nil
+				return false, nil
 			case sqlparser.MinusStr:
 				re = true
-				return false,nil
+				return false, nil
 			case sqlparser.MultStr:
 				re = true
-				return false,nil
+				return false, nil
 			case sqlparser.DivStr:
 				re = true
-				return false,nil
+				return false, nil
 			default:
 				re = false
 			}
@@ -224,7 +224,6 @@ func operateBinaryIndex(sqlAfterWhere string)bool {
 	}, stmt)
 	return re
 }
-
 
 //包含>,< ,>=, <= ,like,in, between ,且不是最后一列的检查。 是不是最后一列的判断，其后没有and；between 是有没有超过一个and
 // 参数为已经转小写的sql

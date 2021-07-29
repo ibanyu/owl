@@ -21,7 +21,7 @@ func DoHttpReq(method, url, jsonParam string, header http.Header) ([]byte, error
 
 	req.Header = header
 	resp, err := cli.Do(req)
-	if err != nil{
+	if err != nil {
 		return nil, fmt.Errorf("do  request err: %s", err.Error())
 	}
 	defer resp.Body.Close()

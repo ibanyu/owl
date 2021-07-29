@@ -13,7 +13,7 @@ type ConfAuthToolImpl struct {
 var ConfAuthService ConfAuthToolImpl
 
 func (ConfAuthToolImpl) GetReviewer(userName string) (reviewerName string, err error) {
-	return  strings.Join(config.Conf.Role.Conf.DBA, ","), nil
+	return strings.Join(config.Conf.Role.Conf.DBA, ","), nil
 }
 
 func (ConfAuthToolImpl) IsDba(userName string) (isDba bool, err error) {

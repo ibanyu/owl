@@ -163,9 +163,9 @@ func updateBackupStatus(status ItemStatus, backupId int64, creator string) {
 	}
 
 	if err := backupDao.UpdateBackup(&DbInjectionBackup{
-		ID:             backupId,
-		RollbackTime:   time.Now().Unix(),
-		RollbackUser:   creator,
+		ID:           backupId,
+		RollbackTime: time.Now().Unix(),
+		RollbackUser: creator,
 		IsRolledBack: 1,
 	}); err != nil {
 		logger.Errorf("update backup record info err: %s", err.Error())

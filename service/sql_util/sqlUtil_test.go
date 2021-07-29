@@ -8,7 +8,7 @@ import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
 )
 
-func init()  {
+func init() {
 	logger.InitLog()
 }
 

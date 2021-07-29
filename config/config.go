@@ -51,7 +51,7 @@ type Config struct {
 		From string `yaml:"from"`
 
 		Conf struct {
-			DBA              []string `yaml:"dba"`
+			DBA []string `yaml:"dba"`
 		} `yaml:"conf"`
 
 		Net struct {
