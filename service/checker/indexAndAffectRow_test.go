@@ -3,9 +3,13 @@ package checker
 import (
 	"fmt"
 	"testing"
+	
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 )
 
 func TestIndexMatchCondition(t *testing.T) {
+	service.InitConfigLog()
+
 	keys := &[]KeysInfo{
 		{
 			KeyName:    "PRIMARY",
@@ -23,6 +27,8 @@ func TestIndexMatchCondition(t *testing.T) {
 }
 
 func TestOperateDisableIndex(t *testing.T) {
+	service.InitConfigLog()
+
 	type data struct {
 		origin string
 		target bool
@@ -64,6 +70,8 @@ func TestOperateDisableIndex(t *testing.T) {
 }
 
 func TestDmlSqlToCount(t *testing.T) {
+	service.InitConfigLog()
+
 	type data struct {
 		origin string
 		target string

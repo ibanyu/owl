@@ -5,14 +5,12 @@ import (
 	"reflect"
 	"testing"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 )
 
-func init() {
-	logger.InitLog()
-}
-
 func TestGetUpdateColumn(t *testing.T) {
+	service.InitConfigLog()
+
 	type data struct {
 		origin string
 		target []string
@@ -54,6 +52,8 @@ func TestGetUpdateColumn(t *testing.T) {
 }
 
 func TestDeleteSpecifyCharAtHead(t *testing.T) {
+	service.InitConfigLog()
+
 	type data struct {
 		origin string
 		target string
@@ -89,6 +89,8 @@ hello`,
 }
 
 func TestBuildDelRollBackSql(t *testing.T) {
+	service.InitConfigLog()
+
 	tableName := "auth"
 
 	column := []Column{
@@ -128,6 +130,8 @@ func TestBuildDelRollBackSql(t *testing.T) {
 }
 
 func TestReplaceSpecifyChar(t *testing.T) {
+	service.InitConfigLog()
+
 	type data struct {
 		origin string
 		target string
@@ -167,6 +171,8 @@ hello`,
 }
 
 func TestHandleKeyWordForCondition(t *testing.T) {
+	service.InitConfigLog()
+
 	type data struct {
 		origin string
 		target string
@@ -200,6 +206,8 @@ func TestHandleKeyWordForCondition(t *testing.T) {
 }
 
 func TestGetCondition(t *testing.T) {
+	service.InitConfigLog()
+
 	type data struct {
 		origin string
 		target []string
@@ -229,6 +237,8 @@ func TestGetCondition(t *testing.T) {
 }
 
 func TestIsSubKey(t *testing.T) {
+	service.InitConfigLog()
+
 	type Key struct {
 		KeyS   string
 		KeyL   string

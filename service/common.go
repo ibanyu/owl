@@ -1,6 +1,11 @@
 package service
 
-import "time"
+import (
+	"time"
+
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+)
 
 type Pagination struct {
 	Offset int    `json:"offset"`
@@ -26,3 +31,9 @@ type RealClock struct{}
 func (RealClock) Now() time.Time                         { return time.Now() }
 func (RealClock) NowUnix() int64                         { return time.Now().Unix() }
 func (RealClock) After(d time.Duration) <-chan time.Time { return time.After(d) }
+
+// todo, maybe better place ?
+func InitConfigLog() {
+	logger.InitLog(".", "test.log", "debug")
+	config.InitConfig("../../config/config.yml")
+}
