@@ -3,6 +3,7 @@ package injection
 import (
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
+	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/admin"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth/login_check"
@@ -20,6 +21,7 @@ func Injection() {
 	checker.SetRuleStatusDao(dao.Rule)
 	db_info.SetClusterDao(dao.Cluster)
 	auth.SetLoginService(login_check.LoginService)
+	service.SetClock(service.RealClock{})
 	admin.SetAdminDao(dao.Admin)
 
 	switch config.Conf.Role.From {
