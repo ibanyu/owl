@@ -31,17 +31,8 @@ login:
 
 
 role:
-  from: "net" # net or conf
+  from: "admin" # admin or conf
   conf:
     dba:
       - "zhangdashu"
       - "wamgdazhang"
-    reviewer_relation:
-      - reviewer: "wangsan"
-        members:
-          - "zhanger"
-          - "lisi"
-      - reviewer: "liusi"
-        members:
-          - "lihuahuaw"
-          - "wangyiyi"
