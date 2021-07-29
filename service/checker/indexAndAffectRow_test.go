@@ -3,7 +3,7 @@ package checker
 import (
 	"fmt"
 	"testing"
-	
+
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
 )
 
