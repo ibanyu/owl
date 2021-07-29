@@ -14,7 +14,6 @@ var zlog *zap.SugaredLogger
 
 const loggerTimeLayout = "2006-01-02 15:04:05.000"
 
-//todo , if no path ,change to init func
 func InitLog(logDir, fileName string, level string) {
 	logFile := logDir + "/" + fileName
 
