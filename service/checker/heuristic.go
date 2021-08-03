@@ -3,6 +3,7 @@ package checker
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -953,7 +954,7 @@ type column struct {
 }
 
 func readTableStruct(table string, info *task.DBInfo) ([]column, error) {
-	sql := fmt.Sprintf("select COLUMN_NAME, COLUMN_TYPE, COLUMN_COMMENT from %s where TABLE_NAME = %s and TABLE_SCHEMA = %s",
+	sql := fmt.Sprintf("select COLUMN_NAME, COLUMN_TYPE, COLUMN_COMMENT from %s where TABLE_NAME = '%s' and TABLE_SCHEMA = '%s'",
 		"COLUMNS", table, info.DBName)
 	rows, err := info.DefaultDB.Query(sql)
 	if nil != err {
@@ -963,7 +964,7 @@ func readTableStruct(table string, info *task.DBInfo) ([]column, error) {
 	var ts []column
 	for rows.Next() {
 		var col column
-		if err = rows.Scan(&col); nil != err {
+		if err = rows.Scan(&col.Name, &col.Type, &col.Comment); nil != err {
 			return nil, err
 		}
 		ts = append(ts, col)
@@ -978,18 +979,26 @@ type tableSysInfo struct {
 
 func getTableSysInfo(table string, info *task.DBInfo) (*tableSysInfo, error) {
 	db := info.DB
-	sqlContent := fmt.Sprintf("select * from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='%s' and TABLE_NAME='%s';", info.DBName, table)
+	sqlContent := fmt.Sprintf("select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='%s' and TABLE_NAME='%s';", info.DBName, table)
 	res, err := db.QueryContext(context.TODO(), sqlContent)
 	if err != nil {
 		logger.Infof("get table sys info err:%+v", err.Error())
 		return nil, err
 	}
 	defer res.Close()
-	var ts *tableSysInfo
-	if err = res.Scan(&ts); nil != err {
-		return nil, err
+
+	for res.Next() {
+		var ts tableSysInfo
+		if err = res.Scan(&ts.TableName); nil != err {
+			return nil, err
+		}
+
+		if ts.TableName == table {
+			return &ts, nil
+		}
 	}
-	return ts, nil
+
+	return nil, errors.New("table not found")
 }
 
 // index str : unique,primary ,fulltext + index/key

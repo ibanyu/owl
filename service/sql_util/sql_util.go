@@ -18,12 +18,12 @@ import (
 
 //取出数据的顺序同建表语句的顺序
 type Column struct {
-	Field   string `bdb:"Field"`
-	Type    string `bdb:"Type"`
-	Null    string `bdb:"Null"`
-	Key     string `bdb:"Key"`
-	Default string `bdb:"Default"`
-	Extra   string `bdb:"Extra"`
+	Field   string
+	Type    string
+	Null    string
+	Key     string
+	Default *string
+	Extra   string
 }
 
 func buildDelRollBackSql(column []Column, dataItems [][]string, tableName string) (string, error) {
@@ -67,7 +67,7 @@ func GetTableColumn(tableName string, db *sql.DB) (*[]Column, error) {
 	var column []Column
 	for rows.Next() {
 		var col Column
-		if err := rows.Scan(&col); err != nil {
+		if err := rows.Scan(&col.Field, &col.Type, &col.Null, &col.Key, &col.Default, &col.Extra); err != nil {
 			return nil, err
 		}
 		column = append(column, col)

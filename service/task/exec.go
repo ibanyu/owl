@@ -65,7 +65,8 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 
 			err := BackupAndExec(dbInfo.DB, &item, subTask.TaskType)
 			if err != nil {
-				err = taskDao.UpdateTask(&DbInjectionTask{
+				failed = true
+				err := taskDao.UpdateTask(&DbInjectionTask{
 					ID:       dbTask.ID,
 					Status:   ExecFailed,
 					Et:       beginTime,
@@ -73,7 +74,6 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 					ExecInfo: err.Error(),
 				})
 				if err != nil {
-					failed = true
 					logger.Errorf("after exec failed, update task status to failed err, err： %s", err.Error())
 				}
 				break

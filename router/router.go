@@ -30,7 +30,8 @@ func Router() *gin.Engine {
 			"message": "pong",
 		})
 	})
-
+	currentDir := getCurrentDirectory()
+	logger.Info("current dir is: ", currentDir)
 	r.Static("/ui", filepath.Join(getCurrentDirectory(), "./static"))
 
 	r.POST("/db-injection/login", HandlerWrapper(controller.Login))

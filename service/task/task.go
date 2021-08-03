@@ -223,7 +223,7 @@ func checkTask(task *DbInjectionTask) error {
 				item.RuleComments = suggestion
 			} else {
 				item.Status = ItemCheckPass
-				item.RuleComments = ""
+				item.RuleComments = " "
 			}
 
 			if err := subTaskDao.UpdateItem(&item); err != nil {

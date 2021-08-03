@@ -11,7 +11,7 @@ type AdminAuthToolImpl struct {
 var AdminAuthService AdminAuthToolImpl
 
 func (AdminAuthToolImpl) GetReviewer(userName string) (reviewerName string, err error) {
-	admins, _, err := admin.ListAdmin(&service.Pagination{})
+	admins, _, err := admin.ListAdmin(&service.Pagination{Limit: 10})
 	if err != nil {
 		return "", err
 	}
