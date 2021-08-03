@@ -2,12 +2,12 @@ DROP TABLE IF EXISTS `db_injection_task`;
 CREATE TABLE IF NOT EXISTS `db_injection_task`
 (
     `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-    `name`           VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '名称',
+    `name`           VARCHAR(150)     NOT NULL DEFAULT '' COMMENT '名称',
     `status`         VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '状态',
-    `creator`        VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '创建者',
-    `reviewer`       VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '审查者',
-    `executor`       VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '执行者',
-    `exec_info`      VARCHAR(200)     NOT NULL DEFAULT '' COMMENT '执行信息',
+    `creator`        VARCHAR(60)     NOT NULL DEFAULT '' COMMENT '创建者',
+    `reviewer`       VARCHAR(256)     NOT NULL DEFAULT '' COMMENT '审查者',
+    `executor`       VARCHAR(60)     NOT NULL DEFAULT '' COMMENT '执行者',
+    `exec_info`      VARCHAR(300)     NOT NULL DEFAULT '' COMMENT '执行信息',
     `reject_content` varchar(500)    NOT NULL DEFAULT '' COMMENT '驳回信息',
 
     `ct`             BIGINT          NOT NULL DEFAULT 0 COMMENT '创建时间',
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `db_injection_subtask`
 (
     `id`           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `task_id`      BIGINT UNSIGNED NOT NULL COMMENT 'task id',
-    `task_type`    VARCHAR(10)     NOT NULL DEFAULT '' COMMENT '任务类型',
+    `task_type`    VARCHAR(20)     NOT NULL DEFAULT '' COMMENT '任务类型',
     `db_name`      VARCHAR(120)    NOT NULL DEFAULT '' COMMENT '数据库名称',
     `cluster_name` VARCHAR(120)    NOT NULL DEFAULT '' COMMENT '数据库集群',
 
@@ -47,9 +47,9 @@ CREATE TABLE IF NOT EXISTS `db_injection_exec_item`
     `task_id`       BIGINT UNSIGNED NOT NULL COMMENT 'task id',
     `subtask_id`    BIGINT UNSIGNED NOT NULL COMMENT 'subtask id',
     `sql_content`   TEXT COMMENT 'sql',
-    `remark`        VARCHAR(800)    NOT NULL DEFAULT '' COMMENT '备注',
+    `remark`        VARCHAR(400)    NOT NULL DEFAULT '' COMMENT '备注',
     `affect_rows`   INT             NOT NULL DEFAULT 0 COMMENT '影响行数',
-    `rule_comments` VARCHAR(80)     NOT NULL DEFAULT '' COMMENT '规则审核结果',
+    `rule_comments` VARCHAR(300)     NOT NULL DEFAULT '' COMMENT '规则审核结果',
     `status`        VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '子项状态',
     `exec_info`     VARCHAR(200)    NOT NULL DEFAULT '' COMMENT '执行信息',
     `backup_status` VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '子项备份状态',
@@ -70,7 +70,7 @@ DROP TABLE IF EXISTS `db_injection_rule_status`;
 CREATE TABLE IF NOT EXISTS `db_injection_rule_status`
 (
     `id`      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-    `name`    VARCHAR(80)     NOT NULL DEFAULT '' COMMENT '规则名',
+    `name`    VARCHAR(120)     NOT NULL DEFAULT '' COMMENT '规则名',
     `close`  TINYINT         NOT NULL DEFAULT 0 COMMENT '开关',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
@@ -84,13 +84,13 @@ CREATE TABLE IF NOT EXISTS `db_injection_cluster`
     `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `name`        VARCHAR(160)    NOT NULL DEFAULT '' COMMENT '名称',
     `description` VARCHAR(200)    NOT NULL DEFAULT '' COMMENT '描述',
-    `addr`        VARCHAR(80)     NOT NULL DEFAULT '' COMMENT '访问地址',
+    `addr`        VARCHAR(120)     NOT NULL DEFAULT '' COMMENT '访问地址',
     `user`        VARCHAR(120)    NOT NULL DEFAULT '' COMMENT '用户',
-    `pwd`         VARCHAR(120)    NOT NULL DEFAULT '' COMMENT '加密后秘钥',
+    `pwd`         VARCHAR(200)    NOT NULL DEFAULT '' COMMENT '加密后秘钥',
 
     `ct`          BIGINT          NOT NULL DEFAULT 0 COMMENT '创建时间',
     `ut`          BIGINT          NOT NULL DEFAULT 0 COMMENT '更改时间',
-    `operator`    VARCHAR(40)     NOT NULL DEFAULT '' COMMENT '操作人',
+    `operator`    VARCHAR(60)     NOT NULL DEFAULT '' COMMENT '操作人',
 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
