@@ -8,7 +8,7 @@ import (
 type AdminAuthToolImpl struct {
 }
 
-var AdminAuthService ConfAuthToolImpl
+var AdminAuthService AdminAuthToolImpl
 
 func (AdminAuthToolImpl) GetReviewer(userName string) (reviewerName string, err error) {
 	admins, _, err := admin.ListAdmin(&service.Pagination{})
@@ -28,16 +28,5 @@ func (AdminAuthToolImpl) GetReviewer(userName string) (reviewerName string, err 
 }
 
 func (AdminAuthToolImpl) IsDba(userName string) (isDba bool, err error) {
-	admins, _, err := admin.ListAdmin(&service.Pagination{})
-	if err != nil {
-		return false, err
-	}
-
-	for _, v := range admins {
-		if v.Username == userName {
-			return true, nil
-		}
-	}
-
-	return false, nil
+	return admin.IsAdmin(userName)
 }

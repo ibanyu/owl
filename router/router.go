@@ -2,8 +2,11 @@ package router
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"reflect"
 	"runtime"
+	"strings"
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
@@ -27,6 +30,8 @@ func Router() *gin.Engine {
 			"message": "pong",
 		})
 	})
+
+	r.Static("/ui", filepath.Join(getCurrentDirectory(), "./static"))
 
 	r.POST("/db-injection/login", HandlerWrapper(controller.Login))
 	r.Use(controller.AuthorizeJWT())
@@ -121,4 +126,13 @@ func getHandleInfo(handler LogicHandler, c *gin.Context) controller.Resp {
 
 func writeResp(resp controller.Resp, c *gin.Context) {
 	c.JSON(200, resp)
+}
+
+func getCurrentDirectory() string {
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		logger.Errorf("get current dir err: %s", err.Error())
+		return ""
+	}
+	return strings.Replace(dir, "\\", "/", -1)
 }
