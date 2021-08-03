@@ -6,10 +6,10 @@ test: fmt
 
 build: fmt
 	mkdir -p bin
-	go build -o bin/dbinjection .
+	go build -o bin/dbinjection ./cmd/main/
 
 build-linux: fmt
-	CGO_ENABLED=0 GOOS=linux go build -a -ldflags '-extldflags "-static"' .
+	CGO_ENABLED=0 GOOS=linux go build -o bin/dbinjection -a -ldflags '-extldflags "-static"' ./cmd/main/
 
 fmt:
 	go fmt ./...

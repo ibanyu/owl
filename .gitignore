@@ -3,3 +3,4 @@ util/logger/logger_test.go
 config/config.yml
 *.log
 bin
+static
