@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -10,7 +11,6 @@ import (
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
-
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
 	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
@@ -24,15 +24,13 @@ const (
 
 func Router() *gin.Engine {
 	r := gin.Default()
+	frontRouter(r)
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
-	currentDir := getCurrentDirectory()
-	logger.Info("current dir is: ", currentDir)
-	r.Static("/ui", filepath.Join(getCurrentDirectory(), "./static"))
 
 	r.POST("/db-injection/login", HandlerWrapper(controller.Login))
 	r.Use(controller.AuthorizeJWT())
@@ -76,6 +74,26 @@ func Router() *gin.Engine {
 	}
 
 	return r
+}
+
+func frontRouter(r *gin.Engine)  {
+	currentDir := getCurrentDirectory()
+	logger.Info("current dir is: ", currentDir)
+	r.Static("/ui", filepath.Join(currentDir, "./static"))
+
+	r.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "ui/")
+	})
+
+	r.NoRoute(func(c *gin.Context) {
+		if !strings.Contains(c.Request.RequestURI, "/db-injection") {
+			path := strings.Split(c.Request.URL.Path, "/")
+			if len(path) > 1 {
+				c.File("./static" + "/index.html")
+				return
+			}
+		}
+	})
 }
 
 func Run() {
