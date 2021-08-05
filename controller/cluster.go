@@ -24,7 +24,7 @@ func ListDB(ctx *gin.Context) Resp {
 func ListCluster(ctx *gin.Context) Resp {
 	f := "ListCluster()-->"
 
-	cluster, err := db_info.ListCluster()
+	cluster, err := db_info.ListClusterForUI()
 	if err != nil {
 		return Resp{Message: fmt.Sprintf("%s,list cluster failed :%s ", f, err.Error()), Code: code.ParamInvalid}
 	}

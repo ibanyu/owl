@@ -22,14 +22,6 @@ var Rules []Rule
 func init() {
 	Rules = []Rule{
 		{
-			Item:      RuleOK,
-			Name:      "OK",
-			Summary:   "OK",
-			Content:   `OK`,
-			Case:      "OK",
-			CheckFunc: (*Rule).RuleOK,
-		},
-		{
 			Item:      RuleCreate001,
 			Name:      "injection check character set",
 			Summary:   "表必须指定utf8mb4字符集,若指定collate则必须为utf8mb4_bin",
@@ -233,7 +225,6 @@ func init() {
 }
 
 const (
-	RuleOK        = "OK"
 	RuleCreate001 = "Create.001"
 	RuleCreate002 = "Create.002"
 	RuleCreate003 = "Create.003"

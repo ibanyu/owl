@@ -94,6 +94,8 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 			if affectRow > 0 {
 				task.SubTasks[idx].ExecItems[itemIdx].AffectRows = affectRow
 			}
+
+			task.SubTasks[idx].ExecItems[itemIdx].Status = ItemCheckPass
 			if !pass {
 				checkPass = false
 				task.SubTasks[idx].ExecItems[itemIdx].RuleComments = suggestion

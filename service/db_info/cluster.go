@@ -46,6 +46,10 @@ func AddCluster(cluster *DbInjectionCluster) (int64, error) {
 }
 
 func UpdateCluster(cluster *DbInjectionCluster) error {
+	if cluster.Pwd == pwdReplace {
+		cluster.Pwd = ""
+	}
+
 	if cluster.Pwd != "" {
 		cryptoData, err := util.AesCrypto([]byte(cluster.Pwd))
 		if err != nil {
@@ -79,4 +83,18 @@ func GetClusterByName(name string) (*DbInjectionCluster, error) {
 
 func ListCluster() ([]DbInjectionCluster, error) {
 	return clusterDao.ListCluster()
+}
+
+const pwdReplace = "******"
+
+func ListClusterForUI() ([]DbInjectionCluster, error) {
+	clusters, err := ListCluster()
+	if err != nil {
+		return nil, err
+	}
+
+	for i, _ := range clusters {
+		clusters[i].Pwd = pwdReplace
+	}
+	return clusters, nil
 }

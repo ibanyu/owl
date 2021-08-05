@@ -109,7 +109,7 @@ type RollBackReq struct {
 // 如果是改,判断哪些字段，根据主键，把原来的字段set回去。
 // 最后更改备份状态
 func Rollback(req *RollBackReq) error {
-	if req.OriginSql == "" || req.ClusterName == "" || req.DBName == "" || req.BackupId < 1 || req.Executor == "" {
+	if req.OriginSql == "" || req.ClusterName == "" || req.DBName == "" || req.BackupId < 1 {
 		logger.Infof("check param failed, originSql : %s ,clusterName :%s ,DBName: %s, backupId: %d, executor: %s",
 			req.OriginSql, req.ClusterName, req.DBName, req.BackupId, req.Executor)
 		return fmt.Errorf("get param failed, expert: originSql : %s, clusterName :%s ,DBName: %s, backupId: %d, creator: %s",

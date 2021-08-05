@@ -32,6 +32,7 @@ func Rollback(ctx *gin.Context) Resp {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s ", f, err.Error()), Code: code.ParamInvalid}
 	}
 
+	req.Executor = ctx.MustGet("user").(string)
 	if err := task.Rollback(&req); err != nil {
 		return Resp{Message: fmt.Sprintf("%s: rollback failed, err: %s", f, err.Error()), Code: code.InternalErr}
 	}
