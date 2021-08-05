@@ -89,7 +89,7 @@ const (
 	ItemSuccess                = "success"
 	ItemSkipped                = "skipped"
 
-	ItemNoBackup        ItemStatus = "rollBackFailed"
+	ItemNoBackup        ItemStatus = "noBackup"
 	ItemBackupSuccess              = "backupSuccess"
 	ItemBackupFailed               = "backupFailed"
 	ItemRollBackFailed             = "rollBackFailed"

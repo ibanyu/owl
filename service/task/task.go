@@ -97,6 +97,7 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 			if !pass {
 				checkPass = false
 				task.SubTasks[idx].ExecItems[itemIdx].RuleComments = suggestion
+				task.SubTasks[idx].ExecItems[itemIdx].Status = ItemCheckFailed
 			}
 		}
 
