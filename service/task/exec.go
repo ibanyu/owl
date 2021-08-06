@@ -40,11 +40,7 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 
 	// mean need't exec task
 	if startId < 0 {
-		return taskDao.UpdateTask(&DbInjectionTask{
-			ID:     paramTask.ID,
-			Status: ExecSuccess,
-			Ut:     time.Now().Unix(),
-		})
+		return refreshTaskStatus(paramTask.ID, 0, 0, "", "")
 	}
 
 	//exec task
@@ -66,13 +62,7 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 			err := BackupAndExec(dbInfo.DB, &item, subTask.TaskType)
 			if err != nil {
 				failed = true
-				err := taskDao.UpdateTask(&DbInjectionTask{
-					ID:       dbTask.ID,
-					Status:   ExecFailed,
-					Et:       beginTime,
-					Executor: paramTask.Executor,
-					ExecInfo: err.Error(),
-				})
+				err := refreshTaskStatus(paramTask.ID, beginTime, 0, paramTask.Executor, err.Error())
 				if err != nil {
 					logger.Errorf("after exec failed, update task status to failed err, err： %s", err.Error())
 				}
@@ -84,13 +74,7 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 	}
 
 	if !failed {
-		err = taskDao.UpdateTask(&DbInjectionTask{
-			ID:       dbTask.ID,
-			Status:   ExecSuccess,
-			Et:       beginTime,
-			Ft:       time.Now().Unix(),
-			Executor: paramTask.Executor,
-		})
+		err = refreshTaskStatus(paramTask.ID, beginTime, time.Now().Unix(), paramTask.Executor, "")
 		if err != nil {
 			logger.Errorf("after exec, update task status to success err, err： %s", err.Error())
 		}

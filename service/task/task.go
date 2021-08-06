@@ -147,6 +147,22 @@ func checkExecItemNum(task *DbInjectionTask) error {
 	return nil
 }
 
+func refreshTaskStatus(taskId int64, et, ft int64, executor, execInfo string) error {
+	task, err := taskDao.GetTask(taskId)
+	if err != nil {
+		return err
+	}
+
+	status := ExecSuccess
+	for _, v := range task.ExecItems {
+		if v.Status != ItemSuccess {
+			status = ExecFailed
+		}
+	}
+
+	return UpdateTask(&DbInjectionTask{ID: taskId, Status: status, Et: et, Ft: ft, Executor: executor, Ut: time.Now().Unix(), ExecInfo: execInfo})
+}
+
 func UpdateTask(task *DbInjectionTask) error {
 	dbTask, err := taskDao.GetTask(task.ID)
 	if err != nil {
@@ -388,4 +404,3 @@ func checkTaskType(sql string, taskType TaskType) error {
 	}
 	return nil
 }
-
