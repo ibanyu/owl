@@ -388,3 +388,4 @@ func checkTaskType(sql string, taskType TaskType) error {
 	}
 	return nil
 }
+

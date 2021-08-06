@@ -104,6 +104,19 @@ const (
 	DDLUpdate          = "UPDATE"
 )
 
+func GetTypeName(taskType string) string {
+	switch taskType {
+	case DML:
+		return "变更数据"
+	case DDLCreate:
+		return "建表"
+	case DDLUpdate:
+		return "改表"
+	default:
+		return "未知类型"
+	}
+}
+
 type Action = string
 
 const (
@@ -116,8 +129,6 @@ const (
 	DoReject        = "reject"
 )
 
-//列表及历史 添加能见过滤；创建者，reviewer
-//本地部署，添加dockerfile；
 func HistoryStatus() []ItemStatus {
 	return []ItemStatus{Reject, Cancel, ExecCancel, ExecFailed, ExecSuccess}
 }

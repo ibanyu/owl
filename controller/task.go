@@ -27,7 +27,7 @@ func ListExecTask(ctx *gin.Context) Resp {
 	}
 
 	return Resp{Data: ListData{
-		Items:  task,
+		Items:  setTypeNameFroTasks(task),
 		Total:  count,
 		More:   count > page.Offset+page.Limit,
 		Offset: page.Offset,
@@ -48,7 +48,7 @@ func ListReviewerTask(ctx *gin.Context) Resp {
 	}
 
 	return Resp{Data: ListData{
-		Items:  task,
+		Items:  setTypeNameFroTasks(task),
 		Total:  count,
 		More:   count > page.Offset+page.Limit,
 		Offset: page.Offset,
@@ -69,7 +69,7 @@ func ListHistoryTask(ctx *gin.Context) Resp {
 	}
 
 	return Resp{Data: ListData{
-		Items:  task,
+		Items:  setTypeNameFroTasks(task),
 		Total:  count,
 		More:   count > page.Offset+page.Limit,
 		Offset: page.Offset,
@@ -94,7 +94,7 @@ func GetTask(ctx *gin.Context) Resp {
 		return Resp{Message: fmt.Sprintf("%s: get task failed, err: %s", f, err.Error()), Code: code.InternalErr}
 	}
 
-	return Resp{Data: task}
+	return Resp{Data: setTypeNameFroTask(task)}
 }
 
 func UpdateTask(ctx *gin.Context) Resp {
@@ -160,4 +160,18 @@ func ExecWaitTask() {
 			}
 		}
 	}
+}
+
+func setTypeNameFroTasks(tasks []task.DbInjectionTask) []task.DbInjectionTask {
+	for i, _ := range tasks {
+		setTypeNameFroTask(&tasks[i])
+	}
+	return tasks
+}
+
+func setTypeNameFroTask(oneTask *task.DbInjectionTask) *task.DbInjectionTask {
+	for i, v := range oneTask.ExecItems {
+		oneTask.ExecItems[i].TaskType = task.GetTypeName(v.TaskType)
+	}
+	return oneTask
 }
