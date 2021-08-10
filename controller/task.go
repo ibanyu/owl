@@ -147,15 +147,14 @@ func ExecWaitTask() {
 
 		waitTasks, _, err := task.GetExecWaitTask()
 		if err != nil {
-			logger.Errorf("the goroutine get exec wait tasks err:%s", err)
+			logger.Errorf("the goroutine get exec wait tasks err:%v", err)
 		}
 		for _, waitTask := range waitTasks {
 			countDown := waitTask.Et - time.Now().Unix()
 			if countDown <= 0 {
 				waitTask.Action = task.Progress
-				err = task.ExecTask(&waitTask, &waitTask)
-				if err != nil {
-					logger.Errorf("the goroutine exec wait task err:%s", err)
+				if err := task.ExecTask(&waitTask, &waitTask); err != nil{
+					logger.Errorf("while exec task in cron err: %s", err.Error())
 				}
 			}
 		}

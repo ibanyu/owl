@@ -43,6 +43,7 @@ const (
 	ReviewPass         = "reviewPass"
 	DBAPass            = "dbaPass"
 	ExecWait           = "execWait"
+	Executing          = "executing"
 	ExecFailed         = "execFailed"
 	ExecSuccess        = "execSuccess"
 
@@ -89,11 +90,11 @@ const (
 	ItemSuccess                = "success"
 	ItemSkipped                = "skipped"
 
-	ItemNoBackup        ItemStatus = "noBackup"
-	ItemBackupSuccess              = "backupSuccess"
-	ItemBackupFailed               = "backupFailed"
-	ItemRollBackFailed             = "rollBackFailed"
-	ItemRollBackSuccess            = "rollBackSuccess"
+	ItemNoBackup        ItemStatus = "no_backup"
+	ItemBackupSuccess              = "backup_success"
+	ItemBackupFailed               = "backup_failed"
+	ItemRollBackFailed             = "roll_backup_failed"
+	ItemRollBackSuccess            = "roll_backup_success"
 )
 
 type TaskType = string

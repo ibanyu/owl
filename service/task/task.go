@@ -153,14 +153,16 @@ func refreshTaskStatus(taskId int64, et, ft int64, executor, execInfo string) er
 		return err
 	}
 
-	status := ExecSuccess
-	for _, v := range task.ExecItems {
-		if v.Status != ItemSuccess {
-			status = ExecFailed
+	status := Executing
+	if task.ExecItems[len(task.ExecItems) - 1].Status != ItemCheckPass{
+		for _, v := range task.ExecItems {
+			if v.Status != ItemSuccess {
+				status = ExecFailed
+			}
 		}
 	}
 
-	return UpdateTask(&DbInjectionTask{ID: taskId, Status: status, Et: et, Ft: ft, Executor: executor, Ut: time.Now().Unix(), ExecInfo: execInfo})
+	return taskDao.UpdateTask(&DbInjectionTask{ID: taskId, Status: status, Et: et, Ft: ft, Executor: executor, Ut: time.Now().Unix(), ExecInfo: execInfo})
 }
 
 func UpdateTask(task *DbInjectionTask) error {

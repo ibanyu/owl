@@ -28,11 +28,25 @@ func Exec(paramTask, dbTask *DbInjectionTask) error {
 	return nil
 }
 
+func ExecTask(paramTask, dbTask *DbInjectionTask) error {
+	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				logger.Errorf("exec task panic, err:%v", err)
+			}
+		}()
+
+		if err := execTask(paramTask, dbTask); err != nil {
+			logger.Errorf("exec task err: %s", err.Error())
+		}
+	}()
+
+	return refreshTaskStatus(paramTask.ID, 0, 0, "", "")
+}
+
 //exec and update status
 //exec from head, skip at some one, or begin at some one
-func ExecTask(paramTask, dbTask *DbInjectionTask) error {
-	//todo, 注意检查获取，执行的顺序
-
+func execTask(paramTask, dbTask *DbInjectionTask) error {
 	startId, err := getExecStartId(paramTask.Action, dbTask.ExecItems, paramTask.ExecItem)
 	if err != nil {
 		return err
@@ -93,7 +107,9 @@ func BackupAndExec(db *sql.DB, item *DbInjectionExecItem, taskType string) error
 	} else {
 		err := subTaskDao.UpdateItem(&DbInjectionExecItem{
 			ID:           item.ID,
+			Status:       ItemFailed,
 			BackupStatus: ItemBackupFailed,
+			ExecInfo:     backupErr.Error(),
 			BackupInfo:   backupErr.Error(),
 		})
 		if err != nil {
