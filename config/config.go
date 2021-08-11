@@ -12,7 +12,7 @@ import (
 type Config struct {
 	Server struct {
 		Port         string `yaml:"port"`
-		Env          int    `yaml:"env"`
+		Env          string `yaml:"env"`
 		LogLevel     string `yaml:"log_level"`
 		LogDir       string `yaml:"log_dir"`
 		ShowSql      bool   `yaml:"show_sql"`

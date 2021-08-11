@@ -18,8 +18,9 @@ import (
 )
 
 const (
-	test    = 0
-	product = 1
+	envDev     = "dev"
+	envTest    = "test"
+	envProduct = "prod"
 )
 
 func Router() *gin.Engine {
@@ -76,8 +77,11 @@ func Router() *gin.Engine {
 	return r
 }
 
-func frontRouter(r *gin.Engine)  {
-	currentDir := getCurrentDirectory()
+func frontRouter(r *gin.Engine) {
+	currentDir := ""
+	if config.Conf.Server.Env != envDev {
+		currentDir = getCurrentDirectory()
+	}
 	logger.Info("current dir is: ", currentDir)
 	r.Static("/ui", filepath.Join(currentDir, "./static"))
 
@@ -89,7 +93,7 @@ func frontRouter(r *gin.Engine)  {
 		if !strings.Contains(c.Request.RequestURI, "/db-injection") {
 			path := strings.Split(c.Request.URL.Path, "/")
 			if len(path) > 1 {
-				c.File("./static" + "/index.html")
+				c.File(filepath.Join(currentDir, "./static") + "/index.html")
 				return
 			}
 		}
@@ -97,7 +101,7 @@ func frontRouter(r *gin.Engine)  {
 }
 
 func Run() {
-	if config.Conf.Server.Env == product {
+	if config.Conf.Server.Env == envProduct {
 		gin.SetMode(gin.ReleaseMode)
 	}
 

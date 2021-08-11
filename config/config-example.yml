@@ -1,7 +1,7 @@
 # config
 server:
   port: 8081
-  env: 0 # 0 test, 1 pro
+  env: "dev" # test, prod, dev
   log_level: "debug" # debug, info, warning, error
   log_dir: "./"
   show_sql: true
