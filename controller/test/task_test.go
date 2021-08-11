@@ -116,7 +116,7 @@ func TestListTask(t *testing.T) {
 		Limit:    10,
 		Operator: "fish",
 	}
-	mockTaskDao.EXPECT().ListTask(&page, true, []string{task.ReviewPass, task.DBAPass, task.ExecCancel}).Return([]task.DbInjectionTask{taskIns}, 1, nil)
+	mockTaskDao.EXPECT().ListTask(&page, true, task.ExecStatus()).Return([]task.DbInjectionTask{taskIns}, 1, nil)
 
 	pageByte, _ := json.Marshal(page)
 	req, _ := http.NewRequest("POST", "/db-injection/task/exec/list", bytes.NewBuffer(pageByte))

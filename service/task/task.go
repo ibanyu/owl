@@ -154,7 +154,7 @@ func refreshTaskStatus(taskId int64, et, ft int64, executor, execInfo string) er
 	}
 
 	status := Executing
-	if task.ExecItems[len(task.ExecItems) - 1].Status != ItemCheckPass{
+	if task.ExecItems[len(task.ExecItems)-1].Status != ItemCheckPass {
 		for _, v := range task.ExecItems {
 			if v.Status != ItemSuccess {
 				status = ExecFailed

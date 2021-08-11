@@ -36,7 +36,7 @@ func buildDelRollBackSql(column []Column, dataItems [][]string, tableName string
 
 	for _, v := range dataItems {
 		if len(v) != columnLen {
-			return "", errors.New(fmt.Sprintf("rollback build values failed, length not match, \n column : %s , \n ,data: %s", column, v))
+			return "", fmt.Errorf("rollback build values failed, length not match, \n column : %v , \n ,data: %s", column, v)
 		}
 		values = append(values, fmt.Sprintf("(%s)", strings.Join(addQuotation(v), ", ")))
 	}

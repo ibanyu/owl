@@ -123,7 +123,9 @@ func getIndexInfo(info *task.DBInfo, sql string) (*[]KeysInfo, error) {
 	keysInfo := []KeysInfo{}
 	for res.Next() {
 		var keys KeysInfo
-		if err = res.Scan(&keys); err != nil {
+		var nilp interface{}
+		if err = res.Scan(&nilp, &nilp, &keys.KeyName, &keys.SeqInIndex, &keys.ColumnName,
+			&nilp, &nilp, &nilp, &nilp, &nilp, &nilp, &nilp, &nilp, &nilp, &nilp); err != nil {
 			return nil, err
 		}
 		keysInfo = append(keysInfo, keys)
