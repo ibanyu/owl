@@ -8,4 +8,4 @@ COPY ./static /service/static
 
 WORKDIR /service
 
-ENTRYPOINT ["bin/dbinjection"]
+ENTRYPOINT ["bin/owl"]

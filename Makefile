@@ -6,16 +6,16 @@ test: fmt
 
 build: fmt
 	mkdir -p bin
-	go build -o bin/dbinjection ./cmd/dbinjection/
+	go build -o bin/owl ./cmd/owl/
 
 build-linux: fmt
-	CGO_ENABLED=0 GOOS=linux go build -o bin/dbinjection -a -ldflags '-extldflags "-static"' ./cmd/dbinjection/
+	CGO_ENABLED=0 GOOS=linux go build -o bin/owl -a -ldflags '-extldflags "-static"' ./cmd/owl/
 
 fmt:
 	go fmt ./...
 
 run: build
-	./bin/dbinjection
+	./bin/owl
 
 .ONESHELL:
 build-front:
@@ -25,7 +25,7 @@ build-front:
 	rm -rf ./static && mkdir static && mv bin/front/db_injection_web/dist/* ./static/
 
 build-docker: build
-	docker build -t palfish/dbinjection:v0.1.0 .
+	docker build -t palfish/owl:v0.1.0 .
 
 run-docker: build-docker
-	docker run -p 8081:8081 -d  palfish/dbinjection:v0.1.0
+	docker run -p 8081:8081 -d  palfish/owl:v0.1.0

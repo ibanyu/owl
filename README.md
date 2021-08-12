@@ -4,19 +4,10 @@
 
 </div>
 
-## What is dbinjection
+## What is Owl
 
-dbinjeciotn is a db manager platform,committed to standardizing the data, index in the database and operations to the database, to avoid risks and failures.  
-capabilities which dbinjection provides include Process approval、sql Audit、sql execute and execute as crontab、data backup and recover .
-
-#### Technology stack
-* gin
-* gorm
-* ldap
-* pingcap/parser
-
-* react
-* Ant Design of React
+Owl is a db manager platform,committed to standardizing the data, index in the database and operations to the database, to avoid risks and failures.  
+capabilities which owl provides include Process approval、sql Audit、sql execute and execute as crontab、data backup and recover .
 
 #### Features
 
@@ -24,6 +15,8 @@ capabilities which dbinjection provides include Process approval、sql Audit、s
 * sql Audit：check sql by some rules, which are Predefined. There are rules like: standardizing name、'null' value not allowed、index match check、 data change affect lines limit, and so on. 
 * sql execute and execute as crontab： After sql audit and approve, the admin can execute sql, or set a feature time to execute sql.
 * data backup and recover：Before the data is changed, it will be backup, and you can recover it if something is wrong.
+
+for more information [introduction](./doc/introduction.md)
 
 ## Develop and deployment
 
@@ -68,7 +61,7 @@ make run-docker
 
 ## Getting Started
 
- [quick start](.....)
+ [quick start](./doc/introduction.md)
 
 ## Become a contributor
 
@@ -79,4 +72,4 @@ make run-docker
 
 ## License
 
-[Apache 2.0 License](./LICENSE)
+[Apache 2.0 License](doc/LICENSE)
