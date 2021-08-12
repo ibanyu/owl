@@ -6,10 +6,26 @@ test: fmt
 
 build: fmt
 	mkdir -p bin
-	go build -o bin/dbinjection ./cmd/main/
+	go build -o bin/dbinjection ./cmd/dbinjection/
 
 build-linux: fmt
-	CGO_ENABLED=0 GOOS=linux go build -o bin/dbinjection -a -ldflags '-extldflags "-static"' ./cmd/main/
+	CGO_ENABLED=0 GOOS=linux go build -o bin/dbinjection -a -ldflags '-extldflags "-static"' ./cmd/dbinjection/
 
 fmt:
 	go fmt ./...
+
+run: build
+	./bin/dbinjection
+
+.ONESHELL:
+build-front:
+	mkdir -p bin/front
+	if [ ! -e "./bin/front/db_injection_web" ]; then cd bin/front && git clone https://github.com/ibanyu/db_injection_web.git; else cd bin/front/db_injection_web && git pull; fi
+	cd bin/front/db_injection_web && yarn install && yarn build
+	rm -rf ./static && mkdir static && mv bin/front/db_injection_web/dist/* ./static/
+
+build-docker: build
+	docker build -t palfish/dbinjection:v0.1.0 .
+
+run-docker: build-docker
+	docker run -p 8081:8081 -d  palfish/dbinjection:v0.1.0

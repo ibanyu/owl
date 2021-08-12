@@ -1,112 +1,84 @@
-### db injection
-> sql check, sql exec, backup and recover dml handle, etc.
+<div align="left">
 
+**[简体中文](./doc/README-zh-CN.md) | English**
 
-#### 技术栈
-* gin--web框架
-* gorm--orm
-* ldap--认证
+</div>
 
-## 系统构建
+## What is dbinjection
 
-获取依赖包
+dbinjeciotn is a db manager platform,committed to standardizing the data, index in the database and operations to the database,  to avoid risks and failures.  
+capabilities which dbinjection provide include Process approval、sql Audit、sql execute and execute as crontab 、data backup and recover .
+
+#### Technology stack
+* gin
+* gorm
+* ldap
+* pingcap/parser
+
+* react
+* Ant Design of React
+
+#### Features
+
+* Process approval：approval or reject sql process order：develop submit、system check、dba check、exec sql.
+* sql Audit：check sql by some rules, which is Predefined. There are rules like: standardizing name、'null' value not allowed 、index match check、 data change affect lines limit, and so on. 
+* sql execute and execute as crontab： After sql audit and approval, the admin can execute sql, or set a feature time to execute sql.
+* data backup and recover：Before the data is changed, it will be backup, and you recover it if something is wrong.
+
+Get Started using dbinjeciotn[quick start](...)
+
+## Develop and deployment
+
+#### Dependency
+* go 1.3+
+* tidb or mysql
+
+* node 
+* yarn (npm)
+
+#### Config file
+
+* config file's location can be set by env-param("config_path") or set in main function. default location is "./config/config.yml".  
+* in default value, mv '/config/config-example.yml' to '/config/config.yml' can make config work. 
+* at last, still need to change config about database, env and so on.
+
+#### DB init
+
+* create table：use mysql client connect db , copy sql in '/dao/build_table.sql' and execute.
+* init first admin： ``` insert into db_injection_admin (username,description) values ('your ldap name','first admin');```
+
+#### Build and run
 ```
-go mod tidy
+# build back end
+make build
+
+# build linux back end
+make build-linux
+
+# build front and set to static dir
+make build-front
+
+# start; if need UI, exec 'make build-front' first
+make run
+
+# build docker image, if  need UI, exec 'make build-front' first
+make build-docker
+
+# run as docker container
+make run-docker
 ```
 
-## 如何启动
-config 包下确定配置文件名是否正确 (测试使用 config-example.yml) :
-```go
-const (
-	configPathEnv = "config_path"
-	configPath    = "./config/config.yml"
-)
-```
+## Getting Started
 
-修改配置文件 config.yml 中 db 对象：
-```go
-db:
-  address: "127.0.0.1"
-  port: 3306
-  user: "root"
-  password: "123456"
-  db_name: "dbinjection"
-  max_idle_conn: 2
-  max_open_conn: 30
+ [introduction](.....)
 
-```
+## Become a contributor
 
-启动 main.go
-```go
-func main() {
-	flag.Parse()
-	log.Println("version:", Version)
-	config.InitConfig("")
-	logger.InitLog(config.Conf.Server.LogDir, "dbinjection.log", config.Conf.Server.LogLevel)
-	dao.InitDB()
-	injection.Injection()
-	checker.InitRuleStatus()
+* Contribute to the codebase.
+* Contribute to the docs.
+* Report and triage bugs by issue.
+* Write technical documentations and blog posts, for users and contributors.
 
-	router.Run()
-}
+## License
 
-```
-
-## 测试规则
-
-```go
-package test
-
-import (
-	"database/sql"
-	"fmt"
-	"testing"
-
-	_ "github.com/go-sql-driver/mysql"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/checker"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/db_info"
-	task "gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
-)
-
-func TestListRule(t *testing.T) {
-	SQLContent := "select * from table_a"
-
-	cluster := db_info.DbInjectionCluster{
-		ID:          0,
-		Name:        "dbinjection",
-		Description: "1",
-		Addr:        "127.0.0.1",
-		User:        "root",
-		Pwd:         "123456",
-		Ct:          0,
-		Ut:          0,
-		Operator:    "1",
-	}
-
-	var dbName string = "dbinjection"
-	defaultDBName := dbName
-
-	db, err := sql.Open("mysql",
-		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", cluster.User, cluster.Pwd, cluster.Addr, dbName))
-	if err != nil {
-		fmt.Printf("open db conn err: %s", err.Error())
-	}
-
-	defaultDB, err := sql.Open("mysql",
-		fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8", cluster.User, cluster.Pwd, cluster.Addr, defaultDBName))
-	if err != nil {
-		fmt.Printf("open db conn err: %s", err.Error())
-	}
-
-	dbInfo := task.DBInfo{DB: db, DefaultDB: defaultDB, DBName: dbName}
-	pass, suggestion, affectRow := checker.Checker.SqlCheck(SQLContent, "", "", &dbInfo)
-	if affectRow > 0 {
-		fmt.Printf("PASS = %t %s %d", pass, suggestion, affectRow)
-	}
-	if !pass {
-		fmt.Printf("PASS = %t %s %d", pass, suggestion, affectRow)
-	}
-
-	dbInfo.CloseConn()
-
-}
+[Apache 2.0 License](./LICENSE)

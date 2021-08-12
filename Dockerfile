@@ -1,9 +1,11 @@
 FROM hub.pri.ibanyu.com/devops/centos:7.5
 
-LABEL MAINTAINER=devops@ipalfish.com
+LABEL MAINTAINER=infrastructure@ipalfish.com
 
-COPY dbinjectionopensource /data/home/serv/deploy/service/bin/
+COPY ./bin/dbinjection /service/bin/
+COPY ./config /service/config
+COPY ./static /service/static
 
-WORKDIR /data
+WORKDIR /service
 
-ENTRYPOINT ["/data/home/serv/deploy/service/bin/dbinjectionopensource"]
+ENTRYPOINT ["bin/dbinjection"]
