@@ -6,8 +6,8 @@
 
 ## What is dbinjection
 
-dbinjeciotn is a db manager platform,committed to standardizing the data, index in the database and operations to the database,  to avoid risks and failures.  
-capabilities which dbinjection provide include Process approval、sql Audit、sql execute and execute as crontab 、data backup and recover .
+dbinjeciotn is a db manager platform,committed to standardizing the data, index in the database and operations to the database, to avoid risks and failures.  
+capabilities which dbinjection provides include Process approval、sql Audit、sql execute and execute as crontab、data backup and recover .
 
 #### Technology stack
 * gin
@@ -20,12 +20,10 @@ capabilities which dbinjection provide include Process approval、sql Audit、sq
 
 #### Features
 
-* Process approval：approval or reject sql process order：develop submit、system check、dba check、exec sql.
-* sql Audit：check sql by some rules, which is Predefined. There are rules like: standardizing name、'null' value not allowed 、index match check、 data change affect lines limit, and so on. 
-* sql execute and execute as crontab： After sql audit and approval, the admin can execute sql, or set a feature time to execute sql.
-* data backup and recover：Before the data is changed, it will be backup, and you recover it if something is wrong.
-
-Get Started using dbinjeciotn[quick start](...)
+* Process approval：approval or reject sql process order：developer submit、system check、dba check、exec sql.
+* sql Audit：check sql by some rules, which are Predefined. There are rules like: standardizing name、'null' value not allowed、index match check、 data change affect lines limit, and so on. 
+* sql execute and execute as crontab： After sql audit and approve, the admin can execute sql, or set a feature time to execute sql.
+* data backup and recover：Before the data is changed, it will be backup, and you can recover it if something is wrong.
 
 ## Develop and deployment
 
@@ -70,7 +68,7 @@ make run-docker
 
 ## Getting Started
 
- [introduction](.....)
+ [quick start](.....)
 
 ## Become a contributor
 
