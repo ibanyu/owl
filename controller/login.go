@@ -6,10 +6,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/admin"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"github.com/ibanyu/owl/code"
+	"github.com/ibanyu/owl/service/admin"
+	"github.com/ibanyu/owl/service/auth"
+	"github.com/ibanyu/owl/service/task"
 )
 
 const (

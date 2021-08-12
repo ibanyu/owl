@@ -6,7 +6,7 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
+	"github.com/ibanyu/owl/config"
 )
 
 func Login(userName, Pwd string) (string, error) {

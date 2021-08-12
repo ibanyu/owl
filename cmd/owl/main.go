@@ -4,13 +4,13 @@ import (
 	"flag"
 	"log"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/injection"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/router"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/checker"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/config"
+	"github.com/ibanyu/owl/controller"
+	"github.com/ibanyu/owl/dao"
+	"github.com/ibanyu/owl/injection"
+	"github.com/ibanyu/owl/router"
+	"github.com/ibanyu/owl/service/checker"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 var Version string

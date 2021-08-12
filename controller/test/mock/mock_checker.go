@@ -6,7 +6,7 @@ package mock
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	task "gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	task "github.com/ibanyu/owl/service/task"
 	reflect "reflect"
 )
 

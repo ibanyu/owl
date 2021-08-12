@@ -10,10 +10,10 @@ import (
 
 	"github.com/golang/mock/gomock"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller/test/mock"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"github.com/ibanyu/owl/controller"
+	"github.com/ibanyu/owl/controller/test/mock"
+	"github.com/ibanyu/owl/service"
+	"github.com/ibanyu/owl/service/task"
 )
 
 func injectAuthTool(ctl *gomock.Controller) {

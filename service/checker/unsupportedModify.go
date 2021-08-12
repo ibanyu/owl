@@ -7,9 +7,9 @@ import (
 	"github.com/pingcap/parser/ast"
 	"github.com/pingcap/parser/mysql"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/service/sql_util"
+	"github.com/ibanyu/owl/service/task"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 /**

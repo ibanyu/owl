@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
+	"github.com/ibanyu/owl/config"
 )
 
 type ConfAuthToolImpl struct {

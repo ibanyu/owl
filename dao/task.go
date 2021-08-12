@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"github.com/ibanyu/owl/service"
+	"github.com/ibanyu/owl/service/task"
 )
 
 type TaskDaoImpl struct {

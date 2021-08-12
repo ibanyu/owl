@@ -6,9 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/admin"
+	"github.com/ibanyu/owl/code"
+	"github.com/ibanyu/owl/service"
+	"github.com/ibanyu/owl/service/admin"
 )
 
 func AddAdmin(ctx *gin.Context) Resp {

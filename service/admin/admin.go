@@ -6,7 +6,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
+	"github.com/ibanyu/owl/service"
 )
 
 type DbInjectionAdmin struct {

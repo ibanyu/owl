@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/config"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 func Exec(paramTask, dbTask *DbInjectionTask) error {

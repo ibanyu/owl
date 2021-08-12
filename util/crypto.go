@@ -4,7 +4,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"fmt"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
+	"github.com/ibanyu/owl/config"
 )
 
 //加密

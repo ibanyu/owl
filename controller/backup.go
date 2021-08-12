@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"github.com/ibanyu/owl/code"
+	"github.com/ibanyu/owl/service/task"
 )
 
 func ListRollbackData(ctx *gin.Context) Resp {

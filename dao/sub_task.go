@@ -1,6 +1,6 @@
 package dao
 
-import "gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+import "github.com/ibanyu/owl/service/task"
 
 type SubTaskDaoImpl struct {
 }

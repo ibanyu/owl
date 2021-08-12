@@ -7,10 +7,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/code"
+	"github.com/ibanyu/owl/service"
+	"github.com/ibanyu/owl/service/task"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 func ListExecTask(ctx *gin.Context) Resp {

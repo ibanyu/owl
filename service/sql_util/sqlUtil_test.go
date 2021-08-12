@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
+	"github.com/ibanyu/owl/service"
 )
 
 func TestGetUpdateColumn(t *testing.T) {

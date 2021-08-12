@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"testing"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
+	"github.com/ibanyu/owl/controller"
 )
 
 func TestListRule(t *testing.T) {

@@ -10,10 +10,10 @@ import (
 
 	"github.com/golang/mock/gomock"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller/test/mock"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/db_info"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util"
+	"github.com/ibanyu/owl/controller"
+	"github.com/ibanyu/owl/controller/test/mock"
+	"github.com/ibanyu/owl/service/db_info"
+	"github.com/ibanyu/owl/util"
 )
 
 func injectClusterMock(t *testing.T) *mock.MockClusterDao {

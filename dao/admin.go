@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/admin"
+	"github.com/ibanyu/owl/service"
+	"github.com/ibanyu/owl/service/admin"
 )
 
 type AdminDaoImpl struct {

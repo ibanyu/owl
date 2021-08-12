@@ -11,10 +11,10 @@ import (
 
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/code"
+	"github.com/ibanyu/owl/config"
+	"github.com/ibanyu/owl/controller"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 const (

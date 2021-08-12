@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/db_info"
+	"github.com/ibanyu/owl/code"
+	"github.com/ibanyu/owl/service/db_info"
 )
 
 func ListDB(ctx *gin.Context) Resp {

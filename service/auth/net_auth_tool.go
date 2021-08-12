@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util"
+	"github.com/ibanyu/owl/config"
+	"github.com/ibanyu/owl/util"
 )
 
 type NetAuthToolImpl struct {

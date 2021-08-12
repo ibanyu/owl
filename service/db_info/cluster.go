@@ -3,8 +3,8 @@ package db_info
 import (
 	"time"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util"
+	"github.com/ibanyu/owl/service"
+	"github.com/ibanyu/owl/util"
 )
 
 type DbInjectionCluster struct {

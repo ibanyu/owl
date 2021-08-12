@@ -8,9 +8,9 @@ import (
 
 	"vitess.io/vitess/go/vt/sqlparser"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/service/task"
+	"github.com/ibanyu/owl/util"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 // Audit 待评审的SQL结构体，由原SQL和其对应的抽象语法树组成

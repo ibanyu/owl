@@ -1,7 +1,7 @@
 package dao
 
 import (
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"github.com/ibanyu/owl/service/task"
 )
 
 type BackupImpl struct {

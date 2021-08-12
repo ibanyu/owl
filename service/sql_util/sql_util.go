@@ -13,7 +13,7 @@ import (
 	"github.com/pingcap/parser/format"
 	_ "github.com/pingcap/tidb/types/parser_driver"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 //取出数据的顺序同建表语句的顺序

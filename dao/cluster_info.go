@@ -1,6 +1,6 @@
 package dao
 
-import "gitlab.pri.ibanyu.com/middleware/dbinjection/service/db_info"
+import "github.com/ibanyu/owl/service/db_info"
 
 type ClusterImpl struct {
 }

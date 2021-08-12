@@ -9,8 +9,8 @@ import (
 
 	tidb "github.com/pingcap/parser/ast"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/service/sql_util"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 type BackupDataResp struct {

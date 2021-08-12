@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util"
+	"github.com/ibanyu/owl/service/task"
+	"github.com/ibanyu/owl/util"
 )
 
 const defaultDBName = "information_schema"

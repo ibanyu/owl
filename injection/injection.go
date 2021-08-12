@@ -1,15 +1,15 @@
 package injection
 
 import (
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/dao"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/admin"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth/login_check"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/checker"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/db_info"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"github.com/ibanyu/owl/config"
+	"github.com/ibanyu/owl/dao"
+	"github.com/ibanyu/owl/service"
+	"github.com/ibanyu/owl/service/admin"
+	"github.com/ibanyu/owl/service/auth"
+	"github.com/ibanyu/owl/service/auth/login_check"
+	"github.com/ibanyu/owl/service/checker"
+	"github.com/ibanyu/owl/service/db_info"
+	"github.com/ibanyu/owl/service/task"
 )
 
 func Injection() {

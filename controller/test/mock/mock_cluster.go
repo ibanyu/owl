@@ -6,7 +6,7 @@ package mock
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	db_info "gitlab.pri.ibanyu.com/middleware/dbinjection/service/db_info"
+	db_info "github.com/ibanyu/owl/service/db_info"
 	reflect "reflect"
 )
 

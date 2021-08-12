@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
+	"github.com/ibanyu/owl/service"
 )
 
 func TestIndexMatchCondition(t *testing.T) {

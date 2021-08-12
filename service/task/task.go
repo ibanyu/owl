@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/sql_util"
+	"github.com/ibanyu/owl/config"
+	"github.com/ibanyu/owl/service"
+	"github.com/ibanyu/owl/service/sql_util"
 )
 
 type DbInjectionTask struct {

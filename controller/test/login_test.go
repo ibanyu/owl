@@ -3,15 +3,15 @@ package test
 import (
 	"bytes"
 	"encoding/json"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/auth"
+	"github.com/ibanyu/owl/controller"
+	"github.com/ibanyu/owl/service/auth"
 	"gotest.tools/assert"
 	"net/http"
 	"testing"
 
 	"github.com/golang/mock/gomock"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/controller/test/mock"
+	"github.com/ibanyu/owl/controller/test/mock"
 )
 
 func injectAuthMock(t *testing.T) *mock.MockLoginChecker {

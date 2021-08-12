@@ -6,10 +6,10 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/router"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/config"
+	"github.com/ibanyu/owl/router"
+	"github.com/ibanyu/owl/service"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 var token string = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImZpc2giLCJwYXNzd29yZCI6ImZseSJ9.8Lur8qWsME-nI_TdFS7aGqAUa4sbup8Qf2Lb5Oikx1g"

@@ -1,8 +1,8 @@
 package dao
 
 import (
+	"github.com/ibanyu/owl/service/checker"
 	"github.com/jinzhu/gorm"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/checker"
 )
 
 type RuleDaoImpl struct {

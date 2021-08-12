@@ -7,7 +7,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/config"
+	"github.com/ibanyu/owl/config"
 )
 
 var DB *gorm.DB

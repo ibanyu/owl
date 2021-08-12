@@ -3,7 +3,7 @@ package checker
 import (
 	"fmt"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/util/logger"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 const ruleClose = 1

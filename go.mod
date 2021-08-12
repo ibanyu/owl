@@ -1,4 +1,4 @@
-module gitlab.pri.ibanyu.com/middleware/dbinjection
+module github.com/ibanyu/owl
 
 go 1.13
 

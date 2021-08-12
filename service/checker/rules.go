@@ -1,7 +1,7 @@
 package checker
 
 import (
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/task"
+	"github.com/ibanyu/owl/service/task"
 )
 
 // Rule 评审规则元数据结构

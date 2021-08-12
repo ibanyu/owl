@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/code"
-	"gitlab.pri.ibanyu.com/middleware/dbinjection/service/checker"
+	"github.com/ibanyu/owl/code"
+	"github.com/ibanyu/owl/service/checker"
 )
 
 func LisRule(ctx *gin.Context) Resp {
