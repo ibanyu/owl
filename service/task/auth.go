@@ -135,7 +135,7 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 				TurnDownEnable:   true,
 			}
 		}
-	case ReviewPass, Executing:
+	case ReviewPass, Executing, ExecWait:
 		//如果是dml，则不需要dba审核
 		if isDba {
 			if detail {

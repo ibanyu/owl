@@ -288,6 +288,9 @@ func ProgressEdit(task, dbTask *DbInjectionTask) error {
 	case DBAPass, ReviewPass:
 		return Exec(task, dbTask)
 	default:
+		if task.Et > time.Now().Unix() {
+			return Exec(task, dbTask)
+		}
 		return fmt.Errorf("progress failed, task status invalid, status: %s", dbTask.Status)
 	}
 
