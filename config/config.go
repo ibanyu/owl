@@ -1,12 +1,11 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 
 	"gopkg.in/yaml.v3"
-
-	"github.com/ibanyu/owl/util/logger"
 )
 
 type Config struct {
@@ -73,7 +72,7 @@ func InitConfig(path string) {
 
 	conf, err := newConfig(path)
 	if err != nil {
-		logger.Warnf("init config failed, err: %s, path: %s", err.Error(), path)
+		log.Println(fmt.Printf("init config failed, err: %s, path: %s", err.Error(), path))
 		log.Fatal("init config failed: ", err.Error())
 	}
 	Conf = conf
