@@ -46,7 +46,7 @@ func (TaskDaoImpl) UpdateTask(task *task.DbInjectionTask) error {
 }
 
 func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool, status []task.ItemStatus) ([]task.DbInjectionTask, int, error) {
-	condition := "(name like ? or creator like ?) and status in (?)"
+	condition := "(name like ? or creator like ?) and !(status = ? and creator != ?) and status in (?)"
 	if !isDBA {
 		condition = fmt.Sprintf("(creator = '%s' or reviewer = '%s') and ", page.Operator, page.Operator) + condition
 	}
@@ -54,13 +54,13 @@ func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool, status []task.
 	page.Key = "%" + page.Key + "%"
 	var count int
 	if err := GetDB().Model(&task.DbInjectionTask{}).Where(condition,
-		page.Key, page.Key, status).Count(&count).Error; err != nil {
+		page.Key, page.Key, task.CheckFailed, page.Operator, status).Count(&count).Error; err != nil {
 		return nil, 0, err
 	}
 
 	var tasks []task.DbInjectionTask
 	if err := GetDB().Order("ct desc").Offset(page.Offset).Limit(page.Limit).
-		Find(&tasks, condition, page.Key, page.Key, status).Error; err != nil {
+		Find(&tasks, condition, page.Key, page.Key, task.CheckFailed, page.Operator, status).Error; err != nil {
 		return nil, 0, err
 	}
 

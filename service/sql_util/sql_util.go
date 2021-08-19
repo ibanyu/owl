@@ -266,7 +266,7 @@ func SplitMultiSql(sql string) (resp []string, err error) {
 	stmtNodes, _, err := getParser().Parse(sql, "utf8mb4", "")
 	if err != nil {
 		logger.Infof("parser sql error : %s", err.Error())
-		return nil, err
+		return nil, fmt.Errorf("there is an error in your SQL syntax: %s", err.Error())
 	}
 
 	for _, v := range stmtNodes {

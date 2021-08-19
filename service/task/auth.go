@@ -34,11 +34,13 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 				return &EditAuth{
 					SysReviewEnable:       true,
 					CreatorTurnDownEnable: true,
+					WithdrawEnable:        true,
 				}
 			}
 			return &EditAuth{
 				CreatorSubmitReviewEnable: true,
 				CreatorTurnDownEnable:     true,
+				WithdrawEnable:            true,
 			}
 		}
 	case CheckPass:

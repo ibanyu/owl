@@ -125,7 +125,7 @@ func AddTask(ctx *gin.Context) Resp {
 	taskParam.Creator = ctx.MustGet("user").(string)
 	id, err := task.AddTask(&taskParam)
 	if err != nil {
-		return Resp{Message: fmt.Sprintf("%s, get task failed :%s", f, err.Error()), Code: code.InternalErr}
+		return Resp{Message: fmt.Sprintf("%s, add task failed :%s", f, err.Error()), Code: code.InternalErr}
 	}
 
 	return Resp{Data: struct {
