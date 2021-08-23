@@ -42,7 +42,7 @@ go version go1.16.7 linux/amd64
 owl
 ```
 3、编辑配置文件，将config/目录下config-example.yml重命名成config.yml，并配置好数据库和Ldap配置
-```cassandraql
+```
 db:
   address: "xx.xx.xx.xx"
   port: xx
@@ -64,12 +64,12 @@ login:
   token_secret: ""
   token_effective_hour: 1
 ```
-4、db表初始化(创建好后端用到的表)，表创建成功后，并在db_injection_admin添加一条管理员记录
-```cassandraql
+4、使用/dao/build_table.sql的sql初始化表，表创建成功后，在db_injection_admin表中添加首位管理员
+```
 insert into db_injection_admin (username,description) values ('your ldap name','first admin');
 ```
 5、编译运行
-```cassandraql
+```
 [root@dongfengtest-host-0 owl]# go build -o bin/owl -a ./cmd/owl/
 [root@dongfengtest-host-0 owl]#
 [root@dongfengtest-host-0 owl]#
@@ -85,32 +85,16 @@ insert into db_injection_admin (username,description) values ('your ldap name','
 ```
 ### 前端单独部署
 1、安装node
-```cassandraql
+```
 [root@dongfengtest-host-0 local]# node -v
 v16.7.0
 ```
-2、npm安装
-```cassandraql
-[root@dongfengtest-host-0 local]# npm install -g cnpm --registry=https://registry.npm.taobao.org
-[root@dongfengtest-host-0 local]# npm -v
-7.20.3
+2、下载前端代码到本地目录
 ```
-3、安装webpack
-```cassandraql
-[root@dongfengtest-host-0 local]# npm install webpack -g
-```
-4、安装vue
-```cassandraql
-[root@dongfengtest-host-0 local]# npm install -g @vue/cli
-[root@dongfengtest-host-0 local]# vue -V
-@vue/cli 4.5.13
-```
-5、下载前端代码到本地目录
-```cassandraql
 git clone https://github.com/ibanyu/owl_web.git
 ```
-6、进入owl目录，安装依赖并编译运行
-```cassandraql
+3、进入owl目录，安装依赖并编译运行
+```
 bogon:db_injection_web liujiang$ npm install
 bogon:db_injection_web liujiang$ 
 bogon:db_injection_web liujiang$ vim config/proxy.js  配置后端访问地址

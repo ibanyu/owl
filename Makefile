@@ -20,9 +20,9 @@ run: build
 .ONESHELL:
 build-front:
 	mkdir -p bin/front
-	if [ ! -e "./bin/front/db_injection_web" ]; then cd bin/front && git clone https://github.com/ibanyu/db_injection_web.git; else cd bin/front/db_injection_web && git pull; fi
-	cd bin/front/db_injection_web && yarn install && yarn build
-	rm -rf ./static && mkdir static && mv bin/front/db_injection_web/dist/* ./static/
+	if [ ! -e "./bin/front/owl_web" ]; then cd bin/front && git clone https://github.com/ibanyu/owl_web.git; else cd bin/front/owl_web && git pull; fi
+	cd bin/front/owl_web && yarn install && yarn build
+	rm -rf ./static && mkdir static && mv bin/front/owl_web/dist/* ./static/
 
 build-docker: build
 	docker build -t palfish/owl:v0.1.0 .
