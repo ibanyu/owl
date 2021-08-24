@@ -67,7 +67,7 @@ login:
   token_secret: ""
   token_effective_hour: 1
 ```
-4、使用/dao/build_table.sql的sql初始化表，表创建成功后，在db_injection_admin表中添加首位管理员
+4、使用/dao/build_table.sql的sql初始化表，表创建成功后，在owl_admin表中添加首位管理员
 ```
 insert into owl_admin (username,description) values ('your ldap name','first admin');
 ```
@@ -81,7 +81,7 @@ insert into owl_admin (username,description) values ('your ldap name','first adm
 [2021-08-20 12:50:11] [info] replacing callback `gorm:update_time_stamp` from /data/sql_audit/owl/dao/init.go:36
 
 (/data/sql_audit/owl/dao/rule.go:15)
-[2021-08-20 12:50:11]  [1.29ms]  SELECT * FROM `db_injection_rule_status`
+[2021-08-20 12:50:11]  [1.29ms]  SELECT * FROM `owl_rule_status`
 [0 rows affected or returned ]
 {"level":"info","ts":"2021-08-20 12:50:11.184","caller":"router/router.go:85","msg":"current dir is: /data/sql_audit/owl/bin"}
 {"level":"info","ts":"2021-08-20 12:50:11.184","caller":"router/router.go:111","msg":"start listening port: 8081"}
@@ -104,11 +104,11 @@ git clone https://github.com/ibanyu/owl_web.git
 ```
 4、进入owl_web目录，安装依赖并编译运行
 ```
-bogon:db_injection_web liujiang$ npm install
-bogon:db_injection_web liujiang$ 
-bogon:db_injection_web liujiang$ vim config/proxy.js  配置后端访问地址
-bogon:db_injection_web liujiang$ 
-bogon:db_injection_web liujiang$ npm start
+bogon:owl_web liujiang$ npm install
+bogon:owl_web liujiang$ 
+bogon:owl_web liujiang$ vim config/proxy.js  配置后端访问地址
+bogon:owl_web liujiang$ 
+bogon:owl_web liujiang$ npm start
   App running at:
   - Local:   http://localhost:8000 (copied to clipboard)
   - Network: http://xx.xx.xx.xx:8000
