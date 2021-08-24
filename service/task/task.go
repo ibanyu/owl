@@ -285,9 +285,10 @@ func ProgressEdit(task, dbTask *DbInjectionTask) error {
 	switch dbTask.Status {
 	case CheckPass:
 		task.Status = ReviewPass
-	case DBAPass, ReviewPass:
+	case DBAPass, ReviewPass, ExecWait:
 		return Exec(task, dbTask)
 	default:
+		// new cron task
 		if task.Et > time.Now().Unix() {
 			return Exec(task, dbTask)
 		}
