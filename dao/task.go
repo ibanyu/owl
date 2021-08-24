@@ -13,7 +13,7 @@ type TaskDaoImpl struct {
 
 var Task TaskDaoImpl
 
-func (TaskDaoImpl) AddTask(task *task.DbInjectionTask) (int64, error) {
+func (TaskDaoImpl) AddTask(task *task.OwlTask) (int64, error) {
 	tx := GetDB().Begin()
 	if err := tx.Create(task).Error; err != nil {
 		tx.Rollback()
@@ -41,11 +41,11 @@ func (TaskDaoImpl) AddTask(task *task.DbInjectionTask) (int64, error) {
 	return task.ID, tx.Commit().Error
 }
 
-func (TaskDaoImpl) UpdateTask(task *task.DbInjectionTask) error {
+func (TaskDaoImpl) UpdateTask(task *task.OwlTask) error {
 	return GetDB().Model(task).Where("id = ?", task.ID).Update(task).Error
 }
 
-func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool, status []task.ItemStatus) ([]task.DbInjectionTask, int, error) {
+func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool, status []task.ItemStatus) ([]task.OwlTask, int, error) {
 	condition := "(name like ? or creator like ?) and !(status = ? and creator != ?) and status in (?)"
 	if !isDBA {
 		condition = fmt.Sprintf("(creator = '%s' or reviewer = '%s') and ", page.Operator, page.Operator) + condition
@@ -53,12 +53,12 @@ func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool, status []task.
 
 	page.Key = "%" + page.Key + "%"
 	var count int
-	if err := GetDB().Model(&task.DbInjectionTask{}).Where(condition,
+	if err := GetDB().Model(&task.OwlTask{}).Where(condition,
 		page.Key, page.Key, task.CheckFailed, page.Operator, status).Count(&count).Error; err != nil {
 		return nil, 0, err
 	}
 
-	var tasks []task.DbInjectionTask
+	var tasks []task.OwlTask
 	if err := GetDB().Order("ct desc").Offset(page.Offset).Limit(page.Limit).
 		Find(&tasks, condition, page.Key, page.Key, task.CheckFailed, page.Operator, status).Error; err != nil {
 		return nil, 0, err
@@ -76,7 +76,7 @@ func (TaskDaoImpl) ListTask(page *service.Pagination, isDBA bool, status []task.
 	return tasks, count, nil
 }
 
-func (TaskDaoImpl) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task.DbInjectionTask, int, error) {
+func (TaskDaoImpl) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task.OwlTask, int, error) {
 	condition := "(name like ? or creator like ?) and status in (?)"
 	if !isDBA {
 		condition = condition + fmt.Sprintf(" and (creator = '%s' or reviewer = '%s')", page.Operator, page.Operator)
@@ -84,12 +84,12 @@ func (TaskDaoImpl) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task
 
 	page.Key = "%" + page.Key + "%"
 	var count int
-	if err := GetDB().Model(&task.DbInjectionTask{}).Where(condition,
+	if err := GetDB().Model(&task.OwlTask{}).Where(condition,
 		page.Key, page.Key, task.HistoryStatus()).Count(&count).Error; err != nil {
 		return nil, 0, err
 	}
 
-	var tasks []task.DbInjectionTask
+	var tasks []task.OwlTask
 	if err := GetDB().Order("ct desc").Offset(page.Offset).Limit(page.Limit).
 		Find(&tasks, condition, page.Key, page.Key, task.HistoryStatus()).Error; err != nil {
 		return nil, 0, err
@@ -107,15 +107,15 @@ func (TaskDaoImpl) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task
 	return tasks, count, nil
 }
 
-func getTaskExecItems(db *gorm.DB, taskP *task.DbInjectionTask) ([]task.DbInjectionExecItem, []task.DbInjectionSubtask, error) {
-	var formattedItems []task.DbInjectionExecItem
-	var subTasks []task.DbInjectionSubtask
+func getTaskExecItems(db *gorm.DB, taskP *task.OwlTask) ([]task.OwlExecItem, []task.OwlSubtask, error) {
+	var formattedItems []task.OwlExecItem
+	var subTasks []task.OwlSubtask
 	if err := db.Find(&subTasks, "task_id = ?", taskP.ID).Error; err != nil {
 		return nil, nil, err
 	}
 
 	for idx, subTask := range subTasks {
-		var items []task.DbInjectionExecItem
+		var items []task.OwlExecItem
 		if err := db.Find(&items, "subtask_id = ?", subTask.ID).Error; err != nil {
 			return nil, nil, err
 		}
@@ -132,8 +132,8 @@ func getTaskExecItems(db *gorm.DB, taskP *task.DbInjectionTask) ([]task.DbInject
 	return formattedItems, subTasks, nil
 }
 
-func (TaskDaoImpl) GetTask(id int64) (*task.DbInjectionTask, error) {
-	var task task.DbInjectionTask
+func (TaskDaoImpl) GetTask(id int64) (*task.OwlTask, error) {
+	var task task.OwlTask
 	if err := GetDB().First(&task, "id = ?", id).Error; err != nil {
 		return nil, err
 	}
@@ -150,16 +150,16 @@ func (TaskDaoImpl) GetTask(id int64) (*task.DbInjectionTask, error) {
 
 const ExecWaitTasksLimit = 5
 
-func (TaskDaoImpl) GetExecWaitTask() ([]task.DbInjectionTask, int, error) {
+func (TaskDaoImpl) GetExecWaitTask() ([]task.OwlTask, int, error) {
 	condition := "status in (?)"
 
 	var count int
-	if err := GetDB().Model(&task.DbInjectionTask{}).Where(condition,
+	if err := GetDB().Model(&task.OwlTask{}).Where(condition,
 		task.ExecWait).Count(&count).Error; err != nil {
 		return nil, 0, err
 	}
 
-	var tasks []task.DbInjectionTask
+	var tasks []task.OwlTask
 	if err := GetDB().Order("et asc").Limit(ExecWaitTasksLimit).
 		Find(&tasks, condition, task.ExecWait).Error; err != nil {
 		return nil, 0, err

@@ -34,7 +34,7 @@ func (m *MockBackupDao) EXPECT() *MockBackupDaoMockRecorder {
 }
 
 // AddBackup mocks base method
-func (m *MockBackupDao) AddBackup(backup *task.DbInjectionBackup) (int64, error) {
+func (m *MockBackupDao) AddBackup(backup *task.OwlBackup) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddBackup", backup)
 	ret0, _ := ret[0].(int64)
@@ -49,7 +49,7 @@ func (mr *MockBackupDaoMockRecorder) AddBackup(backup interface{}) *gomock.Call 
 }
 
 // UpdateBackup mocks base method
-func (m *MockBackupDao) UpdateBackup(backup *task.DbInjectionBackup) error {
+func (m *MockBackupDao) UpdateBackup(backup *task.OwlBackup) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateBackup", backup)
 	ret0, _ := ret[0].(error)
@@ -63,10 +63,10 @@ func (mr *MockBackupDaoMockRecorder) UpdateBackup(backup interface{}) *gomock.Ca
 }
 
 // GetBackupInfoById mocks base method
-func (m *MockBackupDao) GetBackupInfoById(id int64) (*task.DbInjectionBackup, error) {
+func (m *MockBackupDao) GetBackupInfoById(id int64) (*task.OwlBackup, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetBackupInfoById", id)
-	ret0, _ := ret[0].(*task.DbInjectionBackup)
+	ret0, _ := ret[0].(*task.OwlBackup)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

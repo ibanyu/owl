@@ -28,7 +28,7 @@ func injectClusterMock(t *testing.T) *mock.MockClusterDao {
 func TestUpdateCluster(t *testing.T) {
 	mockClusterDao := injectClusterMock(t)
 
-	clusterIns := &db_info.DbInjectionCluster{
+	clusterIns := &db_info.OwlCluster{
 		ID:          777,
 		Addr:        "db-cluster-addr",
 		User:        "user",
@@ -76,7 +76,7 @@ func TestDelCluster(t *testing.T) {
 func TestAddCluster(t *testing.T) {
 	mockClusterDao := injectClusterMock(t)
 
-	clusterIns := &db_info.DbInjectionCluster{
+	clusterIns := &db_info.OwlCluster{
 		Addr:        "db-cluster-addr",
 		User:        "user",
 		Pwd:         "db-cluster-pwd",
@@ -107,8 +107,8 @@ func TestAddCluster(t *testing.T) {
 func TestListCluster(t *testing.T) {
 	mockClusterDao := injectClusterMock(t)
 
-	ClusterIns := db_info.DbInjectionCluster{}
-	mockClusterDao.EXPECT().ListCluster().Return([]db_info.DbInjectionCluster{ClusterIns}, nil)
+	ClusterIns := db_info.OwlCluster{}
+	mockClusterDao.EXPECT().ListCluster().Return([]db_info.OwlCluster{ClusterIns}, nil)
 
 	req, _ := http.NewRequest("POST", "/db-injection/cluster/list", nil)
 	req.Header.Set("token", token)

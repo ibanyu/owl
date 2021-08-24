@@ -5,6 +5,7 @@
 </div>
 
 #### Owl 简介
+
 Owl 是伴鱼基于公司内部场景，开发的一个数据库SQL审核平台，致力于规范研发同学的建表、索引、数据安全等操作。
 提供的功能主要包括：
 * 登陆认证：基于Ldap的登陆认证
@@ -19,7 +20,8 @@ Owl 是伴鱼基于公司内部场景，开发的一个数据库SQL审核平台�
 
 ## 部署及使用
 
-###部署环境
+### 部署环境
+
 Owl是前后端分离的架构，后端基于go的gin web框架编写，依赖的基础环境包括：
 * go 1.3+
 * tidb、mysql（主要用于后端元数据存储）
@@ -28,7 +30,8 @@ Owl是前后端分离的架构，后端基于go的gin web框架编写，依赖�
 * node
 * yarn (npm)
 
-###后端单独部署
+### 后端单独部署
+
 1、安装go环境
 ```
 [root@dongfengtest-host-0 local]# go version
@@ -48,7 +51,7 @@ db:
   port: xx
   user: "xx"
   password: "xx"
-  db_name: "dbinjection"
+  db_name: "owl"
   max_idle_conn: 2
   max_open_conn: 30
 
@@ -83,17 +86,23 @@ insert into db_injection_admin (username,description) values ('your ldap name','
 {"level":"info","ts":"2021-08-20 12:50:11.184","caller":"router/router.go:85","msg":"current dir is: /data/sql_audit/owl/bin"}
 {"level":"info","ts":"2021-08-20 12:50:11.184","caller":"router/router.go:111","msg":"start listening port: 8081"}
 ```
+
 ### 前端单独部署
-1、安装node
+
+1、前端地址  
+
+[owl_web](https://github.com/ibanyu/owl_web)
+
+2、安装node
 ```
 [root@dongfengtest-host-0 local]# node -v
 v16.7.0
 ```
-2、下载前端代码到本地目录
+3、下载前端代码到本地目录
 ```
 git clone https://github.com/ibanyu/owl_web.git
 ```
-3、进入owl目录，安装依赖并编译运行
+4、进入owl目录，安装依赖并编译运行
 ```
 bogon:db_injection_web liujiang$ npm install
 bogon:db_injection_web liujiang$ 
@@ -105,8 +114,8 @@ bogon:db_injection_web liujiang$ npm start
   - Network: http://xx.xx.xx.xx:8000
 ```
 
-###前后端混合部署或者容器化部署
-可以参考Makefile文件
+### 前后端混合部署或者容器化部署
+
 ```
 # 仅构建后端
 make build

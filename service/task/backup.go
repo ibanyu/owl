@@ -15,9 +15,9 @@ import (
 )
 
 type BackupDao interface {
-	AddBackup(backup *DbInjectionBackup) (int64, error)
-	UpdateBackup(backup *DbInjectionBackup) error
-	GetBackupInfoById(id int64) (*DbInjectionBackup, error)
+	AddBackup(backup *OwlBackup) (int64, error)
+	UpdateBackup(backup *OwlBackup) error
+	GetBackupInfoById(id int64) (*OwlBackup, error)
 }
 
 var backupDao BackupDao
@@ -26,7 +26,7 @@ func SetBackupDao(impl BackupDao) {
 	backupDao = impl
 }
 
-type DbInjectionBackup struct {
+type OwlBackup struct {
 	ID           int64  `json:"id" gorm:"column:id"`
 	Data         string `json:"data" gorm:"column:data"`
 	Ct           int64  `json:"ct" gorm:"column:ct"`
@@ -100,7 +100,7 @@ func fetchAndStoreBackupInfo(db *sql.DB, selectSql, tableName string) (isEmpty b
 		return
 	}
 
-	backupId, err = backupDao.AddBackup(&DbInjectionBackup{
+	backupId, err = backupDao.AddBackup(&OwlBackup{
 		Data: dataStr,
 		Ct:   time.Now().Unix(),
 	})

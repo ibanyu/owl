@@ -153,7 +153,7 @@ func Rollback(req *RollBackReq) error {
 
 //更改taskItem 表的备份状态，更改backup表的记录信息
 func updateBackupStatus(status ItemStatus, backupId int64, creator string) {
-	err := subTaskDao.UpdateItemByBackupId(&DbInjectionExecItem{
+	err := subTaskDao.UpdateItemByBackupId(&OwlExecItem{
 		BackupID:     backupId,
 		BackupStatus: status,
 	})
@@ -162,7 +162,7 @@ func updateBackupStatus(status ItemStatus, backupId int64, creator string) {
 		logger.Errorf("update task item backup status failed, %s", err.Error())
 	}
 
-	if err := backupDao.UpdateBackup(&DbInjectionBackup{
+	if err := backupDao.UpdateBackup(&OwlBackup{
 		ID:           backupId,
 		RollbackTime: time.Now().Unix(),
 		RollbackUser: creator,
