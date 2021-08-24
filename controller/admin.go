@@ -13,7 +13,7 @@ import (
 
 func AddAdmin(ctx *gin.Context) Resp {
 	f := "AddAdmin()-->"
-	var adminParam admin.DbInjectionAdmin
+	var adminParam admin.OwlAdmin
 	if err := ctx.BindJSON(&adminParam); err != nil {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s", f, err.Error()), Code: code.ParamInvalid}
 	}

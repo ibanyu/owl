@@ -9,12 +9,12 @@ import (
 	"github.com/ibanyu/owl/util/logger"
 )
 
-func Exec(paramTask, dbTask *DbInjectionTask) error {
+func Exec(paramTask, dbTask *OwlTask) error {
 	if paramTask.Et == 0 {
 		return ExecTask(paramTask, dbTask)
 	}
 
-	err := taskDao.UpdateTask(&DbInjectionTask{
+	err := taskDao.UpdateTask(&OwlTask{
 		ID:       dbTask.ID,
 		Status:   ExecWait,
 		Ut:       time.Now().Unix(),
@@ -28,7 +28,7 @@ func Exec(paramTask, dbTask *DbInjectionTask) error {
 	return nil
 }
 
-func ExecTask(paramTask, dbTask *DbInjectionTask) error {
+func ExecTask(paramTask, dbTask *OwlTask) error {
 	go func() {
 		defer func() {
 			if err := recover(); err != nil {
@@ -46,7 +46,7 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 
 //exec and update status
 //exec from head, skip at some one, or begin at some one
-func ExecTaskDirectly(paramTask, dbTask *DbInjectionTask) error {
+func ExecTaskDirectly(paramTask, dbTask *OwlTask) error {
 	startId, err := getExecStartId(paramTask.Action, dbTask.ExecItems, paramTask.ExecItem)
 	if err != nil {
 		return err
@@ -103,14 +103,14 @@ Failed:
 }
 
 // backup, exec, update status
-func BackupAndExec(db *sql.DB, item *DbInjectionExecItem, taskType string) error {
+func BackupAndExec(db *sql.DB, item *OwlExecItem, taskType string) error {
 	execBackup, backupId, backupErr := backup(db, taskType, item.SQLContent)
 	if !execBackup {
 		item.BackupStatus = ItemNoBackup
 	} else if backupErr == nil {
 		item.BackupStatus = ItemBackupSuccess
 	} else {
-		err := subTaskDao.UpdateItem(&DbInjectionExecItem{
+		err := subTaskDao.UpdateItem(&OwlExecItem{
 			ID:           item.ID,
 			Status:       ItemFailed,
 			BackupStatus: ItemBackupFailed,
@@ -154,7 +154,7 @@ func fmtExecInfo(result sql.Result) string {
 	return fmt.Sprintf("affect nums: %d, last insert id: %d", affect, lastId)
 }
 
-func getExecStartId(action Action, subItems []DbInjectionExecItem, targetItem *DbInjectionExecItem) (int64, error) {
+func getExecStartId(action Action, subItems []OwlExecItem, targetItem *OwlExecItem) (int64, error) {
 	switch action {
 	case Progress:
 		for _, v := range subItems {
@@ -173,7 +173,7 @@ func getExecStartId(action Action, subItems []DbInjectionExecItem, targetItem *D
 			}
 			if v.ID == targetItem.ID {
 				find = true
-				err := subTaskDao.UpdateItem(&DbInjectionExecItem{ID: v.ID, Status: ItemSkipped})
+				err := subTaskDao.UpdateItem(&OwlExecItem{ID: v.ID, Status: ItemSkipped})
 				if err != nil {
 					logger.Errorf("update task status to skip failed, taskId: %d", v.ID)
 				}
@@ -192,7 +192,7 @@ func getExecStartId(action Action, subItems []DbInjectionExecItem, targetItem *D
 }
 
 //todo
-func fmtExecItemFromOneTask(task *DbInjectionTask) (items []DbInjectionExecItem) {
+func fmtExecItemFromOneTask(task *OwlTask) (items []OwlExecItem) {
 	for _, subTask := range task.SubTasks {
 		for _, v := range subTask.ExecItems {
 			items = append(items, v)

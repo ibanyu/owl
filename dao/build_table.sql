@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS `db_injection_task`;
-CREATE TABLE IF NOT EXISTS `db_injection_task`
+DROP TABLE IF EXISTS `owl_task`;
+CREATE TABLE IF NOT EXISTS `owl_task`
 (
     `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `name`           VARCHAR(150)     NOT NULL DEFAULT '' COMMENT '名称',
@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS `db_injection_task`
   COLLATE = utf8mb4_bin
   AUTO_INCREMENT = 7077 COMMENT '任务表';
 
-DROP TABLE IF EXISTS `db_injection_subtask`;
-CREATE TABLE IF NOT EXISTS `db_injection_subtask`
+DROP TABLE IF EXISTS `owl_subtask`;
+CREATE TABLE IF NOT EXISTS `owl_subtask`
 (
     `id`           BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `task_id`      BIGINT UNSIGNED NOT NULL COMMENT 'task id',
@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS `db_injection_subtask`
   COLLATE = utf8mb4_bin
   AUTO_INCREMENT = 7077 COMMENT '子任务表';
 
-DROP TABLE IF EXISTS `db_injection_exec_item`;
-CREATE TABLE IF NOT EXISTS `db_injection_exec_item`
+DROP TABLE IF EXISTS `owl_exec_item`;
+CREATE TABLE IF NOT EXISTS `owl_exec_item`
 (
     `id`            BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `task_id`       BIGINT UNSIGNED NOT NULL COMMENT 'task id',
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS `db_injection_exec_item`
   COLLATE = utf8mb4_bin
   AUTO_INCREMENT = 7077 COMMENT '子任务里的一条sql，执行单位';
 
-DROP TABLE IF EXISTS `db_injection_rule_status`;
-CREATE TABLE IF NOT EXISTS `db_injection_rule_status`
+DROP TABLE IF EXISTS `owl_rule_status`;
+CREATE TABLE IF NOT EXISTS `owl_rule_status`
 (
     `id`      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `name`    VARCHAR(120)     NOT NULL DEFAULT '' COMMENT '规则名',
@@ -78,8 +78,8 @@ CREATE TABLE IF NOT EXISTS `db_injection_rule_status`
   COLLATE = utf8mb4_bin
   AUTO_INCREMENT = 7077 COMMENT '规则状态任务表';
 
-DROP TABLE IF EXISTS `db_injection_cluster`;
-CREATE TABLE IF NOT EXISTS `db_injection_cluster`
+DROP TABLE IF EXISTS `owl_cluster`;
+CREATE TABLE IF NOT EXISTS `owl_cluster`
 (
     `id`          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `name`        VARCHAR(160)    NOT NULL DEFAULT '' COMMENT '名称',
@@ -98,8 +98,8 @@ CREATE TABLE IF NOT EXISTS `db_injection_cluster`
   COLLATE = utf8mb4_bin
   AUTO_INCREMENT = 7077 COMMENT '集群信息表';
 
-DROP TABLE IF EXISTS `db_injection_backup`;
-CREATE TABLE IF NOT EXISTS `db_injection_backup`
+DROP TABLE IF EXISTS `owl_backup`;
+CREATE TABLE IF NOT EXISTS `owl_backup`
 (
     `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `data`           MEDIUMTEXT      NOT NULL COMMENT '备份数据',
@@ -115,8 +115,8 @@ CREATE TABLE IF NOT EXISTS `db_injection_backup`
   COLLATE = utf8mb4_bin
   AUTO_INCREMENT = 7077 COMMENT '备份信息表';
 
-DROP TABLE IF EXISTS `db_injection_admin`;
-CREATE TABLE IF NOT EXISTS `db_injection_admin`
+DROP TABLE IF EXISTS `owl_admin`;
+CREATE TABLE IF NOT EXISTS `owl_admin`
 (
     `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
     `username`       VARCHAR(40)     NOT NULL DEFAULT '' COMMENT 'ldap账号',

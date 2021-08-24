@@ -51,7 +51,7 @@ db:
   port: xx
   user: "xx"
   password: "xx"
-  db_name: "dbinjection"
+  db_name: "owl"
   max_idle_conn: 2
   max_open_conn: 30
 

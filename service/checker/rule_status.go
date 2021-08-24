@@ -8,14 +8,14 @@ import (
 
 const ruleClose = 1
 
-type DbInjectionRuleStatus struct {
+type OwlRuleStatus struct {
 	Name  string `json:"name" gorm:"column:name"`
 	Close int    `json:"close" gorm:"column:close"`
 }
 
 type RuleStatusDao interface {
-	ListAllStatus() ([]DbInjectionRuleStatus, error)
-	UpdateRuleStatus(ruleStatus *DbInjectionRuleStatus) error
+	ListAllStatus() ([]OwlRuleStatus, error)
+	UpdateRuleStatus(ruleStatus *OwlRuleStatus) error
 }
 
 var ruleStatusDao RuleStatusDao
@@ -43,12 +43,12 @@ func InitRuleStatus() {
 func UpdateRuleStatus(name, action string) (err error) {
 	switch action {
 	case "close":
-		if err = ruleStatusDao.UpdateRuleStatus(&DbInjectionRuleStatus{Name: name, Close: 1}); err == nil {
+		if err = ruleStatusDao.UpdateRuleStatus(&OwlRuleStatus{Name: name, Close: 1}); err == nil {
 			updateCacheRuleStatus(name, true)
 		}
 		return
 	case "open":
-		if err = ruleStatusDao.UpdateRuleStatus(&DbInjectionRuleStatus{Name: name, Close: 0}); err == nil {
+		if err = ruleStatusDao.UpdateRuleStatus(&OwlRuleStatus{Name: name, Close: 0}); err == nil {
 			updateCacheRuleStatus(name, false)
 		}
 		return

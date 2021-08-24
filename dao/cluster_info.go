@@ -7,25 +7,25 @@ type ClusterImpl struct {
 
 var Cluster ClusterImpl
 
-func (ClusterImpl) AddCluster(cluster *db_info.DbInjectionCluster) (int64, error) {
+func (ClusterImpl) AddCluster(cluster *db_info.OwlCluster) (int64, error) {
 	err := GetDB().Create(cluster).Error
 	return cluster.ID, err
 }
 
-func (ClusterImpl) UpdateCluster(cluster *db_info.DbInjectionCluster) error {
+func (ClusterImpl) UpdateCluster(cluster *db_info.OwlCluster) error {
 	return GetDB().Model(cluster).Where("id = ?", cluster.ID).Update(cluster).Error
 }
 
 func (ClusterImpl) DelCluster(id int64) error {
-	return GetDB().Where("id = ?", id).Delete(&db_info.DbInjectionCluster{}).Error
+	return GetDB().Where("id = ?", id).Delete(&db_info.OwlCluster{}).Error
 }
 
-func (ClusterImpl) GetClusterByName(name string) (*db_info.DbInjectionCluster, error) {
-	var cluster db_info.DbInjectionCluster
+func (ClusterImpl) GetClusterByName(name string) (*db_info.OwlCluster, error) {
+	var cluster db_info.OwlCluster
 	return &cluster, GetDB().First(&cluster, "name = ?", name).Error
 }
 
-func (ClusterImpl) ListCluster() ([]db_info.DbInjectionCluster, error) {
-	var clusters []db_info.DbInjectionCluster
+func (ClusterImpl) ListCluster() ([]db_info.OwlCluster, error) {
+	var clusters []db_info.OwlCluster
 	return clusters, GetDB().Find(&clusters).Error
 }

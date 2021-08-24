@@ -99,7 +99,7 @@ func GetTask(ctx *gin.Context) Resp {
 
 func UpdateTask(ctx *gin.Context) Resp {
 	f := "UpdateTask()-->"
-	var taskParam task.DbInjectionTask
+	var taskParam task.OwlTask
 	if err := ctx.BindJSON(&taskParam); err != nil {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s", f, err.Error()), Code: code.ParamInvalid}
 	}
@@ -113,7 +113,7 @@ func UpdateTask(ctx *gin.Context) Resp {
 
 func AddTask(ctx *gin.Context) Resp {
 	f := "AddTask()-->"
-	var taskParam task.DbInjectionTask
+	var taskParam task.OwlTask
 	if err := ctx.BindJSON(&taskParam); err != nil {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s", f, err.Error()), Code: code.ParamInvalid}
 	}
@@ -161,14 +161,14 @@ func ExecWaitTask() {
 	}
 }
 
-func setTypeNameFroTasks(tasks []task.DbInjectionTask) []task.DbInjectionTask {
+func setTypeNameFroTasks(tasks []task.OwlTask) []task.OwlTask {
 	for i, _ := range tasks {
 		setTypeNameFroTask(&tasks[i])
 	}
 	return tasks
 }
 
-func setTypeNameFroTask(oneTask *task.DbInjectionTask) *task.DbInjectionTask {
+func setTypeNameFroTask(oneTask *task.OwlTask) *task.OwlTask {
 	for i, v := range oneTask.ExecItems {
 		oneTask.ExecItems[i].TaskType = task.GetTypeName(v.TaskType)
 	}

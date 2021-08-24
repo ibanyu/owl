@@ -15,7 +15,7 @@ db:
   port: 3306
   user: "root"
   password: "aaaaaa"
-  db_name: "dbinjection"
+  db_name: "owl"
   max_idle_conn: 2
   max_open_conn: 30
 
