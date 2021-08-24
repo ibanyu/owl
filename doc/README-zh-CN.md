@@ -69,7 +69,7 @@ login:
 ```
 4、使用/dao/build_table.sql的sql初始化表，表创建成功后，在db_injection_admin表中添加首位管理员
 ```
-insert into db_injection_admin (username,description) values ('your ldap name','first admin');
+insert into owl_admin (username,description) values ('your ldap name','first admin');
 ```
 5、编译运行
 ```
@@ -102,7 +102,7 @@ v16.7.0
 ```
 git clone https://github.com/ibanyu/owl_web.git
 ```
-4、进入owl目录，安装依赖并编译运行
+4、进入owl_web目录，安装依赖并编译运行
 ```
 bogon:db_injection_web liujiang$ npm install
 bogon:db_injection_web liujiang$ 

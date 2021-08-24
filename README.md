@@ -40,7 +40,7 @@ for more information [introduction](./doc/introduction.md)
 #### DB init
 
 * create table：use mysql client connect db , copy sql in '/dao/build_table.sql' and execute.
-* init first admin： ``` insert into db_injection_admin (username,description) values ('your ldap name','first admin');```
+* init first admin： ``` insert into owl_admin (username,description) values ('your ldap name','first admin');```
 
 #### Build and run
 ```
