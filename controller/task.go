@@ -153,7 +153,7 @@ func ExecWaitTask() {
 			countDown := waitTask.Et - time.Now().Unix()
 			if countDown <= 0 {
 				waitTask.Action = task.Progress
-				if err := task.ExecTask(&waitTask, &waitTask); err != nil {
+				if err := task.ExecTaskDirectly(&waitTask, &waitTask); err != nil {
 					logger.Errorf("while exec task in cron err: %s", err.Error())
 				}
 			}

@@ -36,7 +36,7 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 			}
 		}()
 
-		if err := execTask(paramTask, dbTask); err != nil {
+		if err := ExecTaskDirectly(paramTask, dbTask); err != nil {
 			logger.Errorf("exec task err: %s", err.Error())
 		}
 	}()
@@ -46,7 +46,7 @@ func ExecTask(paramTask, dbTask *DbInjectionTask) error {
 
 //exec and update status
 //exec from head, skip at some one, or begin at some one
-func execTask(paramTask, dbTask *DbInjectionTask) error {
+func ExecTaskDirectly(paramTask, dbTask *DbInjectionTask) error {
 	startId, err := getExecStartId(paramTask.Action, dbTask.ExecItems, paramTask.ExecItem)
 	if err != nil {
 		return err
@@ -61,7 +61,7 @@ func execTask(paramTask, dbTask *DbInjectionTask) error {
 	jump := true
 	failed := false
 	beginTime := time.Now().Unix()
-	for _, subTask := range dbTask.SubTasks { //todo
+	for _, subTask := range dbTask.SubTasks {
 		dbInfo, err := dbTool.GetDBConn(subTask.DbName, subTask.ClusterName)
 		if err != nil {
 			return err
@@ -80,12 +80,17 @@ func execTask(paramTask, dbTask *DbInjectionTask) error {
 				if err != nil {
 					logger.Errorf("after exec failed, update task status to failed err, err： %s", err.Error())
 				}
-				break
+
+				// stop all task
+				dbInfo.CloseConn()
+				goto Failed
 			}
 		}
 
 		dbInfo.CloseConn()
 	}
+
+Failed:
 
 	if !failed {
 		err = refreshTaskStatus(paramTask.ID, beginTime, time.Now().Unix(), paramTask.Executor, "")
