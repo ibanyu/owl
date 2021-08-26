@@ -67,10 +67,11 @@ login:
   token_secret: ""
   token_effective_hour: 1
 ```
-4、使用/dao/build_table.sql的sql初始化表，表创建成功后，在owl_admin表中添加首位管理员
-```
-insert into owl_admin (username,description) values ('your ldap name','first admin');
-```
+4、初始化数据库  
+* 创建数据库：``` CREATE DATABASE `owl` CHARACTER SET utf8 COLLATE utf8_general_ci; use owl ```  
+* 初始化表：使用[build_table.sql](../dao/build_table.sql)的sql初始化表  
+* 添加首位管理员： ``` insert into owl_admin (username,description) values ('your ldap name','first admin'); ```  
+
 5、编译运行
 ```
 [root@dongfengtest-host-0 owl]# go build -o bin/owl -a ./cmd/owl/
