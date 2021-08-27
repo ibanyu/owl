@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"vitess.io/vitess/go/mysql"
+	"vitess.io/vitess/go/vt/sqlparser"
 
 	"github.com/pingcap/parser"
 	"github.com/pingcap/parser/ast"
@@ -266,6 +267,12 @@ func SplitMultiSql(sql string) (resp []string, err error) {
 	stmtNodes, _, err := getParser().Parse(sql, "utf8mb4", "")
 	if err != nil {
 		logger.Infof("parser sql error : %s", err.Error())
+		return nil, fmt.Errorf("there is an error in your SQL syntax: %s", err.Error())
+	}
+
+	_, err = sqlparser.Parse(sql)
+	if err != nil {
+		logger.Infof("vitess parser sql error : %s", err.Error())
 		return nil, fmt.Errorf("there is an error in your SQL syntax: %s", err.Error())
 	}
 

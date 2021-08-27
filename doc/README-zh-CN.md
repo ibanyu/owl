@@ -68,7 +68,7 @@ login:
   token_effective_hour: 1
 ```
 4、初始化数据库  
-* 创建数据库：``` CREATE DATABASE `owl` CHARACTER SET utf8 COLLATE utf8_general_ci; use owl ```  
+* 创建数据库：``` CREATE DATABASE `owl`; use owl ```  
 * 初始化表：使用[build_table.sql](../dao/build_table.sql)的sql初始化表  
 * 添加首位管理员： ``` insert into owl_admin (username,description) values ('your ldap name','first admin'); ```  
 
