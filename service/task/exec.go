@@ -118,7 +118,7 @@ func BackupAndExec(db *sql.DB, item *OwlExecItem, taskType string) error {
 			BackupInfo:   backupErr.Error(),
 		})
 		if err != nil {
-			logger.Errorf("while backup failed, update item backup status err, %s", err.Error())
+			logger.Errorf("while backup failed, update item=%d backup status err, %s", item.ID, err.Error())
 		}
 
 		if !config.Conf.Server.ExecNoBackup {
