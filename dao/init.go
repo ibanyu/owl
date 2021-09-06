@@ -8,6 +8,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/ibanyu/owl/config"
+	"github.com/ibanyu/owl/util/logger"
 )
 
 var DB *gorm.DB
@@ -23,6 +24,7 @@ func InitDB() {
 	var err error
 	DB, err = gorm.Open("mysql", conn)
 	if err != nil {
+		logger.Errorf("init DB error : %s", err.Error())
 		log.Fatal("init DB error : ", err.Error())
 	}
 

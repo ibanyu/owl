@@ -4,43 +4,123 @@
 
 </div>
 
-## Owl 简介
+#### Owl 简介
 
-Owl 是一个数据库管理平台，致力于规范化数据库中的数据、索引、以及对db进行的操作，从而减少风险，规避故障。  
-提供的功能包括：流程审批、sql自动审查、sql执行、定时执行、数据变更备份及回滚等。
+Owl 是伴鱼基于公司内部场景，开发的一个数据库SQL审核平台，致力于规范研发同学的建表、索引、数据安全等操作。
+提供的功能主要包括：
+* 登陆认证：基于Ldap的登陆认证
+* 流程审批：支持两级审核，管理员(DBA)和研发
+* 规则列表：支持动态开启与关闭审核规则
+* SQL自动检测：通过TiDB Parser做SQL语法检测
+* SQL规则引擎：通过一套规则，规范SQL上线
+* SQL定时执行：风险操作，调度到低峰期执行
+* 数据备份和回滚：对于DML操作，备份操作前的数据，并支持回滚
 
 ![architecture](./image/architecture.png)
 
 #### 功能简介
 
-* 工单审批：对sql工单进行简单的流程审批：研发提交、系统审核、dba审核、执行。
-* 系统审核：根据一些预定义的规则审核sql，规则包括：命名规范、不允许控制规范、索引匹配检测、变更影响的数据行数限制等。如有需要，可以关闭部分规则。
-* sql执行及定时执行： 根据所管理的db集群去执行sql，并支持定时执行。
-* 数据变更备份及回滚：数据变更操作执行后会备份原始数据，可以查看原始数据并执行回滚。
+具体请参考[功能介绍](./introduction.md)
 
-具体请参考[简介](./introduction.md)
+## 部署及使用
 
-## 开发及部署
+### 部署环境
 
-#### 依赖
-* go环境1.3+
-* tidb or mysql
+Owl是前后端分离的架构，后端基于go的gin web框架编写，依赖的基础环境包括：
+* go 1.3+
+* tidb、mysql（主要用于后端元数据存储）
 
-* node 
+前端基于react的ant design pro框架编写，依赖的基础环境包括：
+* node
 * yarn (npm)
 
-#### 配置文件
+### 后端单独部署
 
-* 配置文件位置可由环境变量（"config_path"）或者main函数中指定，不指定则为默认值："./config/config.yml"。  
-* 默认情况下，修改/config/config-example.yml 为 /config/config.yml即可正确读取配置文件  
-* 然后还需要修改config.yml中db、当前环境等相关的配置。
+1、安装go环境
+```
+[root@dongfengtest-host-0 local]# go version
+go version go1.16.7 linux/amd64
+```
+2、下载后端代码到本地目录
+```
+[root@dongfengtest-host-0 sql_audit]# git clone https://github.com/ibanyu/owl.git                                                        ^C
+[root@dongfengtest-host-0 sql_audit]#
+[root@dongfengtest-host-0 sql_audit]# ls
+owl
+```
+3、编辑配置文件，将config/目录下config-example.yml重命名成config.yml，并配置好数据库和Ldap配置
+```
+db:
+  address: "xx.xx.xx.xx"
+  port: xx
+  user: "xx"
+  password: "xx"
+  db_name: "owl"
+  max_idle_conn: 2
+  max_open_conn: 30
 
-#### db初始化
+login:
+  ldap:
+    host: "ldap.test.com"
+    port: 389
+    base_dn: "dc=test,dc=com"
+    use_ssl: false
+    bind_dn: "cn=hi,dc=test,dc=com"
+    bind_pwd: "password"
+  login_path: "https://xx.com/login"
+  token_secret: ""
+  token_effective_hour: 1
+```
+4、初始化数据库  
+* 创建数据库：``` CREATE DATABASE `owl`; use owl ```  
+* 初始化表：使用[build_table.sql](../dao/build_table.sql)的sql初始化表  
+* 添加首位管理员： ``` insert into owl_admin (username,description) values ('your ldap name','first admin'); ```  
 
-* 建表：client 链接数据，复制/dao/build_table.sql中的内容并执行
-* 初始化admin： ``` insert into db_injection_admin (username,description) values ('your ldap name','first admin');```
+5、编译运行
+```
+[root@dongfengtest-host-0 owl]# go build -o bin/owl -a ./cmd/owl/
+[root@dongfengtest-host-0 owl]#
+[root@dongfengtest-host-0 owl]#
+[root@dongfengtest-host-0 owl]# ./bin/owl
 
-#### 构建及启动
+[2021-08-20 12:50:11] [info] replacing callback `gorm:update_time_stamp` from /data/sql_audit/owl/dao/init.go:36
+
+(/data/sql_audit/owl/dao/rule.go:15)
+[2021-08-20 12:50:11]  [1.29ms]  SELECT * FROM `owl_rule_status`
+[0 rows affected or returned ]
+{"level":"info","ts":"2021-08-20 12:50:11.184","caller":"router/router.go:85","msg":"current dir is: /data/sql_audit/owl/bin"}
+{"level":"info","ts":"2021-08-20 12:50:11.184","caller":"router/router.go:111","msg":"start listening port: 8081"}
+```
+
+### 前端单独部署
+
+1、前端地址  
+
+[owl_web](https://github.com/ibanyu/owl_web)
+
+2、安装node
+```
+[root@dongfengtest-host-0 local]# node -v
+v16.7.0
+```
+3、下载前端代码到本地目录
+```
+git clone https://github.com/ibanyu/owl_web.git
+```
+4、进入owl_web目录，安装依赖并编译运行
+```
+bogon:owl_web liujiang$ npm install
+bogon:owl_web liujiang$ 
+bogon:owl_web liujiang$ vim config/proxy.js  配置后端访问地址
+bogon:owl_web liujiang$ 
+bogon:owl_web liujiang$ npm start
+  App running at:
+  - Local:   http://localhost:8000 (copied to clipboard)
+  - Network: http://xx.xx.xx.xx:8000
+```
+
+### 前后端混合部署或者容器化部署
+
 ```
 # 仅构建后端
 make build
@@ -61,11 +141,6 @@ make build-docker
 make run-docker
 ```
 
-## 快速上手
-
-#### 如何使用
-
-请参考 [快速上手](./introduction.md)
 
 #### 如何参与贡献
 

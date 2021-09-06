@@ -35,7 +35,7 @@ func injectTaskMock(t *testing.T) *mock.MockTaskDao {
 func TestUpdateTask(t *testing.T) {
 	mockTaskDao := injectTaskMock(t)
 
-	taskIns := &task.DbInjectionTask{
+	taskIns := &task.OwlTask{
 		ID:       707,
 		Status:   task.CheckPass,
 		Executor: userName,
@@ -65,7 +65,7 @@ func TestUpdateTask(t *testing.T) {
 func TestGetTask(t *testing.T) {
 	mockTaskDao := injectTaskMock(t)
 
-	taskIns := &task.DbInjectionTask{
+	taskIns := &task.OwlTask{
 		Status:   task.CheckPass,
 		Creator:  userName,
 		Reviewer: userName,
@@ -87,7 +87,7 @@ func TestGetTask(t *testing.T) {
 func TestAddTask(t *testing.T) {
 	mockTaskDao := injectTaskMock(t)
 
-	taskIns := &task.DbInjectionTask{
+	taskIns := &task.OwlTask{
 		Status:   task.CheckPass,
 		Creator:  userName,
 		Reviewer: userName,
@@ -110,13 +110,13 @@ func TestAddTask(t *testing.T) {
 func TestListTask(t *testing.T) {
 	mockTaskDao := injectTaskMock(t)
 
-	taskIns := task.DbInjectionTask{}
+	taskIns := task.OwlTask{}
 	page := service.Pagination{
 		Offset:   5,
 		Limit:    10,
 		Operator: "fish",
 	}
-	mockTaskDao.EXPECT().ListTask(&page, true, task.ExecStatus()).Return([]task.DbInjectionTask{taskIns}, 1, nil)
+	mockTaskDao.EXPECT().ListTask(&page, true, task.ExecStatus()).Return([]task.OwlTask{taskIns}, 1, nil)
 
 	pageByte, _ := json.Marshal(page)
 	req, _ := http.NewRequest("POST", "/db-injection/task/exec/list", bytes.NewBuffer(pageByte))
@@ -133,13 +133,13 @@ func TestListTask(t *testing.T) {
 func TestListHistoryTask(t *testing.T) {
 	mockTaskDao := injectTaskMock(t)
 
-	taskIns := task.DbInjectionTask{}
+	taskIns := task.OwlTask{}
 	page := service.Pagination{
 		Offset:   5,
 		Limit:    10,
 		Operator: "fish",
 	}
-	mockTaskDao.EXPECT().ListHistoryTask(&page, true).Return([]task.DbInjectionTask{taskIns}, 1, nil)
+	mockTaskDao.EXPECT().ListHistoryTask(&page, true).Return([]task.OwlTask{taskIns}, 1, nil)
 
 	pageByte, _ := json.Marshal(page)
 	req, _ := http.NewRequest("POST", "/db-injection/task/history", bytes.NewBuffer(pageByte))

@@ -7,7 +7,7 @@ import (
 	"github.com/ibanyu/owl/util"
 )
 
-type DbInjectionCluster struct {
+type OwlCluster struct {
 	ID          int64  `json:"id" gorm:"column:id"`
 	Name        string `json:"name" gorm:"column:name"`
 	Description string `json:"description" gorm:"column:description"`
@@ -21,11 +21,11 @@ type DbInjectionCluster struct {
 }
 
 type ClusterDao interface {
-	AddCluster(cluster *DbInjectionCluster) (int64, error)
-	UpdateCluster(cluster *DbInjectionCluster) error
+	AddCluster(cluster *OwlCluster) (int64, error)
+	UpdateCluster(cluster *OwlCluster) error
 	DelCluster(id int64) error
-	GetClusterByName(clusterName string) (*DbInjectionCluster, error)
-	ListCluster() ([]DbInjectionCluster, error)
+	GetClusterByName(clusterName string) (*OwlCluster, error)
+	ListCluster() ([]OwlCluster, error)
 }
 
 var clusterDao ClusterDao
@@ -34,7 +34,7 @@ func SetClusterDao(impl ClusterDao) {
 	clusterDao = impl
 }
 
-func AddCluster(cluster *DbInjectionCluster) (int64, error) {
+func AddCluster(cluster *OwlCluster) (int64, error) {
 	cryptoData, err := util.AesCrypto([]byte(cluster.Pwd))
 	if err != nil {
 		return 0, err
@@ -45,7 +45,7 @@ func AddCluster(cluster *DbInjectionCluster) (int64, error) {
 	return clusterDao.AddCluster(cluster)
 }
 
-func UpdateCluster(cluster *DbInjectionCluster) error {
+func UpdateCluster(cluster *OwlCluster) error {
 	if cluster.Pwd == pwdReplace {
 		cluster.Pwd = ""
 	}
@@ -67,7 +67,7 @@ func DelCluster(id int64) error {
 	return clusterDao.DelCluster(id)
 }
 
-func GetClusterByName(name string) (*DbInjectionCluster, error) {
+func GetClusterByName(name string) (*OwlCluster, error) {
 	cluster, err := clusterDao.GetClusterByName(name)
 	if err != nil {
 		return nil, err
@@ -81,13 +81,13 @@ func GetClusterByName(name string) (*DbInjectionCluster, error) {
 	return cluster, nil
 }
 
-func ListCluster() ([]DbInjectionCluster, error) {
+func ListCluster() ([]OwlCluster, error) {
 	return clusterDao.ListCluster()
 }
 
 const pwdReplace = "******"
 
-func ListClusterForUI() ([]DbInjectionCluster, error) {
+func ListClusterForUI() ([]OwlCluster, error) {
 	clusters, err := ListCluster()
 	if err != nil {
 		return nil, err

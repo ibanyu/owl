@@ -7,13 +7,15 @@ server:
   show_sql: true
   num_once_limit: 100
   exec_no_backup: false
+  aes_key: "l02mx893j3283445"
+  aes_iv: "08783ksu3k390dj3" # length same to ase_key; 16
 
 db:
   address: "127.0.0.1"
   port: 3306
   user: "root"
   password: "aaaaaa"
-  db_name: "dbinjection"
+  db_name: "owl"
   max_idle_conn: 2
   max_open_conn: 30
 

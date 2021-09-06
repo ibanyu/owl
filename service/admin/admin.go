@@ -9,7 +9,7 @@ import (
 	"github.com/ibanyu/owl/service"
 )
 
-type DbInjectionAdmin struct {
+type OwlAdmin struct {
 	ID          int64  `json:"id" gorm:"column:id"`
 	Username    string `json:"username" gorm:"username"`
 	Description string `json:"description" gorm:"column:description"`
@@ -19,9 +19,9 @@ type DbInjectionAdmin struct {
 }
 
 type AdminDao interface {
-	AddAdmin(admin *DbInjectionAdmin) (int64, error)
-	GetAdmin(username string) (*DbInjectionAdmin, error)
-	ListAdmin(pagination *service.Pagination) ([]DbInjectionAdmin, int, error)
+	AddAdmin(admin *OwlAdmin) (int64, error)
+	GetAdmin(username string) (*OwlAdmin, error)
+	ListAdmin(pagination *service.Pagination) ([]OwlAdmin, int, error)
 	DelAdmin(id int64) error
 }
 
@@ -31,13 +31,13 @@ func SetAdminDao(impl AdminDao) {
 	adminDao = impl
 }
 
-func AddAdmin(admin *DbInjectionAdmin) (int64, error) {
+func AddAdmin(admin *OwlAdmin) (int64, error) {
 	// add admin
 	admin.Ct = time.Now().Unix()
 	return adminDao.AddAdmin(admin)
 }
 
-func ListAdmin(pagination *service.Pagination) ([]DbInjectionAdmin, int, error) {
+func ListAdmin(pagination *service.Pagination) ([]OwlAdmin, int, error) {
 	return adminDao.ListAdmin(pagination)
 }
 

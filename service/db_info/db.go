@@ -58,7 +58,7 @@ func ListAllDB() (map[string][]string, error) {
 	return resp, nil
 }
 
-func ListDbByCluster(cluster *DbInjectionCluster) ([]string, error) {
+func ListDbByCluster(cluster *OwlCluster) ([]string, error) {
 	deCryptoData, err := util.AesDeCrypto(util.ParseStringedByte(cluster.Pwd))
 	if err != nil {
 		return nil, err

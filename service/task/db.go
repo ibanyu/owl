@@ -31,7 +31,7 @@ func SetDbTools(impl dbTools) {
 	dbTool = impl
 }
 
-type DbInjectionAccount struct {
+type OwlAccount struct {
 	ID       uint64 `json:"id" gorm:"column:id"`
 	Username string `json:"username" gorm:"column:username"`
 	Passwd   string `json:"passwd" gorm:"column:passwd"`

@@ -2,17 +2,17 @@ package task
 
 import "fmt"
 
-type DbInjectionSubtask struct {
+type OwlSubtask struct {
 	ID          int64  `json:"id" gorm:"column:id"`
 	TaskID      int64  `json:"task_id" gorm:"column:task_id"`
 	TaskType    string `json:"task_type" gorm:"column:task_type"`
 	DbName      string `json:"db_name" gorm:"column:db_name"`
 	ClusterName string `json:"cluster_name" gorm:"column:cluster_name"`
 
-	ExecItems []DbInjectionExecItem `json:"exec_items" gorm:"-"`
+	ExecItems []OwlExecItem `json:"exec_items" gorm:"-"`
 }
 
-type DbInjectionExecItem struct {
+type OwlExecItem struct {
 	ID           int64  `json:"id" gorm:"column:id"`
 	TaskID       int64  `json:"task_id" gorm:"column:task_id"`
 	SubtaskID    int64  `json:"subtask_id" gorm:"column:subtask_id"`

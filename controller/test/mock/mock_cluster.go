@@ -34,7 +34,7 @@ func (m *MockClusterDao) EXPECT() *MockClusterDaoMockRecorder {
 }
 
 // AddCluster mocks base method
-func (m *MockClusterDao) AddCluster(cluster *db_info.DbInjectionCluster) (int64, error) {
+func (m *MockClusterDao) AddCluster(cluster *db_info.OwlCluster) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddCluster", cluster)
 	ret0, _ := ret[0].(int64)
@@ -49,7 +49,7 @@ func (mr *MockClusterDaoMockRecorder) AddCluster(cluster interface{}) *gomock.Ca
 }
 
 // UpdateCluster mocks base method
-func (m *MockClusterDao) UpdateCluster(cluster *db_info.DbInjectionCluster) error {
+func (m *MockClusterDao) UpdateCluster(cluster *db_info.OwlCluster) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateCluster", cluster)
 	ret0, _ := ret[0].(error)
@@ -77,10 +77,10 @@ func (mr *MockClusterDaoMockRecorder) DelCluster(id interface{}) *gomock.Call {
 }
 
 // GetClusterByName mocks base method
-func (m *MockClusterDao) GetClusterByName(clusterName string) (*db_info.DbInjectionCluster, error) {
+func (m *MockClusterDao) GetClusterByName(clusterName string) (*db_info.OwlCluster, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetClusterByName", clusterName)
-	ret0, _ := ret[0].(*db_info.DbInjectionCluster)
+	ret0, _ := ret[0].(*db_info.OwlCluster)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -92,10 +92,10 @@ func (mr *MockClusterDaoMockRecorder) GetClusterByName(clusterName interface{}) 
 }
 
 // ListCluster mocks base method
-func (m *MockClusterDao) ListCluster() ([]db_info.DbInjectionCluster, error) {
+func (m *MockClusterDao) ListCluster() ([]db_info.OwlCluster, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListCluster")
-	ret0, _ := ret[0].([]db_info.DbInjectionCluster)
+	ret0, _ := ret[0].([]db_info.OwlCluster)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

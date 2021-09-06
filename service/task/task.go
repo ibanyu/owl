@@ -11,7 +11,7 @@ import (
 	"github.com/ibanyu/owl/service/sql_util"
 )
 
-type DbInjectionTask struct {
+type OwlTask struct {
 	ID            int64  `json:"id" gorm:"column:id"`
 	Name          string `json:"name" gorm:"column:name"`
 	Status        string `json:"status" gorm:"column:status"`
@@ -25,22 +25,22 @@ type DbInjectionTask struct {
 	Et            int64  `json:"et" gorm:"column:et"`
 	Ft            int64  `json:"ft" gorm:"column:ft"`
 
-	SubTasks  []DbInjectionSubtask  `json:"sub_tasks" gorm:"-"`
-	ExecItems []DbInjectionExecItem `json:"exec_items" gorm:"-"`
-	ExecItem  *DbInjectionExecItem  `json:"exec_item" gorm:"-"`
-	EditAuth  *EditAuth             `json:"edit_auth" gorm:"-"`
+	SubTasks  []OwlSubtask  `json:"sub_tasks" gorm:"-"`
+	ExecItems []OwlExecItem `json:"exec_items" gorm:"-"`
+	ExecItem  *OwlExecItem  `json:"exec_item" gorm:"-"`
+	EditAuth  *EditAuth     `json:"edit_auth" gorm:"-"`
 
 	StatusName string `json:"status_name" gorm:"-"`
 	Action     Action `json:"action" gorm:"-"`
 }
 
 type TaskDao interface {
-	AddTask(task *DbInjectionTask) (int64, error)
-	UpdateTask(task *DbInjectionTask) error
-	ListTask(pagination *service.Pagination, isDBA bool, status []ItemStatus) ([]DbInjectionTask, int, error)
-	ListHistoryTask(page *service.Pagination, isDBA bool) ([]DbInjectionTask, int, error)
-	GetTask(id int64) (*DbInjectionTask, error)
-	GetExecWaitTask() ([]DbInjectionTask, int, error)
+	AddTask(task *OwlTask) (int64, error)
+	UpdateTask(task *OwlTask) error
+	ListTask(pagination *service.Pagination, isDBA bool, status []ItemStatus) ([]OwlTask, int, error)
+	ListHistoryTask(page *service.Pagination, isDBA bool) ([]OwlTask, int, error)
+	GetTask(id int64) (*OwlTask, error)
+	GetExecWaitTask() ([]OwlTask, int, error)
 }
 
 var taskDao TaskDao
@@ -50,9 +50,9 @@ func SetTaskDao(impl TaskDao) {
 }
 
 type SubTaskDao interface {
-	UpdateItem(item *DbInjectionExecItem) error
-	DelItem(item *DbInjectionExecItem) error
-	UpdateItemByBackupId(item *DbInjectionExecItem) error
+	UpdateItem(item *OwlExecItem) error
+	DelItem(item *OwlExecItem) error
+	UpdateItemByBackupId(item *OwlExecItem) error
 }
 
 var subTaskDao SubTaskDao
@@ -61,7 +61,7 @@ func SetSubTaskDao(impl SubTaskDao) {
 	subTaskDao = impl
 }
 
-func AddTask(task *DbInjectionTask) (int64, error) {
+func AddTask(task *OwlTask) (int64, error) {
 	reviewer, err := AuthTool.GetReviewer(task.Creator)
 	if err != nil {
 		return 0, err
@@ -117,8 +117,8 @@ func AddTask(task *DbInjectionTask) (int64, error) {
 	return taskDao.AddTask(task)
 }
 
-func splitSubTaskExecItems(subTask *DbInjectionSubtask) (*DbInjectionSubtask, error) {
-	var items []DbInjectionExecItem
+func splitSubTaskExecItems(subTask *OwlSubtask) (*OwlSubtask, error) {
+	var items []OwlExecItem
 	for _, execItem := range subTask.ExecItems {
 		sqls, err := sql_util.SplitMultiSql(execItem.SQLContent)
 		if err != nil {
@@ -134,7 +134,7 @@ func splitSubTaskExecItems(subTask *DbInjectionSubtask) (*DbInjectionSubtask, er
 	return subTask, nil
 }
 
-func checkExecItemNum(task *DbInjectionTask) error {
+func checkExecItemNum(task *OwlTask) error {
 	num := 0
 	for _, v := range task.SubTasks {
 		for range v.ExecItems {
@@ -162,10 +162,10 @@ func refreshTaskStatus(taskId int64, et, ft int64, executor, execInfo string) er
 		}
 	}
 
-	return taskDao.UpdateTask(&DbInjectionTask{ID: taskId, Status: status, Et: et, Ft: ft, Executor: executor, Ut: time.Now().Unix(), ExecInfo: execInfo})
+	return taskDao.UpdateTask(&OwlTask{ID: taskId, Status: status, Et: et, Ft: ft, Executor: executor, Ut: time.Now().Unix(), ExecInfo: execInfo})
 }
 
-func UpdateTask(task *DbInjectionTask) error {
+func UpdateTask(task *OwlTask) error {
 	dbTask, err := taskDao.GetTask(task.ID)
 	if err != nil {
 		return err
@@ -204,7 +204,7 @@ func UpdateTask(task *DbInjectionTask) error {
 	case Progress:
 		return ProgressEdit(task, dbTask)
 	case DoReject:
-		return taskDao.UpdateTask(&DbInjectionTask{
+		return taskDao.UpdateTask(&OwlTask{
 			ID:            task.ID,
 			Status:        Reject,
 			Executor:      task.Executor,
@@ -225,7 +225,7 @@ func recheckTask(id int64, operator string) error {
 	return checkTask(task)
 }
 
-func checkTask(task *DbInjectionTask) error {
+func checkTask(task *OwlTask) error {
 	checkPass := true
 	for _, subTask := range task.SubTasks {
 		dbInfo, err := dbTool.GetDBConn(subTask.DbName, subTask.ClusterName)
@@ -264,7 +264,7 @@ func checkTask(task *DbInjectionTask) error {
 	return taskDao.UpdateTask(task)
 }
 
-func doCancel(task, dbTask *DbInjectionTask, isDba bool) error {
+func doCancel(task, dbTask *OwlTask, isDba bool) error {
 	switch {
 	case dbTask.Creator == task.Executor:
 		task.Status = Cancel
@@ -274,27 +274,28 @@ func doCancel(task, dbTask *DbInjectionTask, isDba bool) error {
 		return errors.New("no auth to do cancel")
 	}
 
-	return taskDao.UpdateTask(&DbInjectionTask{
+	return taskDao.UpdateTask(&OwlTask{
 		ID:       task.ID,
 		Status:   task.Status,
 		Executor: task.Executor,
 	})
 }
 
-func ProgressEdit(task, dbTask *DbInjectionTask) error {
+func ProgressEdit(task, dbTask *OwlTask) error {
 	switch dbTask.Status {
 	case CheckPass:
 		task.Status = ReviewPass
-	case DBAPass, ReviewPass:
+	case DBAPass, ReviewPass, ExecWait:
 		return Exec(task, dbTask)
 	default:
+		// new cron task
 		if task.Et > time.Now().Unix() {
 			return Exec(task, dbTask)
 		}
 		return fmt.Errorf("progress failed, task status invalid, status: %s", dbTask.Status)
 	}
 
-	return taskDao.UpdateTask(&DbInjectionTask{
+	return taskDao.UpdateTask(&OwlTask{
 		ID:       task.ID,
 		Status:   task.Status,
 		Ut:       time.Now().Unix(),
@@ -302,7 +303,7 @@ func ProgressEdit(task, dbTask *DbInjectionTask) error {
 	})
 }
 
-func ListTask(pagination *service.Pagination, status []ItemStatus) ([]DbInjectionTask, int, error) {
+func ListTask(pagination *service.Pagination, status []ItemStatus) ([]OwlTask, int, error) {
 	isDba, err := AuthTool.IsDba(pagination.Operator)
 	if err != nil {
 		return nil, 0, err
@@ -320,7 +321,7 @@ func ListTask(pagination *service.Pagination, status []ItemStatus) ([]DbInjectio
 	return tasks, count, nil
 }
 
-func ListHistoryTask(pagination *service.Pagination) ([]DbInjectionTask, int, error) {
+func ListHistoryTask(pagination *service.Pagination) ([]OwlTask, int, error) {
 	isDba, err := AuthTool.IsDba(pagination.Operator)
 	if err != nil {
 		return nil, 0, err
@@ -338,7 +339,7 @@ func ListHistoryTask(pagination *service.Pagination) ([]DbInjectionTask, int, er
 	return tasks, count, nil
 }
 
-func GetTask(id int64, operator string) (*DbInjectionTask, error) {
+func GetTask(id int64, operator string) (*OwlTask, error) {
 	isDba, err := AuthTool.IsDba(operator)
 	if err != nil {
 		return nil, err
@@ -356,7 +357,7 @@ func GetTask(id int64, operator string) (*DbInjectionTask, error) {
 	return task, nil
 }
 
-func GetExecWaitTask() ([]DbInjectionTask, int, error) {
+func GetExecWaitTask() ([]OwlTask, int, error) {
 	tasks, count, err := taskDao.GetExecWaitTask()
 	if err != nil {
 		return nil, 0, err
@@ -369,7 +370,7 @@ func GetExecWaitTask() ([]DbInjectionTask, int, error) {
 	return tasks, count, nil
 }
 
-func CheckTaskType(task *DbInjectionTask) error {
+func CheckTaskType(task *OwlTask) error {
 	for _, subTask := range task.SubTasks {
 		taskType := subTask.TaskType
 		for _, execItem := range subTask.ExecItems {
