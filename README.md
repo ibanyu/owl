@@ -9,6 +9,8 @@
 Owl is a db manager platform,committed to standardizing the data, index in the database and operations to the database, to avoid risks and failures.  
 capabilities which owl provides include Process approval、sql Audit、sql execute and execute as crontab、data backup and recover .
 
+![architecture](./doc/image/architecture-en.png)
+
 #### Features
 
 * Process approval：approval or reject sql process order：developer submit、system check、dba check、exec sql.
