@@ -16,6 +16,10 @@ Owl 是伴鱼基于公司内部场景，开发的一个数据库SQL审核平台�
 * SQL定时执行：风险操作，调度到低峰期执行
 * 数据备份和回滚：对于DML操作，备份操作前的数据，并支持回滚
 
+![architecture](./image/architecture.png)
+
+#### 功能简介
+
 具体请参考[功能介绍](./introduction.md)
 
 ## 部署及使用
