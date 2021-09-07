@@ -10,13 +10,13 @@ type RuleDaoImpl struct {
 
 var Rule RuleDaoImpl
 
-func (RuleDaoImpl) ListAllStatus() ([]checker.DbInjectionRuleStatus, error) {
-	var ruleStatus []checker.DbInjectionRuleStatus
+func (RuleDaoImpl) ListAllStatus() ([]checker.OwlRuleStatus, error) {
+	var ruleStatus []checker.OwlRuleStatus
 	return ruleStatus, GetDB().Find(&ruleStatus).Error
 }
 
-func (RuleDaoImpl) UpdateRuleStatus(ruleStatus *checker.DbInjectionRuleStatus) error {
-	err := GetDB().Where("name = ?", ruleStatus.Name).First(&checker.DbInjectionRuleStatus{}).Error
+func (RuleDaoImpl) UpdateRuleStatus(ruleStatus *checker.OwlRuleStatus) error {
+	err := GetDB().Where("name = ?", ruleStatus.Name).First(&checker.OwlRuleStatus{}).Error
 	if err != nil && gorm.IsRecordNotFoundError(err) {
 		return GetDB().Create(ruleStatus).Error
 	}

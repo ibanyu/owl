@@ -99,7 +99,7 @@ func GetTask(ctx *gin.Context) Resp {
 
 func UpdateTask(ctx *gin.Context) Resp {
 	f := "UpdateTask()-->"
-	var taskParam task.DbInjectionTask
+	var taskParam task.OwlTask
 	if err := ctx.BindJSON(&taskParam); err != nil {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s", f, err.Error()), Code: code.ParamInvalid}
 	}
@@ -113,7 +113,7 @@ func UpdateTask(ctx *gin.Context) Resp {
 
 func AddTask(ctx *gin.Context) Resp {
 	f := "AddTask()-->"
-	var taskParam task.DbInjectionTask
+	var taskParam task.OwlTask
 	if err := ctx.BindJSON(&taskParam); err != nil {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s", f, err.Error()), Code: code.ParamInvalid}
 	}
@@ -125,7 +125,7 @@ func AddTask(ctx *gin.Context) Resp {
 	taskParam.Creator = ctx.MustGet("user").(string)
 	id, err := task.AddTask(&taskParam)
 	if err != nil {
-		return Resp{Message: fmt.Sprintf("%s, get task failed :%s", f, err.Error()), Code: code.InternalErr}
+		return Resp{Message: fmt.Sprintf("%s, add task failed :%s", f, err.Error()), Code: code.InternalErr}
 	}
 
 	return Resp{Data: struct {
@@ -153,7 +153,7 @@ func ExecWaitTask() {
 			countDown := waitTask.Et - time.Now().Unix()
 			if countDown <= 0 {
 				waitTask.Action = task.Progress
-				if err := task.ExecTask(&waitTask, &waitTask); err != nil {
+				if err := task.ExecTaskDirectly(&waitTask, &waitTask); err != nil {
 					logger.Errorf("while exec task in cron err: %s", err.Error())
 				}
 			}
@@ -161,14 +161,14 @@ func ExecWaitTask() {
 	}
 }
 
-func setTypeNameFroTasks(tasks []task.DbInjectionTask) []task.DbInjectionTask {
+func setTypeNameFroTasks(tasks []task.OwlTask) []task.OwlTask {
 	for i, _ := range tasks {
 		setTypeNameFroTask(&tasks[i])
 	}
 	return tasks
 }
 
-func setTypeNameFroTask(oneTask *task.DbInjectionTask) *task.DbInjectionTask {
+func setTypeNameFroTask(oneTask *task.OwlTask) *task.OwlTask {
 	for i, v := range oneTask.ExecItems {
 		oneTask.ExecItems[i].TaskType = task.GetTypeName(v.TaskType)
 	}

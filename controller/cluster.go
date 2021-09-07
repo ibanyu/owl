@@ -40,7 +40,7 @@ func ListCluster(ctx *gin.Context) Resp {
 func AddCluster(ctx *gin.Context) Resp {
 	f := "AddCluster()-->"
 
-	var cluster db_info.DbInjectionCluster
+	var cluster db_info.OwlCluster
 	if err := ctx.BindJSON(&cluster); err != nil {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s ", f, err.Error()), Code: code.ParamInvalid}
 	}
@@ -56,7 +56,7 @@ func AddCluster(ctx *gin.Context) Resp {
 func UpdateCluster(ctx *gin.Context) Resp {
 	f := "UpdateCluster()-->"
 
-	var cluster db_info.DbInjectionCluster
+	var cluster db_info.OwlCluster
 	if err := ctx.BindJSON(&cluster); err != nil {
 		return Resp{Message: fmt.Sprintf("%s, parse param failed :%s ", f, err.Error()), Code: code.ParamInvalid}
 	}

@@ -35,7 +35,7 @@ func (m *MockTaskDao) EXPECT() *MockTaskDaoMockRecorder {
 }
 
 // AddTask mocks base method
-func (m *MockTaskDao) AddTask(task *task.DbInjectionTask) (int64, error) {
+func (m *MockTaskDao) AddTask(task *task.OwlTask) (int64, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "AddTask", task)
 	ret0, _ := ret[0].(int64)
@@ -50,7 +50,7 @@ func (mr *MockTaskDaoMockRecorder) AddTask(task interface{}) *gomock.Call {
 }
 
 // UpdateTask mocks base method
-func (m *MockTaskDao) UpdateTask(task *task.DbInjectionTask) error {
+func (m *MockTaskDao) UpdateTask(task *task.OwlTask) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateTask", task)
 	ret0, _ := ret[0].(error)
@@ -64,10 +64,10 @@ func (mr *MockTaskDaoMockRecorder) UpdateTask(task interface{}) *gomock.Call {
 }
 
 // ListTask mocks base method
-func (m *MockTaskDao) ListTask(pagination *service.Pagination, isDBA bool, status []task.ItemStatus) ([]task.DbInjectionTask, int, error) {
+func (m *MockTaskDao) ListTask(pagination *service.Pagination, isDBA bool, status []task.ItemStatus) ([]task.OwlTask, int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListTask", pagination, isDBA, status)
-	ret0, _ := ret[0].([]task.DbInjectionTask)
+	ret0, _ := ret[0].([]task.OwlTask)
 	ret1, _ := ret[1].(int)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
@@ -80,10 +80,10 @@ func (mr *MockTaskDaoMockRecorder) ListTask(pagination, isDBA, status interface{
 }
 
 // ListHistoryTask mocks base method
-func (m *MockTaskDao) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task.DbInjectionTask, int, error) {
+func (m *MockTaskDao) ListHistoryTask(page *service.Pagination, isDBA bool) ([]task.OwlTask, int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListHistoryTask", page, isDBA)
-	ret0, _ := ret[0].([]task.DbInjectionTask)
+	ret0, _ := ret[0].([]task.OwlTask)
 	ret1, _ := ret[1].(int)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
@@ -96,10 +96,10 @@ func (mr *MockTaskDaoMockRecorder) ListHistoryTask(page, isDBA interface{}) *gom
 }
 
 // GetTask mocks base method
-func (m *MockTaskDao) GetTask(id int64) (*task.DbInjectionTask, error) {
+func (m *MockTaskDao) GetTask(id int64) (*task.OwlTask, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetTask", id)
-	ret0, _ := ret[0].(*task.DbInjectionTask)
+	ret0, _ := ret[0].(*task.OwlTask)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -111,10 +111,10 @@ func (mr *MockTaskDaoMockRecorder) GetTask(id interface{}) *gomock.Call {
 }
 
 // GetExecWaitTask mocks base method
-func (m *MockTaskDao) GetExecWaitTask() ([]task.DbInjectionTask, int, error) {
+func (m *MockTaskDao) GetExecWaitTask() ([]task.OwlTask, int, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetExecWaitTask")
-	ret0, _ := ret[0].([]task.DbInjectionTask)
+	ret0, _ := ret[0].([]task.OwlTask)
 	ret1, _ := ret[1].(int)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
@@ -150,7 +150,7 @@ func (m *MockSubTaskDao) EXPECT() *MockSubTaskDaoMockRecorder {
 }
 
 // UpdateItem mocks base method
-func (m *MockSubTaskDao) UpdateItem(item *task.DbInjectionExecItem) error {
+func (m *MockSubTaskDao) UpdateItem(item *task.OwlExecItem) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateItem", item)
 	ret0, _ := ret[0].(error)
@@ -164,7 +164,7 @@ func (mr *MockSubTaskDaoMockRecorder) UpdateItem(item interface{}) *gomock.Call 
 }
 
 // DelItem mocks base method
-func (m *MockSubTaskDao) DelItem(item *task.DbInjectionExecItem) error {
+func (m *MockSubTaskDao) DelItem(item *task.OwlExecItem) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "DelItem", item)
 	ret0, _ := ret[0].(error)
@@ -178,7 +178,7 @@ func (mr *MockSubTaskDaoMockRecorder) DelItem(item interface{}) *gomock.Call {
 }
 
 // UpdateItemByBackupId mocks base method
-func (m *MockSubTaskDao) UpdateItemByBackupId(item *task.DbInjectionExecItem) error {
+func (m *MockSubTaskDao) UpdateItemByBackupId(item *task.OwlExecItem) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "UpdateItemByBackupId", item)
 	ret0, _ := ret[0].(error)

@@ -22,6 +22,10 @@ for more information [introduction](./doc/introduction.md)
 
 ## Develop and deployment
 
+#### WEB Address
+
+[owl_web](https://github.com/ibanyu/owl_web)
+
 #### Dependency
 * go 1.3+
 * tidb or mysql
@@ -37,8 +41,9 @@ for more information [introduction](./doc/introduction.md)
 
 #### DB init
 
-* create table：use mysql client connect db , copy sql in '/dao/build_table.sql' and execute.
-* init first admin： ``` insert into db_injection_admin (username,description) values ('your ldap name','first admin');```
+* create database: ``` CREATE DATABASE `owl`; use owl ```
+* create table：use mysql client connect db , copy sql in [build_table.sql](./dao/build_table.sql) and execute.
+* init first admin： ``` insert into owl_admin (username,description) values ('your ldap name','first admin'); ```
 
 #### Build and run
 ```

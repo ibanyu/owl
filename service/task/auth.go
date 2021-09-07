@@ -26,7 +26,7 @@ type EditAuth struct {
 }
 
 // GetTaskOpAbility根据task状态，获取角色的可操作类型
-func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjectionTask) *EditAuth {
+func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *OwlTask) *EditAuth {
 	switch task.Status {
 	case CheckFailed:
 		if isCreator {
@@ -34,11 +34,13 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 				return &EditAuth{
 					SysReviewEnable:       true,
 					CreatorTurnDownEnable: true,
+					WithdrawEnable:        true,
 				}
 			}
 			return &EditAuth{
 				CreatorSubmitReviewEnable: true,
 				CreatorTurnDownEnable:     true,
+				WithdrawEnable:            true,
 			}
 		}
 	case CheckPass:
@@ -257,7 +259,7 @@ func GetTaskOperateAuth(detail, isCreator, isReviewer, isDba bool, task *DbInjec
 	return &EditAuth{}
 }
 
-func allIsDmlTask(task *DbInjectionTask) bool {
+func allIsDmlTask(task *OwlTask) bool {
 	for _, v := range task.SubTasks {
 		if v.TaskType != DML {
 			return false
