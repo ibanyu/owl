@@ -140,9 +140,12 @@ make build-docker
 # docker 启动
 make run-docker
 ```
+### 开发计划
 
+* 数据库权限控制
+* 查询语句支持
 
-#### 如何参与贡献
+### 如何参与贡献
 
 * 提交bug：通过issue的方式提交bug。
 * 贡献代码：fork仓库，进行代码变更，提交pr。

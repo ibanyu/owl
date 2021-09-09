@@ -65,10 +65,11 @@ make build-docker
 # run as docker container
 make run-docker
 ```
+ 
+## Roadmap
 
-## Getting Started
-
- [quick start](./doc/introduction.md)
+* database access control
+* select sql support
 
 ## Become a contributor
 
