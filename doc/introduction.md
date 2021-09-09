@@ -1,6 +1,6 @@
 # Owl简介 
-Owl是伴鱼基于TiDB生态开发的一款SQL审核工具，完全兼容TiDB的语法，主要提供的核心功能如下： 
-* 基于TiDB Parse的SQL语法解析，完全兼容TiDB语法 
+Owl是伴鱼基于TiDB生态开发的一款SQL审核工具，兼容Mysql、TiDB的语法，主要提供的核心功能如下： 
+* 基于TiDB Parse的SQL语法解析，兼容MySQL、TiDB语法 
 * 基于LDAP的登陆权限验证 
 * 支持两级工单审核流 
 * 支持基于审核规则列表的动态开关 
