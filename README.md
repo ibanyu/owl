@@ -17,6 +17,7 @@ capabilities which owl provides include Process approval、sql Audit、sql execu
 * sql Audit：check sql by some rules, which are Predefined. There are rules like: standardizing name、'null' value not allowed、index match check、 data change affect lines limit, and so on. 
 * sql execute and execute as crontab： After sql audit and approve, the admin can execute sql, or set a feature time to execute sql.
 * data backup and recover：Before the data is changed, it will be backup, and you can recover it if something is wrong.
+* submit multi sql once：we can submit multi sql once,  separate sql with ```;``` in one input box. like this: ```insert into xxxx; insert into xxxx```.
 
 for more information [introduction](./doc/introduction.md)
 
