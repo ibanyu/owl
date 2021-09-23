@@ -270,14 +270,17 @@ func SplitMultiSql(sql string) (resp []string, err error) {
 		return nil, fmt.Errorf("there is an error in your SQL syntax: %s", err.Error())
 	}
 
-	_, err = sqlparser.Parse(sql)
-	if err != nil {
-		logger.Infof("vitess parser sql error : %s", err.Error())
-		return nil, fmt.Errorf("there is an error in your SQL syntax: %s", err.Error())
-	}
-
 	for _, v := range stmtNodes {
 		resp = append(resp, deleteSpecifyCharAtHead(v.Text()))
+	}
+
+	// vitess can't parse multi sql once
+	for i, v := range resp {
+		_, err = sqlparser.Parse(v)
+		if err != nil {
+			logger.Infof("vitess parser sql error : %s", err.Error())
+			return nil, fmt.Errorf("there is an error in your SQL syntax: %s, at num: %d", err.Error(), i)
+		}
 	}
 	return
 }

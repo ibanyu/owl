@@ -979,7 +979,7 @@ type tableSysInfo struct {
 
 func getTableSysInfo(table string, info *task.DBInfo) (*tableSysInfo, error) {
 	db := info.DB
-	sqlContent := fmt.Sprintf("select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='%s' and TABLE_NAME='%s';", info.DBName, table)
+	sqlContent := fmt.Sprintf("select TABLE_NAME,TABLE_ROWS from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='%s' and TABLE_NAME='%s';", info.DBName, table)
 	res, err := db.QueryContext(context.TODO(), sqlContent)
 	if err != nil {
 		logger.Infof("get table sys info err:%+v", err.Error())
@@ -989,7 +989,7 @@ func getTableSysInfo(table string, info *task.DBInfo) (*tableSysInfo, error) {
 
 	for res.Next() {
 		var ts tableSysInfo
-		if err = res.Scan(&ts.TableName); nil != err {
+		if err = res.Scan(&ts.TableName, &ts.TableRows); nil != err {
 			return nil, err
 		}
 
