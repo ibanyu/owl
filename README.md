@@ -80,6 +80,12 @@ make build-docker
 * Report and triage bugs by issue.
 * Write technical documentations and blog posts, for users and contributors.
 
+## Community
+
+wechat group:
+
+![wechat-group](./doc/image/wechat-group.png)
+
 ## License
 
 [Apache 2.0 License](doc/LICENSE)
