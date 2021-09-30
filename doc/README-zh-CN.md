@@ -110,6 +110,12 @@ make build-docker
 * 贡献代码：fork仓库，进行代码变更，提交pr。
 * 参与设计讨论：通过issue或者pr（/doc）提交设计文档，并讨论。
 
+## 社区
+
+微信群:
+
+![wechat-group](./image/wechat-group.png)
+
 ## License
 
 [Apache 2.0 License](./LICENSE)
