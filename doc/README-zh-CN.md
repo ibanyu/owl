@@ -78,71 +78,29 @@ login:
 * 添加首位管理员： ``` insert into owl_admin (username,description) values ('your ldap name','first admin'); ```  
 
 5、编译运行
-```
-[root@dongfengtest-host-0 owl]# go build -o bin/owl -a ./cmd/owl/
-[root@dongfengtest-host-0 owl]#
-[root@dongfengtest-host-0 owl]#
-[root@dongfengtest-host-0 owl]# ./bin/owl
-
-[2021-08-20 12:50:11] [info] replacing callback `gorm:update_time_stamp` from /data/sql_audit/owl/dao/init.go:36
-
-(/data/sql_audit/owl/dao/rule.go:15)
-[2021-08-20 12:50:11]  [1.29ms]  SELECT * FROM `owl_rule_status`
-[0 rows affected or returned ]
-{"level":"info","ts":"2021-08-20 12:50:11.184","caller":"router/router.go:85","msg":"current dir is: /data/sql_audit/owl/bin"}
-{"level":"info","ts":"2021-08-20 12:50:11.184","caller":"router/router.go:111","msg":"start listening port: 8081"}
-```
-
-### 前端单独部署
-
-1、前端地址  
-
-[owl_web](https://github.com/ibanyu/owl_web)
-
-2、安装node
-```
-[root@dongfengtest-host-0 local]# node -v
-v16.7.0
-```
-3、下载前端代码到本地目录
-```
-git clone https://github.com/ibanyu/owl_web.git
-```
-4、进入owl_web目录，安装依赖并编译运行
-```
-bogon:owl_web liujiang$ npm install
-bogon:owl_web liujiang$ 
-bogon:owl_web liujiang$ vim config/proxy.js  配置后端访问地址
-bogon:owl_web liujiang$ 
-bogon:owl_web liujiang$ npm start
-  App running at:
-  - Local:   http://localhost:8000 (copied to clipboard)
-  - Network: http://xx.xx.xx.xx:8000
-```
-
-### 前后端混合部署或者容器化部署
 
 ```
+# 一键启动
+make run
+
+# 一键docker启动
+make run-docker
+
 # 仅构建后端
 make build
 
 # 交叉编译后端
 make build-linux
 
-# 构建UI并置于static目录
+# 获取UI并置于static目录
 make build-front
 
-# 启动; 如需同时启动UI，则需先执行make build-front
-make run
-
-# 编译docker镜像; 如需同时启动UI，则需先执行make build-front
+# 编译docker镜像
 make build-docker
-
-# docker 启动
-make run-docker
 ```
 ### 开发计划
 
+* mysql分库分表工具支持（gh-ost）
 * 数据库权限控制
 * 查询语句支持
 

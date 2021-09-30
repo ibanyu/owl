@@ -48,27 +48,28 @@ for more information [introduction](./doc/introduction.md)
 
 #### Build and run
 ```
-# build back end
+# run
+make run
+
+# run as docker container
+make run-docker
+
+# build back-end
 make build
 
-# build linux back end
+# build linux back-end
 make build-linux
 
 # build front and set to static dir
 make build-front
 
-# start; if need UI, exec 'make build-front' first
-make run
-
-# build docker image, if  need UI, exec 'make build-front' first
+# build docker image
 make build-docker
-
-# run as docker container
-make run-docker
 ```
  
 ## Roadmap
 
+* sharding tool support (gh-ost)
 * database access control
 * select sql support
 
