@@ -14,17 +14,22 @@ build-linux: fmt
 fmt:
 	go fmt ./...
 
-run: build
+run: build-front build
 	./bin/owl
 
 .ONESHELL:
 build-front:
-	mkdir -p bin/front
-	if [ ! -e "./bin/front/owl_web" ]; then cd bin/front && git clone https://github.com/ibanyu/owl_web.git; else cd bin/front/owl_web && git pull; fi
-	cd bin/front/owl_web && yarn install && yarn build
-	rm -rf ./static && mkdir static && mv bin/front/owl_web/dist/* ./static/
+	if [ ! -e "./static" ]; then \
+		rm -rf ./static && \
+		wget https://github.com/ibanyu/owl_web/releases/download/v1.0/static.tar && tar -xvf static.tar; \
+	fi
+#
+#	mkdir -p bin/front
+#	if [ ! -e "./bin/front/owl_web" ]; then cd bin/front && git clone https://github.com/qingfeng777/owl_web.git; else cd bin/front/owl_web && git pull; fi
+#	cd bin/front/owl_web && yarn install && yarn build
+#	rm -rf ./static && mkdir static && mv bin/front/owl_web/dist/* ./static/
 
-build-docker: build
+build-docker: build-front build
 	docker build -t palfish/owl:v0.1.0 .
 
 run-docker: build-docker
