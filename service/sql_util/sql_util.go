@@ -143,16 +143,16 @@ func GetCondition(sqlAfterWhere string) []string {
 // != ,not in 已经在上一步过滤掉
 func getOneCondition(str string) string {
 	switch {
+	case strings.Contains(str, ">="):
+		return strings.TrimSpace(strings.Split(str, ">=")[0])
+	case strings.Contains(str, "<="):
+		return strings.TrimSpace(strings.Split(str, "<=")[0])
 	case strings.Contains(str, "="):
 		return strings.TrimSpace(strings.Split(str, "=")[0])
 	case strings.Contains(str, ">"):
 		return strings.TrimSpace(strings.Split(str, ">")[0])
 	case strings.Contains(str, "<"):
 		return strings.TrimSpace(strings.Split(str, "<")[0])
-	case strings.Contains(str, ">="):
-		return strings.TrimSpace(strings.Split(str, ">=")[0])
-	case strings.Contains(str, "<="):
-		return strings.TrimSpace(strings.Split(str, "<=")[0])
 	case strings.Contains(str, " like "):
 		return strings.TrimSpace(strings.Split(str, "like")[0])
 	case strings.Contains(str, " not in "):
