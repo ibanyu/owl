@@ -230,49 +230,67 @@ func operateBinaryIndex(sqlAfterWhere string) bool {
 //包含>,< ,>=, <= ,like,in, between ,且不是最后一列的检查。 是不是最后一列的判断，其后没有and；between 是有没有超过一个and
 // 参数为已经转小写的sql
 func scopeOperateDisableIndex(sqlAfterWhere string) bool {
-	//同样的范围条件判断
-	if strings.Count(sqlAfterWhere, ">") > 1 ||
-		strings.Count(sqlAfterWhere, "<") > 1 ||
-		strings.Count(sqlAfterWhere, ">=") > 1 ||
-		strings.Count(sqlAfterWhere, "<=") > 1 ||
-		strings.Count(sqlAfterWhere, indexDisableConditionLike) > 1 ||
-		strings.Count(sqlAfterWhere, indexDisableConditionIn) > 1 ||
-		strings.Count(sqlAfterWhere, indexDisableConditionBetween) > 1 {
-		return true
-	}
-
 	switch {
-	case strings.Contains(sqlAfterWhere, ">"):
-		if strings.Contains(strings.Split(sqlAfterWhere, ">")[1], "and") {
-			return true
-		}
-	case strings.Contains(sqlAfterWhere, "<"):
-		if strings.Contains(strings.Split(sqlAfterWhere, "<")[1], "and") {
-			return true
-		}
 	case strings.Contains(sqlAfterWhere, ">="):
-		if strings.Contains(strings.Split(sqlAfterWhere, ">=")[1], "and") {
+		if strings.Contains(strings.Split(sqlAfterWhere, ">=")[1], "and") &&
+			!operateSameField(sqlAfterWhere, ">=") {
 			return true
 		}
 	case strings.Contains(sqlAfterWhere, "<="):
-		if strings.Contains(strings.Split(sqlAfterWhere, "<=")[1], "and") {
+		if strings.Contains(strings.Split(sqlAfterWhere, "<=")[1], "and") &&
+			!operateSameField(sqlAfterWhere, "<=") {
+			return true
+		}
+	case strings.Contains(sqlAfterWhere, ">"):
+		if strings.Contains(strings.Split(sqlAfterWhere, ">")[1], "and") &&
+			!operateSameField(sqlAfterWhere, ">") {
+			return true
+		}
+	case strings.Contains(sqlAfterWhere, "<"):
+		if strings.Contains(strings.Split(sqlAfterWhere, "<")[1], "and") &&
+			!operateSameField(sqlAfterWhere, "<") {
 			return true
 		}
 	case strings.Contains(sqlAfterWhere, indexDisableConditionLike):
-		if strings.Contains(strings.Split(sqlAfterWhere, "like")[1], "and") {
+		if strings.Contains(strings.Split(sqlAfterWhere, indexDisableConditionLike)[1], "and") &&
+			!operateSameField(sqlAfterWhere, indexDisableConditionLike) {
 			return true
 		}
 	case strings.Contains(sqlAfterWhere, indexDisableConditionIn):
-		if strings.Contains(strings.Split(sqlAfterWhere, "in")[1], "and") {
+		if strings.Contains(strings.Split(sqlAfterWhere, indexDisableConditionIn)[1], "and") &&
+			!operateSameField(sqlAfterWhere, indexDisableConditionIn) {
 			return true
 		}
 	case strings.Contains(sqlAfterWhere, indexDisableConditionBetween):
-		if strings.Count(strings.Split(sqlAfterWhere, "between")[1], "and") > 1 {
+		if strings.Count(strings.Split(sqlAfterWhere, indexDisableConditionBetween)[1], "and") > 1 &&
+			!operateSameField(sqlAfterWhere, indexDisableConditionBetween) {
 			return true
 		}
 	}
 
 	return false
+}
+
+// 判断指定操作符，及其后所有字段是否都操作的同一字段
+// 外层函数保证sqlAfterWhere 已被转小写、已验证不包含基础的不匹配索引规则等
+func operateSameField(sqlAfterWhere, operator string) bool {
+	conditionFields := sql_util.GetCondition(sqlAfterWhere)
+	conditions := strings.Split(sqlAfterWhere, " and ")
+	var idx int
+	for i, v := range conditions {
+		if strings.Contains(v, operator) {
+			idx = i
+			break
+		}
+	}
+
+	for i := idx; i < len(conditionFields)-1; i++ {
+		if conditionFields[i] != conditionFields[i+1] {
+			return false
+		}
+	}
+
+	return true
 }
 
 func getAffectRow(info *task.DBInfo, sql string) (int, error) {
