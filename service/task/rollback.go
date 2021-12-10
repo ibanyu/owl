@@ -37,6 +37,7 @@ func ListRollbackData(req *RollBackReq) (*BackupDataResp, error) {
 	dbInfo, err := dbTool.GetDBConn(req.DBName, req.ClusterName)
 	if err != nil {
 		logger.Errorf("get db_info conn err: %s", err.Error())
+		return &BackupDataResp{DataItems: dataSplit(backup.Data)}, nil
 	}
 	defer dbInfo.CloseConn()
 
@@ -46,8 +47,7 @@ func ListRollbackData(req *RollBackReq) (*BackupDataResp, error) {
 		// index 用于标记被更改的列，可以容忍
 	}
 
-	dataItems := dataSplit(backup.Data)
-	return &BackupDataResp{DataItems: dataItems, Index: index, Columns: cols}, nil
+	return &BackupDataResp{DataItems: dataSplit(backup.Data), Index: index, Columns: cols}, nil
 }
 
 func transIntToInt32(num []int) (resp []int32) {
