@@ -28,7 +28,7 @@ login:
     bind_dn: "cn=hi,dc=test,dc=com"
     bind_pwd: "password"
   login_path: "https://ipalfish.com/login"
-  token_secret: ""
+  token_secret: "xxswfwes23sdsfsf"
   token_effective_hour: 1
 
 
